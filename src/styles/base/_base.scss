@@ -1,0 +1,94 @@
+html {
+  scroll-behavior: smooth;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  overscroll-behavior-y: none;
+  padding: 0;
+  margin: 0;
+  background-color: $color-white;
+  color: $color-grey;
+  font-family: "Lunchtype22", sans-serif;
+  font-weight: 500;
+  line-height: 1.14;
+  transition-property: opacity, filter;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.page-transition {
+  opacity: 0;
+  filter: blur(12px);
+}
+
+@supports (-webkit-font-smoothing: antialiased) or
+  (-moz-osx-font-smoothing: grayscale) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  object-fit: cover;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  outline: none;
+  font: inherit;
+}
+
+[data-state="disabled"] {
+  cursor: not-allowed;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+// p::selection,
+// span::selection,
+// h1::selection,
+// h2::selection,
+// h3::selection,
+// h4::selection,
+// h5::selection,
+// h6::selection,
+// a::selection,
+// label::selection,
+// img::selection {
+// }
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

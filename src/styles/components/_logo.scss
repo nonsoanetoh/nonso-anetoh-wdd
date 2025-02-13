@@ -1,0 +1,14 @@
+#logo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 131/ 191;
+  grid-area: logo;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+  }
+}

@@ -1,0 +1,35 @@
+:root {
+  --r: calc((100vw / 1920) * 10);
+  --layout-spacing: calc(2 * var(--r));
+}
+
+// @include media("<=tablet") {
+//   :root {
+//     --r: calc((100vw / 768) * 10);
+//     --layout-spacing: calc(1 * var(--r));
+//   }
+// }
+
+// @include media("<=phone") {
+//   :root {
+//     --r: calc((100vw / 430) * 10);
+//     --layout-spacing: calc(1 * var(--r));
+//   }
+// }
+
+$color-white: #ffffff;
+$color-grey: #3f3f3f;
+$color-highlight: #0972db;
+
+$z-indexes: (
+  "dev",
+  "preloader",
+  "page-manager",
+  "page-content",
+  "navigation",
+  "interaction",
+  "footer",
+  "content",
+  "logo",
+  "unsupported"
+);

@@ -1,0 +1,52 @@
+{
+  "id": "logo",
+  "type": "SharedSlice",
+  "name": "Logo",
+  "description": "Logo",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "animated_frame": {
+          "type": "Group",
+          "config": {
+            "label": "Animated Frame",
+            "repeat": true,
+            "fields": {
+              "frame": {
+                "type": "Image",
+                "config": {
+                  "label": "Frame",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              }
+            }
+          }
+        },
+        "interaction_frame": {
+          "type": "Image",
+          "config": {
+            "label": "Interaction Frame",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "alternate_frame": {
+          "type": "Image",
+          "config": {
+            "label": "Alternate Frame",
+            "constraint": {},
+            "thumbnails": []
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
