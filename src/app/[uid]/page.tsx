@@ -11,9 +11,7 @@ import { components } from "@/slices";
 export async function generateMetadata({ params }): Promise<Metadata> {
   const client = createClient();
   const param = await params;
-  const page = await client
-    .getByUID("page", params.uid, { lang: param.lang })
-    .catch(() => notFound());
+  const page = await client.getByUID("page", param.uid).catch(() => notFound());
 
   return {
     title: prismic.asText(page.data.title),
@@ -22,7 +20,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
       title: page.data.meta_title || undefined,
       images: [
         {
-          url: page.data.meta_image.url || "",
+          url: page.data.meta_image.url ?? "",
         },
       ],
     },
@@ -31,11 +29,8 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 
 export default async function Page({ params }) {
   const client = createClient();
-  const page = await client
-    .getByUID("page", params.uid, {
-      lang: params.lang,
-    })
-    .catch(() => notFound());
+  const param = await params;
+  const page = await client.getByUID("page", param.uid).catch(() => notFound());
 
   return <SliceZone slices={page.data.slices} components={components} />;
 }
@@ -45,7 +40,6 @@ export async function generateStaticParams() {
 
   const pages = await client.getAllByType("page", {
     predicates: [prismic.filter.not("my.page.uid", "home")],
-    lang: "*",
   });
 
   return pages.map((page) => ({ uid: page.uid, lang: page.lang }));
