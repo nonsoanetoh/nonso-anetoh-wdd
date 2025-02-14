@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SliceZone } from "@prismicio/react";
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
-import Wrapper from "@/components/wrapper";
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params }): Promise<Metadata> {
   const client = createClient();
+  const param = await params;
   const page = await client
-    .getByUID("page", params.uid, { lang: params.lang })
+    .getByUID("page", params.uid, { lang: param.lang })
     .catch(() => notFound());
 
   return {
@@ -35,11 +36,8 @@ export default async function Page({ params }) {
       lang: params.lang,
     })
     .catch(() => notFound());
-  return (
-    <Wrapper>
-      <SliceZone slices={page.data.slices} components={components} />
-    </Wrapper>
-  );
+
+  return <SliceZone slices={page.data.slices} components={components} />;
 }
 
 export async function generateStaticParams() {

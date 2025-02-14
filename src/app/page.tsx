@@ -1,4 +1,5 @@
-import { Metadata } from "next";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 
 import { SliceZone } from "@prismicio/react";
 import * as prismic from "@prismicio/client";
@@ -6,15 +7,7 @@ import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 
-/**
- * This component renders your homepage.
- *
- * Use Next's generateMetadata function to render page metadata.
- *
- * Use the SliceZone to render the content of the page.
- */
-
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
   const client = createClient();
   const home = await client.getByUID("page", "home");
 
@@ -33,9 +26,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Index() {
-  /**
-   * The client queries content from the Prismic API
-   */
   const client = createClient();
   const home = await client.getByUID("page", "home");
 

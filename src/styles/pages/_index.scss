@@ -1,4 +1,4 @@
-@import "./home";
+@use "./home";
 
 .page {
   padding: 0 calc(var(--layout-spacing)) calc(var(--layout-spacing))

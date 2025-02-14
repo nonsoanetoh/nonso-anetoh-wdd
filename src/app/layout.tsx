@@ -13,6 +13,15 @@ export default function RootLayout({
       <body>
         <Navigation />
         {children}
+        {children}
+        {children}
+        {children}
+        {children}
+        {children}
+        {children}
+        {children}
+        {children}
+        {children}
       </body>
       <PrismicPreview repositoryName={repositoryName} />
     </html>

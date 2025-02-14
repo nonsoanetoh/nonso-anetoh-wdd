@@ -1,23 +1,19 @@
-@import "./base/reset";
+@use "./abstract/index" as *;
 
-@import "./vendor/vendor";
+@use "./base/reset";
+@use "./vendor/vendor";
 
-@import "./abstract/variables";
-@import "./abstract/functions";
-@import "./abstract/mixins";
-@import "./abstract/animations";
+@use "./shared/titles";
+@use "./shared/descriptions";
 
-@import "./shared/titles";
-@import "./shared/descriptions";
+@use "./base/type";
+@use "./base/base";
 
-@import "./base/type";
-@import "./base/base";
+@use "./components/preloader";
+@use "./components/logo";
+@use "./components/spotify-player";
+@use "./components/reps";
 
-@import "./components/preloader";
-@import "./components/logo";
-@import "./components/spotify-player";
-@import "./components/reps";
+@use "./layout/header";
 
-@import "./layout/header";
-
-@import "./pages";
+@use "./pages";

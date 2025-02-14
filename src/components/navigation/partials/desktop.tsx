@@ -1,10 +1,13 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
 import { createClient } from "@/prismicio";
-import { LanguageSwitcher } from "@/components/language-switcher";
 import { NavigationDocument } from "../../../../prismicio-types";
 
-export const Navigation: FC = () => {
+interface NavigationProps {
+  children: React.ReactNode;
+}
+
+export const Navigation: FC<NavigationProps> = ({ children }) => {
   const [navigation, setNavigation] = useState<NavigationDocument>();
 
   useEffect(() => {
@@ -16,16 +19,5 @@ export const Navigation: FC = () => {
     fetchData();
   }, []);
 
-  return (
-    <>
-      {navigation && (
-        <div className="text-content">
-          <h1>{navigation.data.title}</h1>
-          <p>{navigation.data.label}</p>
-          <p>{navigation.data.location}</p>
-          <LanguageSwitcher />
-        </div>
-      )}
-    </>
-  );
+  return <>{navigation && <>{children}</>}</>;
 };
