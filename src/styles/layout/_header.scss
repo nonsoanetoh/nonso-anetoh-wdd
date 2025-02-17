@@ -1,118 +1,118 @@
 #header {
   position: fixed;
-  top: calc(var(--r) * 3);
-  left: 50%;
-  transform: translateX(-50%);
+  top: 1rem;
+  width: 100vw;
+  font-weight: 500;
+
   display: flex;
   flex-direction: column;
-  gap: calc(var(--r) * 1.4);
+  align-items: center;
+  gap: 0.75rem;
+  background-color: transparent;
 
   .content-wrapper {
+    width: min(100vw - 2rem, 24rem);
     display: flex;
-    border-radius: calc(var(--r) * 2);
-    padding: 0 2rem;
-    aspect-ratio: 510 / 194;
-    align-items: center;
-    gap: calc(var(--r) * 3.4);
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.75rem;
+    gap: 2rem;
+    background-color: #eeebeb;
+    border-radius: 1rem;
     cursor: pointer;
+    overflow: hidden;
 
-    h1 {
-      white-space: nowrap;
+    transition: height 0.5s ease;
+
+    &.expanded {
+      height: auto;
+    }
+
+    .group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .logo-wrapper {
+        position: relative;
+        width: 80%;
+        aspect-ratio: 102 / 125;
+
+        .reps {
+          position: absolute;
+          bottom: 16%;
+          right: 0;
+          transform: translateX(30%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #808080;
+          color: white;
+          padding: 0.1rem 0.3rem;
+          border-radius: 0.2rem;
+          font-size: 0.8rem;
+          line-height: 1;
+          pointer-events: none;
+        }
+
+        .logo__frame {
+          position: absolute;
+          top: 0;
+          display: none;
+
+          img {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
     }
 
     .text-content {
-      width: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: calc(var(--r) * 0.2);
+      align-items: flex-end;
+      color: #636262;
+      justify-content: space-between;
 
-      p {
-        color: #636262;
-      }
-    }
+      // .clock .inline {
+      //   animation: blink 1s step-start infinite;
+      // }
 
-    .language-switcher {
-      display: flex;
-      flex-direction: column;
-      gap: calc(var(--r) * 0.2);
+      .email-cta {
+        span {
+          font-weight: 500;
+          color: black;
+        }
 
-      .label {
-        font-size: 11px;
-        //
-      }
-
-      .links {
         display: flex;
-        flex-direction: row;
-        gap: 0.3rem;
-        color: #636262;
-
-        span {
-          color: #939292;
-        }
-
-        .link,
-        span {
-          //
-        }
-
-        .active {
-          color: #000000;
-        }
-      }
-    }
-  }
-
-  nav {
-    margin: 0 calc(var(--r) * 1.4);
-
-    ul {
-      display: flex;
-      gap: calc(var(--r) * 1.2);
-
-      li {
-        border-radius: calc(var(--r) * 1);
-
-        &:nth-child(1) {
-          background-color: #14d1fc;
-        }
-
-        &:nth-child(2) {
-          background-color: #6fea2a;
-        }
-
-        &:nth-child(3) {
-          background-color: #5a00cb;
-          color: white;
-        }
-
-        &:nth-child(4) {
-          background-color: #ff4433;
-          color: white;
-        }
-
-        &:nth-child(5) {
-          background-color: #5757ff;
-          color: white;
-        }
+        gap: 0.25rem;
       }
 
-      .link {
-        flex: 1;
-        text-align: center;
-
-        display: inline-block;
-        padding: 0.5rem 0.75rem;
+      .schedule-cta {
+        background-color: #5757ff;
+        border-radius: calc(0.75rem - 8px);
+        padding: 0.15rem 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        vertical-align: middle;
         cursor: pointer;
       }
     }
   }
-}
 
-.separator {
-  display: block;
-  height: 1px;
-  background-color: #cecece;
-  margin: calc(var(--r) * 1.5) 0;
+  .nav {
+    &__list {
+      display: flex;
+      flex-direction: row;
+      gap: 0.25rem;
+    }
+
+    &__link {
+      padding: 0.5rem 0.75rem;
+      background-color: #9d9d9d;
+    }
+  }
 }

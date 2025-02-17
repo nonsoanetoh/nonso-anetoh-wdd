@@ -53,7 +53,6 @@ const usePreloader = ({ swapSpeed = 0.25 }: UPProps) => {
   const startAnimation = useCallback(
     (sequence: HTMLElement[]): Promise<void> => {
       return new Promise((resolve) => {
-        console.log("here: ", sequence);
         if (sequence.length > 0) {
           animateSequence({ sequence }).then(resolve);
         } else {

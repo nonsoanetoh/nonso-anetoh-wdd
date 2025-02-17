@@ -5,6 +5,8 @@ import { createClient } from "@/prismicio";
 import { PreloaderDocument } from "../../../prismicio-types";
 import { PrismicNextImage } from "@prismicio/next";
 import usePreloader from "@/hooks/usePreloader";
+import ContentSidebar from "../sidebar";
+import Spotify from "../spotify";
 
 interface CLProps {
   children: React.ReactNode;
@@ -40,8 +42,6 @@ const ContentLayout: FC<CLProps> = ({ children }) => {
     if (imagesLoaded) {
       const currentPreloaderRef = preloaderRef.current;
 
-      console.log("currentPreloaderRef: ", currentPreloaderRef);
-
       if (currentPreloaderRef) {
         const frames = Array.from(
           currentPreloaderRef.querySelectorAll(".preloader__image img")
@@ -67,8 +67,12 @@ const ContentLayout: FC<CLProps> = ({ children }) => {
           })}
         </section>
       )}
-      <Navigation />
-      {children}
+      <div id="page">
+        <Navigation />
+        {children}
+      </div>
+      <ContentSidebar />
+      <Spotify />
     </>
   );
 };

@@ -1,83 +1,47 @@
 #spotify-player {
   position: fixed;
-  left: var(--layout-spacing);
-  bottom: var(--layout-spacing);
-  z-index: z("page-content");
-
-  // @include media("<=phone") {
-  //   display: none;
-  // }
-}
-
-#spotify-player:hover {
-  cursor: pointer;
-}
-
-#spotify-player:hover .cover-art,
-#spotify-player:hover .vinyl {
-  filter: blur(1px);
-}
-
-#spotify-player.hidden {
-  visibility: hidden;
-}
-
-#spotify-player .wrapper {
+  left: 1rem;
+  bottom: 1rem;
   display: flex;
   flex-direction: column;
-}
+  width: 7rem;
 
-#spotify-player .deck {
-  position: relative;
-  width: calc(16 * var(--r));
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-  // @include media("<=tablet") {
-  //   width: calc(10 * var(--r));
-  // }
-}
+  .cover-image {
+    position: relative;
+    width: 65%;
+    aspect-ratio: 1/1;
+    z-index: 3;
+  }
 
-#spotify-player .deck .vinyl {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  width: calc(10 * var(--r));
-  aspect-ratio: 1 / 1;
+  .vinyl {
+    position: absolute;
+    width: 65%;
+    aspect-ratio: 1/1;
+    right: 0;
+    top: 0;
+    z-index: 2;
+  }
 
-  // @include media("<=tablet") {
-  //   width: calc(7 * var(--r));
-  // }
-}
+  .marquee {
+    width: 100%;
+    overflow: hidden;
 
-#spotify-player .cover-art {
-  position: relative;
-  // outline: 1px solid black;
-  z-index: 2;
-  width: calc(10 * var(--r));
-  aspect-ratio: 1 / 1;
-  background-color: green;
-
-  // @include media("<=tablet") {
-  //   width: calc(7 * var(--r));
-  // }
+    &__text {
+      white-space: nowrap;
+    }
+  }
 }
 
 #spotify-player .marquee {
-  margin-top: calc(1 * var(--r));
-  font-size: calc(1.8 * var(--r));
+  font-size: 14px;
   position: relative;
   overflow: hidden;
-
-  // @include media("<=tablet") {
-  //   margin-top: calc(0.8 * var(--r));
-  //   font-size: calc(1.4 * var(--r));
-  // }
 }
 
 #spotify-player .marquee__inner {

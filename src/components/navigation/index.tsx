@@ -1,16 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Navigation as DesktopNavigation } from "./partials/desktop";
-import MobileNavigation from "./partials/mobile";
+import { MdEmail } from "@react-icons/all-files/md/MdEmail";
 import { createClient } from "@/prismicio";
 import { NavigationDocument } from "../../../prismicio-types";
-import gsap from "gsap";
-import { Flip } from "gsap/Flip";
-
-gsap.registerPlugin(Flip);
+import Link from "next/link";
+import Calendly from "../calendly";
+import Clock from "../clock";
+import Logo from "../logo";
 
 const Navigation = () => {
   const [navigationData, setNavigationData] = useState<NavigationDocument>();
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   useEffect(() => {
     const fetchNavigationData = async () => {
@@ -24,32 +24,49 @@ const Navigation = () => {
 
   return (
     <header id="header">
-      header
-      <div className="content-wrapper">
-        <div className="logo-wrapper"></div>
-        <DesktopNavigation>
-          <div className="text-content">
-            <h1>{navigationData?.data?.title}</h1>
-            <p>{navigationData?.data?.label}</p>
-            <p>{navigationData?.data?.location}</p>
-          </div>
-        </DesktopNavigation>
-        <MobileNavigation />
+      <div
+        className={`content-wrapper ${isCollapsed ? "collapsed" : "expanded"}`}
+        onMouseEnter={() => setIsCollapsed(false)}
+        onMouseLeave={() => setIsCollapsed(true)}
+      >
+        <div className="group">
+          <h1>{navigationData?.data?.title}</h1>
+          {!isCollapsed && (
+            <Logo
+              frames={navigationData?.data?.logo_frame || []}
+              isCollapsed={isCollapsed}
+            />
+          )}
+        </div>
+        <div className="text-content">
+          <p>{navigationData?.data?.label}</p>
+          {!isCollapsed && (
+            <>
+              <Clock />
+              <p>{navigationData?.data?.location}</p>
+              <Link className="email-cta" href="mailto:nonsoanetoh@gmail.com">
+                <span>Available for work</span>
+                <MdEmail color="#FF4433" />
+              </Link>
+              <Calendly />
+            </>
+          )}
+        </div>
       </div>
-      <nav>
-        {/* <ul>
-          {["Home", "About", "Work", "Blog", "Contact"].map((link, index) => (
-            <li
-              key={index}
-              className="link"
-              ref={(el) => {
-                navLinksRef.current[index] = el;
-              }}
-            >
-              <a>{link}</a>
-            </li>
-          ))}
-        </ul> */}
+      <nav className="nav">
+        <ul className="nav__list">
+          {["Home", "About", "Projects", "Blog", "Contact"].map(
+            (item, index) => {
+              return (
+                <li className="nav__item" key={index}>
+                  <Link className="nav__link" href={`#${item.toLowerCase()}`}>
+                    {item}
+                  </Link>
+                </li>
+              );
+            }
+          )}
+        </ul>
       </nav>
     </header>
   );

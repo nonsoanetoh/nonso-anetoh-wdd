@@ -1,12 +1,7 @@
 @use "./home";
 
-.page {
-  padding: 0 calc(var(--layout-spacing)) calc(var(--layout-spacing))
-    calc(var(--layout-spacing));
-  overflow: hidden;
-  font-family: "Inter", serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  width: 100%;
-  overflow-x: hidden;
+#page {
+  position: relative;
+  width: 100vw;
+  min-height: 100dvh;
 }
