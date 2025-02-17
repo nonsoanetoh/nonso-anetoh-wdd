@@ -221,6 +221,36 @@ export type AllDocumentTypes =
   | PageDocument
   | PreloaderDocument;
 
+/**
+ * Default variation for Services Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ServicesSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  never
+>;
+
+/**
+ * Slice variation for *Services*
+ */
+type ServicesSliceVariation = ServicesSliceDefault;
+
+/**
+ * Services Shared Slice
+ *
+ * - **API ID**: `services`
+ * - **Description**: Services
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ServicesSlice = prismic.SharedSlice<
+  "services",
+  ServicesSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -252,6 +282,9 @@ declare module "@prismicio/client" {
       PreloaderDocumentData,
       PreloaderDocumentDataImagesItem,
       AllDocumentTypes,
+      ServicesSlice,
+      ServicesSliceVariation,
+      ServicesSliceDefault,
     };
   }
 }
