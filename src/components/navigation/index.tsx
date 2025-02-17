@@ -55,17 +55,15 @@ const Navigation = () => {
       </div>
       <nav className="nav">
         <ul className="nav__list">
-          {["Home", "About", "Projects", "Blog", "Contact"].map(
-            (item, index) => {
-              return (
-                <li className="nav__item" key={index}>
-                  <Link className="nav__link" href={`#${item.toLowerCase()}`}>
-                    {item}
-                  </Link>
-                </li>
-              );
-            }
-          )}
+          {["About", "Projects", "Blog", "Contact"].map((item, index) => {
+            return (
+              <li className="nav__item" key={index}>
+                <Link className="nav__link" href={`#${item.toLowerCase()}`}>
+                  {item}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </header>

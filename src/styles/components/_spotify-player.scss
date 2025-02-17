@@ -21,10 +21,10 @@
 
   .vinyl {
     position: absolute;
-    width: 65%;
+    width: calc(65% - 0.25rem);
     aspect-ratio: 1/1;
     right: 0;
-    top: 0;
+    top: 0.125rem;
     z-index: 2;
   }
 
