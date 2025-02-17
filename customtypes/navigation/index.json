@@ -45,13 +45,19 @@
           "repeat": true
         }
       },
-      "slices": {
-        "type": "Slices",
-        "fieldset": "Slice Zone",
+      "logo_frame": {
+        "type": "Group",
         "config": {
-          "choices": {
-            "logo": {
-              "type": "SharedSlice"
+          "label": "Logo Frame",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "image",
+                "constraint": {},
+                "thumbnails": []
+              }
             }
           }
         }

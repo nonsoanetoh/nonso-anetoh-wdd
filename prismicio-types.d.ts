@@ -4,7 +4,20 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
-type NavigationDocumentDataSlicesSlice = LogoSlice;
+/**
+ * Item in *Navigation → Logo Frame*
+ */
+export interface NavigationDocumentDataLogoFrameItem {
+  /**
+   * image field in *Navigation → Logo Frame*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: navigation.logo_frame[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
 
 /**
  * Content for Navigation documents
@@ -57,15 +70,15 @@ interface NavigationDocumentData {
   >;
 
   /**
-   * Slice Zone field in *Navigation*
+   * Logo Frame field in *Navigation*
    *
-   * - **Field Type**: Slice Zone
+   * - **Field Type**: Group
    * - **Placeholder**: *None*
-   * - **API ID Path**: navigation.slices[]
+   * - **API ID Path**: navigation.logo_frame[]
    * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#slices
+   * - **Documentation**: https://prismic.io/docs/field#group
    */
-  slices: prismic.SliceZone<NavigationDocumentDataSlicesSlice>;
+  logo_frame: prismic.GroupField<Simplify<NavigationDocumentDataLogoFrameItem>>;
 }
 
 /**
@@ -84,7 +97,7 @@ export type NavigationDocument<Lang extends string = string> =
     Lang
   >;
 
-type PageDocumentDataSlicesSlice = RichTextSlice;
+type PageDocumentDataSlicesSlice = never;
 
 /**
  * Content for Page documents
@@ -156,131 +169,57 @@ interface PageDocumentData {
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
-export type AllDocumentTypes = NavigationDocument | PageDocument;
-
 /**
- * Item in *Logo → Default → Primary → Animated Frame*
+ * Item in *Preloader → images*
  */
-export interface LogoSliceDefaultPrimaryAnimatedFrameItem {
+export interface PreloaderDocumentDataImagesItem {
   /**
-   * Frame field in *Logo → Default → Primary → Animated Frame*
+   * image field in *Preloader → images*
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
-   * - **API ID Path**: logo.default.primary.animated_frame[].frame
+   * - **API ID Path**: preloader.images[].image
    * - **Documentation**: https://prismic.io/docs/field#image
    */
-  frame: prismic.ImageField<never>;
+  image: prismic.ImageField<never>;
 }
 
 /**
- * Primary content in *Logo → Default → Primary*
+ * Content for Preloader documents
  */
-export interface LogoSliceDefaultPrimary {
+interface PreloaderDocumentData {
   /**
-   * Animated Frame field in *Logo → Default → Primary*
+   * images field in *Preloader*
    *
    * - **Field Type**: Group
    * - **Placeholder**: *None*
-   * - **API ID Path**: logo.default.primary.animated_frame[]
+   * - **API ID Path**: preloader.images[]
+   * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/field#group
    */
-  animated_frame: prismic.GroupField<
-    Simplify<LogoSliceDefaultPrimaryAnimatedFrameItem>
+  images: prismic.GroupField<Simplify<PreloaderDocumentDataImagesItem>>;
+}
+
+/**
+ * Preloader document from Prismic
+ *
+ * - **API ID**: `preloader`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type PreloaderDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<PreloaderDocumentData>,
+    "preloader",
+    Lang
   >;
 
-  /**
-   * Interaction Frame field in *Logo → Default → Primary*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: logo.default.primary.interaction_frame
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  interaction_frame: prismic.ImageField<never>;
-
-  /**
-   * Alternate Frame field in *Logo → Default → Primary*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: logo.default.primary.alternate_frame
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  alternate_frame: prismic.ImageField<never>;
-}
-
-/**
- * Default variation for Logo Slice
- *
- * - **API ID**: `default`
- * - **Description**: Default
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type LogoSliceDefault = prismic.SharedSliceVariation<
-  "default",
-  Simplify<LogoSliceDefaultPrimary>,
-  never
->;
-
-/**
- * Slice variation for *Logo*
- */
-type LogoSliceVariation = LogoSliceDefault;
-
-/**
- * Logo Shared Slice
- *
- * - **API ID**: `logo`
- * - **Description**: Logo
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type LogoSlice = prismic.SharedSlice<"logo", LogoSliceVariation>;
-
-/**
- * Primary content in *RichText → Default → Primary*
- */
-export interface RichTextSliceDefaultPrimary {
-  /**
-   * Content field in *RichText → Default → Primary*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: Lorem ipsum...
-   * - **API ID Path**: rich_text.default.primary.content
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  content: prismic.RichTextField;
-}
-
-/**
- * Default variation for RichText Slice
- *
- * - **API ID**: `default`
- * - **Description**: RichText
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type RichTextSliceDefault = prismic.SharedSliceVariation<
-  "default",
-  Simplify<RichTextSliceDefaultPrimary>,
-  never
->;
-
-/**
- * Slice variation for *RichText*
- */
-type RichTextSliceVariation = RichTextSliceDefault;
-
-/**
- * RichText Shared Slice
- *
- * - **API ID**: `rich_text`
- * - **Description**: RichText
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type RichTextSlice = prismic.SharedSlice<
-  "rich_text",
-  RichTextSliceVariation
->;
+export type AllDocumentTypes =
+  | NavigationDocument
+  | PageDocument
+  | PreloaderDocument;
 
 declare module "@prismicio/client" {
   interface CreateClient {
@@ -305,20 +244,14 @@ declare module "@prismicio/client" {
     export type {
       NavigationDocument,
       NavigationDocumentData,
-      NavigationDocumentDataSlicesSlice,
+      NavigationDocumentDataLogoFrameItem,
       PageDocument,
       PageDocumentData,
       PageDocumentDataSlicesSlice,
+      PreloaderDocument,
+      PreloaderDocumentData,
+      PreloaderDocumentDataImagesItem,
       AllDocumentTypes,
-      LogoSlice,
-      LogoSliceDefaultPrimaryAnimatedFrameItem,
-      LogoSliceDefaultPrimary,
-      LogoSliceVariation,
-      LogoSliceDefault,
-      RichTextSlice,
-      RichTextSliceDefaultPrimary,
-      RichTextSliceVariation,
-      RichTextSliceDefault,
     };
   }
 }

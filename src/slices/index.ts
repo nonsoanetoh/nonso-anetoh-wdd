@@ -2,7 +2,4 @@
 
 import dynamic from "next/dynamic";
 
-export const components = {
-  logo: dynamic(() => import("./Logo")),
-  rich_text: dynamic(() => import("./RichText")),
-};
+export const components = {};
