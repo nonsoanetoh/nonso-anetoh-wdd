@@ -42,8 +42,8 @@ const Navigation = () => {
           <p>{navigationData?.data?.label}</p>
           {!isCollapsed && (
             <>
-              <Clock />
               <p>{navigationData?.data?.location}</p>
+              <Clock />
               <Link className="email-cta" href="mailto:nonsoanetoh@gmail.com">
                 <span>Available for work</span>
                 <MdEmail color="#FF4433" />

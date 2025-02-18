@@ -1,5 +1,4 @@
 import React from "react";
-import Script from "next/script";
 
 const Calendly = () => {
   const handleCalendly = () => {
@@ -15,15 +14,6 @@ const Calendly = () => {
       <button onClick={handleCalendly} className="schedule-cta">
         Schedule a Call
       </button>
-      <Script
-        src="https://assets.calendly.com/assets/external/widget.js"
-        type="text/javascript"
-        async
-      />
-      <link
-        href="https://assets.calendly.com/assets/external/widget.css"
-        rel="stylesheet"
-      />
     </>
   );
 };
