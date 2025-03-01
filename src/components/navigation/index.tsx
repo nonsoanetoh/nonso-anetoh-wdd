@@ -8,6 +8,25 @@ import Calendly from "../calendly";
 import Clock from "../clock";
 import Logo from "../logo";
 
+const links = [
+  {
+    label: "home",
+    href: "/",
+  },
+  {
+    label: "work",
+    href: "/work",
+  },
+  {
+    label: "Blog",
+    href: "/blog",
+  },
+  {
+    label: "Email",
+    href: "mailto:nonsoanetoh@gmail.com",
+  },
+];
+
 const Navigation = () => {
   const [navigationData, setNavigationData] = useState<NavigationDocument>();
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -53,19 +72,17 @@ const Navigation = () => {
           )}
         </div>
       </div>
-      {/* <nav className="nav">
+      <nav className="nav">
         <ul className="nav__list">
-          {["Projects", "Articles", "Contact"].map((item, index) => {
-            return (
-              <li className="nav__item" key={index}>
-                <Link className="nav__link" href={`#${item.toLowerCase()}`}>
-                  {item}
-                </Link>
-              </li>
-            );
-          })}
+          {links.map((link) => (
+            <li key={link.label} className="nav__item">
+              <Link className="nav__link" href={link.href}>
+                <span>{link.label}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
-      </nav> */}
+      </nav>
     </header>
   );
 };

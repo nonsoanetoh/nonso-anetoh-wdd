@@ -21,9 +21,12 @@ const JumpLinks = () => {
   return (
     <nav className="jump-links">
       <ul>
-        {jumpLinks.map((link) => (
+        {jumpLinks.map((link, index) => (
           <li key={link.id}>
-            <a href={`#${link.id}`}>{link.label}</a>
+            <span>{index + 1}.</span>
+            <a className="jump-link" href={`#${link.id}`}>
+              {link.label}
+            </a>
           </li>
         ))}
       </ul>

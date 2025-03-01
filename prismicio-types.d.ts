@@ -206,7 +206,7 @@ export type NavigationDocument<Lang extends string = string> =
     Lang
   >;
 
-type PageDocumentDataSlicesSlice = never;
+type PageDocumentDataSlicesSlice = ServicesSlice | BlogListSlice;
 
 /**
  * Content for Page documents
@@ -332,6 +332,36 @@ export type AllDocumentTypes =
   | PreloaderDocument;
 
 /**
+ * Default variation for BlogList Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type BlogListSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  never
+>;
+
+/**
+ * Slice variation for *BlogList*
+ */
+type BlogListSliceVariation = BlogListSliceDefault;
+
+/**
+ * BlogList Shared Slice
+ *
+ * - **API ID**: `blog_list`
+ * - **Description**: BlogList
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type BlogListSlice = prismic.SharedSlice<
+  "blog_list",
+  BlogListSliceVariation
+>;
+
+/**
  * Primary content in *RichText → Default → Primary*
  */
 export interface RichTextSliceDefaultPrimary {
@@ -440,6 +470,9 @@ declare module "@prismicio/client" {
       PreloaderDocumentData,
       PreloaderDocumentDataImagesItem,
       AllDocumentTypes,
+      BlogListSlice,
+      BlogListSliceVariation,
+      BlogListSliceDefault,
       RichTextSlice,
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,

@@ -2,10 +2,31 @@
   grid-area: jump;
   position: sticky;
   top: 1rem;
-  margin: 2rem;
   padding: 1rem;
+  width: calc(100% - 2rem);
   margin-top: 0;
-  background-color: #f5f5f5;
+  background-color: #d9d9d9;
   align-self: flex-start;
   z-index: 999999999;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 1.1rem;
+  }
+
+  li {
+    display: flex;
+    gap: 0.15rem;
+  }
+
+  .jump-link {
+    text-decoration: none !important;
+  }
+
+  @media screen and (max-width: 48rem) {
+    position: relative;
+    width: 100%;
+  }
 }

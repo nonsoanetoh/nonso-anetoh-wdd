@@ -1,25 +1,76 @@
+.page--blog-list {
+}
+
+.page--blog-list,
+.page--blog {
+  .blog-hero {
+    background-color: #d9d9d9;
+    aspect-ratio: 1920 / 494;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: min(100% - 6rem, 8rem);
+    }
+  }
+}
+
 .page--blog {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-areas: ". . . post post post post post post jump jump jump";
-  margin-top: 12rem;
+  display: flex;
+  flex-direction: column;
 
   .blog-content {
     position: relative;
-    width: 100%;
-    grid-area: post;
-    font-weight: 400;
-    margin-bottom: 4rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas:
+      ". header header header header header header header header header header ."
+      ". . . . . back back . . . . ."
+      ". jump jump jump body body body body body body body .";
+
+    gap: 1rem;
+    padding: 4rem 0;
+
+    &__header {
+      grid-area: header;
+    }
+
+    &__body {
+      grid-area: body;
+    }
+
+    .image-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 2rem 0;
+    }
+
+    img {
+      height: auto;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .image-label {
+      padding: 0.25rem 0.5rem;
+      background-color: black;
+      color: white;
+    }
 
     .back-button {
+      grid-area: back;
+      grid-row-start: 2;
+      grid-column: 5 / 12;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
       text-decoration: none;
       justify-self: flex-start;
-      margin-bottom: 2rem;
 
       svg {
         width: 1.5rem;
@@ -31,15 +82,31 @@
     }
 
     h1 {
-      font-size: 2.75rem;
+      font-size: 3rem;
       font-weight: 500;
       line-height: 1.2;
       margin-bottom: 0.5rem;
       color: black;
     }
 
+    [data-jump]::before {
+      content: "";
+      display: block;
+      height: 4.5rem;
+      margin-top: -4.5rem;
+      visibility: hidden;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    strong {
+      font-weight: 500;
+    }
+
     h2 {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 500;
       line-height: 1.2;
       margin: 1.5rem 0;
@@ -53,7 +120,6 @@
     }
 
     .text-group {
-      margin: 1rem 0;
       margin-bottom: 2rem;
     }
 
@@ -64,12 +130,25 @@
 
     p {
       width: 100%;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 400;
       line-height: 1.4;
 
       & + p {
         margin-top: 0.75rem;
+      }
+    }
+
+    @media screen and (max-width: 48rem) {
+      grid-template-areas:
+        ". header header header header header header header header header header ."
+        ". . . . . back back . . . . ."
+        ". jump jump jump jump jump jump jump jump jump jump ."
+        ". body body body body body body body body body body .";
+      padding-top: 2rem;
+
+      h1 {
+        font-size: 1.5rem;
       }
     }
   }

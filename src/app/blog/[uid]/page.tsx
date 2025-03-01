@@ -11,6 +11,7 @@ import { components } from "@/slices";
 import { RichTextComponent } from "@/components/richtext";
 import JumpLinks from "@/components/jump-links";
 import BackButton from "@/components/back-button";
+import Image from "next/image";
 
 export async function generateMetadata({ params }) {
   const client = createClient();
@@ -58,27 +59,37 @@ export default async function Page({ params }) {
 
   return (
     <div className="page page--blog">
+      <section className="blog-hero">
+        <Image
+          src="/blog-hero.png"
+          width={300}
+          height={440}
+          alt="Nonso Anetoh - Web Designer & Developer"
+        />
+      </section>
       <article className="blog-content">
-        <header>
-          <BackButton />
+        <header className="blog-content__header">
           <RichTextComponent field={title} />
         </header>
-        <SliceZone
-          slices={slices}
-          components={components}
-          context={{
-            publicationDate: new Date(
-              publication_date || ""
-            ).toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }),
-          }}
-        />
+        <BackButton />
+        <JumpLinks />
+        <div className="blog-content__body">
+          <SliceZone
+            slices={slices}
+            components={components}
+            context={{
+              publicationDate: new Date(
+                publication_date || ""
+              ).toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }),
+            }}
+          />
+        </div>
       </article>
-      <JumpLinks />
 
       {/* Display the Recommended Posts section using the posts we requested earlier
       <h2 className="font-bold text-3xl">Recommended Posts</h2>

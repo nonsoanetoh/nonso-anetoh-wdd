@@ -8,6 +8,7 @@ import {
   PrismicLink,
 } from "@prismicio/react";
 import CodeBlock from "../codeblock";
+import { PrismicNextImage } from "@prismicio/next";
 
 export const richTextComponents: JSXMapSerializer = {
   label: ({ node, children }) => {
@@ -15,7 +16,12 @@ export const richTextComponents: JSXMapSerializer = {
       return <code>{children}</code>;
     }
   },
-  heading1: ({ children }) => <h1>{children}</h1>,
+  heading1: ({ children }) => (
+    <h1>
+      {"––– "}
+      {children}
+    </h1>
+  ),
   heading2: ({ node, children }) => {
     const text = node.text;
     const match = text?.match(/##section--(.+?)\*\*(.+?)##/);
@@ -70,9 +76,20 @@ export const richTextComponents: JSXMapSerializer = {
   hyperlink: ({ node, children }) => {
     return <PrismicLink field={node.data}>{children}</PrismicLink>;
   },
-
   preformatted: ({ node }) => {
     return <CodeBlock code={node.text} />;
+  },
+  image: ({ node }) => {
+    return (
+      <figure className="image-wrapper">
+        <span className="image-label">{node.alt}</span>
+        <PrismicNextImage
+          field={node}
+          priority
+          sizes="(max-width: 600px) 100vw, 50vw"
+        />
+      </figure>
+    );
   },
 };
 
