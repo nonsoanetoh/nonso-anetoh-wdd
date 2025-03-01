@@ -13,7 +13,11 @@
 @use "./components/logo";
 @use "./components/spotify-player";
 @use "./components/reps";
+@use "./components/jump-links";
+@use "./components/code-block";
 
+@use "./layout/layout";
 @use "./layout/header";
+@use "./layout/content-sidebar";
 
 @use "./pages";

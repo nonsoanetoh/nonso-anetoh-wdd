@@ -1,0 +1,43 @@
+.hljs {
+  display: block;
+  padding: 1rem;
+  background: #f5f5f5;
+  color: #333;
+  margin: 1rem 0;
+}
+.hljs-comment,
+.hljs-quote {
+  color: #777;
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-name {
+  color: #007acc;
+}
+.hljs-attribute,
+.hljs-meta {
+  color: #f08d49;
+}
+.hljs-number,
+.hljs-regexp,
+.hljs-link {
+  color: #d36363;
+}
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst {
+  color: #50a14f;
+}
+.hljs-title,
+.hljs-section {
+  color: #4078f2;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
+}

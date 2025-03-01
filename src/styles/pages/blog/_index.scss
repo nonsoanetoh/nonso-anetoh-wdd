@@ -1,0 +1,76 @@
+.page--blog {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-areas: ". . . post post post post post post jump jump jump";
+  margin-top: 12rem;
+
+  .blog-content {
+    position: relative;
+    width: 100%;
+    grid-area: post;
+    font-weight: 400;
+    margin-bottom: 4rem;
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      justify-self: flex-start;
+      margin-bottom: 2rem;
+
+      svg {
+        width: 1.5rem;
+        height: auto;
+      }
+
+      span {
+      }
+    }
+
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      color: black;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin: 1.5rem 0;
+      margin-bottom: 0.25rem;
+      color: black;
+    }
+
+    a {
+      font-weight: 500;
+      text-decoration: underline;
+    }
+
+    .text-group {
+      margin: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .publication-date,
+    .read-time {
+      display: block;
+    }
+
+    p {
+      width: 100%;
+      font-size: 1.15rem;
+      font-weight: 400;
+      line-height: 1.4;
+
+      & + p {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+.content-sidebar {
+  position: relative;
+  background-color: #14d1fc;
+  width: var(--sidebar-width);
+  overflow-x: hidden;
+  flex: 0;
+  z-index: 99999;
+
+  .content {
+    padding: 1rem;
+  }
+
+  .close-indicator {
+    position: absolute;
+    transform: translateY(-50%) translateX(-100%);
+    top: 50%;
+    left: -1rem;
+    z-index: 99999;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 60rem) {
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    height: min(70vh, 750px);
+    transform: translateY(100%);
+    visibility: hidden;
+    flex: initial;
+
+    .close-indicator {
+      top: -1rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100%);
+    }
+  }
+}

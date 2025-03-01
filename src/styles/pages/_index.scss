@@ -1,7 +1,10 @@
 @use "./home";
+@use "./blog";
 
 #page {
   position: relative;
-  width: 100vw;
+  width: 100%;
   min-height: 100dvh;
+  flex: 1;
+  z-index: 999;
 }
