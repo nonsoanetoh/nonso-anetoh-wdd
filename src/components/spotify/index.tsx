@@ -163,9 +163,11 @@ const Spotify = () => {
         };
 
         const baseId = process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID;
+
         if (!baseId) {
           throw new Error("AIRTABLE_BASE_ID is not defined");
         }
+
         const base = Airtable.base(baseId);
 
         const res = await base("token").select().firstPage();
@@ -174,6 +176,7 @@ const Spotify = () => {
         if (currentToken && !tokenValid(currentToken)) {
           await updateToken();
         }
+
         if (!currentToken) {
           await updateToken();
         }
@@ -233,26 +236,16 @@ const Spotify = () => {
     marqueeTween.current?.timeScale(1);
   };
 
-  // useEffect(() => {
-  //   console.log(playing);
-  // }, [playing]);
-
   return (
-    <div
+    <a
+      href={playing?.url}
+      target="_blank"
+      rel="noopener noreferrer"
       id="spotify-player"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div className="vinyl-wrapper">
-        <div className="cover-image">
-          <Image
-            src={playing?.isPlaying ? playing.coverImageUrl : "/no-cover.png"}
-            alt="No song playing right now"
-            fill
-            priority
-            sizes="(max-width: 200px) 100vw, 50vw"
-          />
-        </div>
         <div className="vinyl">
           <Image
             fill
@@ -288,7 +281,7 @@ const Spotify = () => {
             ))}
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
