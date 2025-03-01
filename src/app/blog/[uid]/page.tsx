@@ -49,16 +49,16 @@ export default async function Page({ params }: { params: Params }) {
     .getByUID("blog_post", param.uid)
     .catch(() => notFound());
 
-  const posts = await client
-    .getAllByType("blog_post", {
-      predicates: [prismic.filter.not("my.blog_post.uid", param.uid)],
-      orderings: [
-        { field: "my.blog_post.publication_date", direction: "desc" },
-        { field: "document.first_publication_date", direction: "desc" },
-      ],
-      limit: 2,
-    })
-    .then((response) => console.log(response));
+  // const posts = await client
+  //   .getAllByType("blog_post", {
+  //     predicates: [prismic.filter.not("my.blog_post.uid", param.uid)],
+  //     orderings: [
+  //       { field: "my.blog_post.publication_date", direction: "desc" },
+  //       { field: "document.first_publication_date", direction: "desc" },
+  //     ],
+  //     limit: 2,
+  //   })
+  //   .then((response) => console.log(response));
 
   const { slices, title, publication_date } = page.data;
 
