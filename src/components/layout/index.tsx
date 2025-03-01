@@ -55,7 +55,7 @@ const ContentLayout: FC<CLProps> = ({ children }) => {
 
   return (
     <>
-      {/* {!isPreloaded && (
+      {!isPreloaded && (
         <section className="preloader" ref={preloaderRef}>
           {preloaderData?.data?.images?.map((image, index) => {
             return (
@@ -65,7 +65,7 @@ const ContentLayout: FC<CLProps> = ({ children }) => {
             );
           })}
         </section>
-      )} */}
+      )}
       <PageContent>{children}</PageContent>
       <Spotify />
     </>
