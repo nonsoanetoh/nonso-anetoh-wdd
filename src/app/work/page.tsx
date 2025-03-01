@@ -3,7 +3,7 @@
 
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
-import { RichTextComponent } from "@/components/richtext";
+// import { RichTextComponent } from "@/components/richtext";
 import Image from "next/image";
 
 export async function generateMetadata() {
@@ -25,13 +25,13 @@ export async function generateMetadata() {
 }
 
 export default async function Index() {
-  const client = createClient();
-  const posts = await client.getAllByType("project", {
-    orderings: [
-      { field: "project.publication_date", direction: "desc" },
-      { field: "document.first_publication_date", direction: "desc" },
-    ],
-  });
+  // const client = createClient();
+  // const posts = await client.getAllByType("project", {
+  //   orderings: [
+  //     { field: "project.publication_date", direction: "desc" },
+  //     { field: "document.first_publication_date", direction: "desc" },
+  //   ],
+  // });
   return (
     <section className="page--work-list">
       <section className="work-hero">
