@@ -1,12 +1,11 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import Navigation from "../navigation";
 import { createClient } from "@/prismicio";
 import { PreloaderDocument } from "../../../prismicio-types";
 import { PrismicNextImage } from "@prismicio/next";
 import usePreloader from "@/hooks/usePreloader";
-import ContentSidebar from "../sidebar";
 import Spotify from "../spotify";
+import PageContent from "./page-context";
 
 interface CLProps {
   children: React.ReactNode;
@@ -67,11 +66,7 @@ const ContentLayout: FC<CLProps> = ({ children }) => {
           })}
         </section>
       )}
-      <div id="page">
-        <Navigation />
-        {children}
-      </div>
-      <ContentSidebar />
+      <PageContent>{children}</PageContent>
       <Spotify />
     </>
   );
