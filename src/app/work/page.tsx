@@ -11,8 +11,8 @@ export async function generateMetadata() {
   const work = await client.getByUID("page", "work");
 
   return {
-    title: prismic.asText(work.data.title),
     description: work.data.meta_description,
+    title: prismic.asText(work.data.title),
     openGraph: {
       title: work.data.meta_title || undefined,
       images: [
@@ -42,15 +42,15 @@ export default async function Index() {
           alt="Nonso Anetoh - Web Designer & Developer"
         />
       </section>
-      <ul>
-        {posts.map((post) => (
+      {/* <ul>
+        {posts?.map((post) => (
           <li key={post.id}>
             <a href={`/work/${post.uid}`}>
               <RichTextComponent field={post.data.title} />
             </a>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </section>
   );
 }
