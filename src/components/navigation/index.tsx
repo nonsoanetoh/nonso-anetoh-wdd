@@ -53,9 +53,9 @@ const Navigation = () => {
           )}
         </div>
       </div>
-      <nav className="nav">
+      {/* <nav className="nav">
         <ul className="nav__list">
-          {["About", "Projects", "Blog", "Contact"].map((item, index) => {
+          {["Projects", "Articles", "Contact"].map((item, index) => {
             return (
               <li className="nav__item" key={index}>
                 <Link className="nav__link" href={`#${item.toLowerCase()}`}>
@@ -65,7 +65,7 @@ const Navigation = () => {
             );
           })}
         </ul>
-      </nav>
+      </nav> */}
     </header>
   );
 };
