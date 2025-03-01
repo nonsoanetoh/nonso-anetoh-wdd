@@ -24,6 +24,8 @@
     "express": "^4.21.2",
     "framer-motion": "^12.4.2",
     "gsap": "^3.12.7",
+    "hast-util-to-jsx-runtime": "^1.0.1",
+    "highlight.js": "^11.11.1",
     "include-media": "^2.0.0",
     "next": "^15.1.6",
     "node-fetch": "^3.3.2",
