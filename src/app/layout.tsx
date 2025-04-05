@@ -1,20 +1,29 @@
 import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from "@/prismicio";
 import "@/styles/main.scss";
-import ContentLayout from "@/components/layout";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import Layout from "@/components/layout/layout";
+import { createClient } from "@/prismicio";
+import EasterEgg from "@/components/easter-egg";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const client = createClient();
+  const navigation = await client.getSingle("navigation");
+
+  const data = {
+    navigation,
+  };
+
   return (
     <html lang="en" className={inter.className}>
       <head>
@@ -24,7 +33,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ContentLayout>{children}</ContentLayout>
+        <Layout data={data}>{children}</Layout>
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
           type="text/javascript"
