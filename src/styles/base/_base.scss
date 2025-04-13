@@ -12,7 +12,7 @@ body {
   margin: 0;
   background-color: $color-white;
   color: $color-grey;
-  font-family: "Lunchtype22", sans-serif;
+  font-family: "PP Neue Montreal", sans-serif;
   font-weight: 500;
   line-height: 1.4;
   transition-property: opacity, filter;
@@ -58,18 +58,21 @@ a {
   color: inherit;
 }
 
-// p::selection,
-// span::selection,
-// h1::selection,
-// h2::selection,
-// h3::selection,
-// h4::selection,
-// h5::selection,
-// h6::selection,
-// a::selection,
-// label::selection,
-// img::selection {
-// }
+p::selection,
+span::selection,
+h1::selection,
+h2::selection,
+h3::selection,
+h4::selection,
+h5::selection,
+h6::selection,
+a::selection,
+label::selection,
+img::selection,
+li::selection {
+  color: black;
+  background-color: #6eea29;
+}
 
 html.lenis,
 html.lenis body {

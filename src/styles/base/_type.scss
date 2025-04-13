@@ -1,10 +1,29 @@
-// @font-face {
-//   font-family: "Lunchtype22";
-//   src: url("../fonts/lunchtype-22-medium.woff2") format("woff2"),
-//     url("../fonts/lunchtype-22-medium.woff") format("woff"),
-//     url("../fonts/lunchtype-22-medium.ttf") format("truetype"),
-//     url("../fonts/lunchtype-22-medium.svg#Lunchtype-Medium") format("svg");
-//   font-weight: 500;
-//   font-style: normal;
-//   font-display: swap;
-// }
+@font-face {
+  font-family: "PP Neue Montreal";
+  src:
+    url("/fonts/pp-medium.woff2") format("woff2"),
+    url("/fonts/pp-medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src:
+    url("/fonts/pp-regular.woff2") format("woff2"),
+    url("/fonts/pp-regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src:
+    url("/fonts/pp-bold.woff2") format("woff2"),
+    url("/fonts/pp-bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
