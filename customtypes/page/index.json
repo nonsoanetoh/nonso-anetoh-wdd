@@ -27,10 +27,19 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
-            "services": {
+            "process": {
               "type": "SharedSlice"
             },
-            "blog_list": {
+            "project_list": {
+              "type": "SharedSlice"
+            },
+            "blog_highlight": {
+              "type": "SharedSlice"
+            },
+            "image_carousel": {
+              "type": "SharedSlice"
+            },
+            "text_block": {
               "type": "SharedSlice"
             }
           }

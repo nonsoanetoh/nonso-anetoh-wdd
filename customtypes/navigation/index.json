@@ -45,10 +45,10 @@
           "repeat": true
         }
       },
-      "logo_frame": {
+      "images": {
         "type": "Group",
         "config": {
-          "label": "Logo Frame",
+          "label": "images",
           "repeat": true,
           "fields": {
             "image": {
