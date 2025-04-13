@@ -1,0 +1,76 @@
+{
+  "id": "process",
+  "type": "SharedSlice",
+  "name": "Process",
+  "description": "Process",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "services": {
+          "type": "Group",
+          "config": {
+            "label": "Services",
+            "repeat": true,
+            "fields": {
+              "title": {
+                "type": "Text",
+                "config": {
+                  "label": "Title",
+                  "placeholder": ""
+                }
+              },
+              "description": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "Description",
+                  "placeholder": "",
+                  "allowTargetBlank": true,
+                  "multi": "paragraph,hyperlink,list-item"
+                }
+              },
+              "media_one": {
+                "type": "Image",
+                "config": {
+                  "label": "Media One",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "media_two": {
+                "type": "Image",
+                "config": {
+                  "label": "Media Two",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "media_three": {
+                "type": "Image",
+                "config": {
+                  "label": "Media Three",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "media_four": {
+                "type": "Image",
+                "config": {
+                  "label": "Media Four",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
