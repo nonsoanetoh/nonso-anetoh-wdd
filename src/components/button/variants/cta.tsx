@@ -15,7 +15,9 @@ const CTA: FC<CTAProps> = ({ label, link, linkType }) => {
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    const circles = linkRef.current?.querySelectorAll(".circle");
+    const circles = Array.from(
+      linkRef.current?.querySelectorAll(".circle") || []
+    ).reverse();
 
     console.log(linkRef);
 
@@ -23,13 +25,15 @@ const CTA: FC<CTAProps> = ({ label, link, linkType }) => {
 
     const timeline = gsap.timeline({ paused: true });
 
-    const angles = Array.from(circles).map((_, index) => {
-      const angle = (index * 360) / circles.length;
-      return {
-        x: -Math.cos((angle * Math.PI) / 180) * 3,
-        y: -Math.sin((angle * Math.PI) / 180) * 3,
-      };
-    });
+    const angles = circles
+      .map((_, index) => {
+        const angle = (index * 360) / circles.length;
+        return {
+          x: -Math.cos((angle * Math.PI) / 180) * 3,
+          y: -Math.sin((angle * Math.PI) / 180) * 3,
+        };
+      })
+      .reverse();
 
     timeline.to(
       circles,
@@ -57,42 +61,6 @@ const CTA: FC<CTAProps> = ({ label, link, linkType }) => {
       linkElement?.removeEventListener("mouseleave", reverseAnimation);
       linkElement?.removeEventListener("focus", playAnimation);
       linkElement?.removeEventListener("blur", reverseAnimation);
-    };
-  }, []);
-
-  useEffect(() => {
-    const circles = linkRef.current?.querySelectorAll(".circle");
-    if (!circles) return;
-
-    const timeline = gsap.timeline({ paused: true });
-
-    const angles = Array.from(circles).map((_, index) => {
-      const angle = (index * 360) / circles.length;
-      return {
-        x: -Math.cos((angle * Math.PI) / 180) * 2,
-        y: -Math.sin((angle * Math.PI) / 180) * 2,
-      };
-    });
-
-    timeline.to(
-      circles,
-      {
-        x: (i) => angles[i].x,
-        y: (i) => angles[i].y,
-        duration: 0.2,
-        ease: "back.in(7)",
-        stagger: 0.01,
-      },
-      0
-    );
-
-    const linkElement = linkRef.current;
-    linkElement?.addEventListener("mouseenter", () => timeline.play());
-    linkElement?.addEventListener("mouseleave", () => timeline.reverse());
-
-    return () => {
-      linkElement?.removeEventListener("mouseenter", () => timeline.play());
-      linkElement?.removeEventListener("mouseleave", () => timeline.reverse());
     };
   }, []);
 
