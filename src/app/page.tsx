@@ -5,6 +5,7 @@ import { SliceZone } from "@prismicio/react";
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
+import Hero from "@/components/hero/home";
 
 export async function generateMetadata() {
   const client = createClient();
@@ -28,9 +29,11 @@ export default async function Index() {
   const client = createClient();
   const home = await client.getByUID("page", "home");
   return (
-    <>
-      das
-      <SliceZone slices={home.data.slices} components={components} />
-    </>
+    <div className="page page--home">
+      <Hero />
+      <div className="inner">
+        <SliceZone slices={home.data.slices} components={components} />
+      </div>
+    </div>
   );
 }
