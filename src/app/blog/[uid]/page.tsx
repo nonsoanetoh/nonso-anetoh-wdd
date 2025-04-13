@@ -10,7 +10,6 @@ import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 import { RichTextComponent } from "@/components/richtext";
 import JumpLinks from "@/components/jump-links";
-import BackButton from "@/components/back-button";
 import Image from "next/image";
 
 export async function generateMetadata({ params }) {
@@ -44,17 +43,6 @@ export default async function Page({ params }) {
     .getByUID("blog_post", param.uid)
     .catch(() => notFound());
 
-  // const posts = await client
-  //   .getAllByType("blog_post", {
-  //     predicates: [prismic.filter.not("my.blog_post.uid", param.uid)],
-  //     orderings: [
-  //       { field: "my.blog_post.publication_date", direction: "desc" },
-  //       { field: "document.first_publication_date", direction: "desc" },
-  //     ],
-  //     limit: 2,
-  //   })
-  //   .then((response) => console.log(response));
-
   const { slices, title, publication_date } = page.data;
 
   return (
@@ -71,7 +59,6 @@ export default async function Page({ params }) {
         <header className="blog-content__header">
           <RichTextComponent field={title} />
         </header>
-        <BackButton />
         <JumpLinks />
         <div className="blog-content__body">
           <SliceZone
@@ -90,16 +77,6 @@ export default async function Page({ params }) {
           />
         </div>
       </article>
-
-      {/* Display the Recommended Posts section using the posts we requested earlier
-      <h2 className="font-bold text-3xl">Recommended Posts</h2>
-      <section className="grid grid-cols-1 gap-8 max-w-3xl w-full">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </section>
-
-      */}
     </div>
   );
 }
@@ -107,14 +84,8 @@ export default async function Page({ params }) {
 export async function generateStaticParams() {
   const client = createClient();
 
-  /**
-   * Query all Documents from the API, except the homepage.
-   */
   const pages = await client.getAllByType("blog_post");
 
-  /**
-   * Define a path for every Document.
-   */
   return pages.map((page) => {
     return { uid: page.uid };
   });

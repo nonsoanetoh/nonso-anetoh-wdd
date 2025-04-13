@@ -3,8 +3,7 @@
 
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
-import { RichTextComponent } from "@/components/richtext";
-import Image from "next/image";
+import { PrismicNextLink } from "@prismicio/next";
 
 export async function generateMetadata() {
   const client = createClient();
@@ -26,7 +25,6 @@ export async function generateMetadata() {
 
 export default async function Index() {
   const client = createClient();
-  // const blog = await client.getByUID("page", "blog");
   const posts = await client.getAllByType("blog_post", {
     orderings: [
       { field: "my.blog_post.publication_date", direction: "desc" },
@@ -35,23 +33,23 @@ export default async function Index() {
   });
   return (
     <section className="page--blog-list">
-      <section className="blog-hero">
-        <Image
-          src="/blog-hero.png"
-          width={300}
-          height={440}
-          alt="Nonso Anetoh - Web Designer & Developer"
-        />
-      </section>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <a href={`/blog/${post.uid}`}>
-              <RichTextComponent field={post.data.title} />
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div className="inner">
+        <p className="description">
+          A collection of articles detailing my journey — ideas, experiments,
+          and lessons learned while building projects.
+        </p>
+        <div className="posts">
+          {posts.map((post) => (
+            <PrismicNextLink className="post" key={post.id} field={post}>
+              <article>
+                <header>
+                  <h3>{prismic.asText(post.data.title)}</h3>
+                </header>
+              </article>
+            </PrismicNextLink>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
