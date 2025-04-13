@@ -1,0 +1,50 @@
+footer {
+  width: 100vw;
+  height: 100dvh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    position: relative;
+    background-color: #ff4433;
+    aspect-ratio: 1/1;
+    transform: rotate(12deg);
+    padding: 1rem;
+    color: white;
+    font-weight: 500;
+    width: min(100% - 4rem, 22rem);
+
+    @media screen and (max-width: 26rem) {
+      transform: rotate(0deg);
+    }
+
+    .inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3rem;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    p,
+    a {
+      font-size: 1.5rem;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: left;
+      width: 100%;
+      height: 0.25rem;
+      background-color: #a13127;
+    }
+  }
+}
