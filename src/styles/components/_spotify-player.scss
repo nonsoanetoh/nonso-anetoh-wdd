@@ -4,14 +4,14 @@
   bottom: 1rem;
   display: flex;
   flex-direction: column;
-  width: 5rem;
+  width: 4rem;
   gap: 0.5rem;
-  z-index: 99999999999999;
+  z-index: 9999999999;
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .vinly-wrapper {
@@ -25,6 +25,7 @@
     aspect-ratio: 1/1;
     height: auto;
     z-index: 2;
+    padding: 0.25rem;
   }
 
   .marquee {
@@ -43,6 +44,7 @@
 
 #spotify-player .marquee {
   font-size: 14px;
+  font-weight: 500;
   position: relative;
   overflow: hidden;
   background-color: #d9d9d9;

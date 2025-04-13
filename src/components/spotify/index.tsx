@@ -1,8 +1,10 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Airtable from "airtable";
 import Image from "next/image";
 import { gsap } from "gsap";
+import Link from "next/link";
 
 interface Playing {
   artistName: string;
@@ -237,51 +239,98 @@ const Spotify = () => {
   };
 
   return (
-    <a
-      href={playing?.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      id="spotify-player"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="vinyl-wrapper">
-        <div className="vinyl">
-          <Image
-            fill
-            unoptimized
-            priority
-            src={playing?.isPlaying ? "/playing.gif" : "/not-playing.png"}
-            alt={
-              playing?.isPlaying
-                ? playing.songName
-                : "No song playing right now"
-            }
-          />
-        </div>
-      </div>
-      <div className="marquee" ref={marqueeRef}>
-        <div className="marquee__inner" aria-hidden="true">
-          {Array(6)
-            .fill(null)
-            .map((_, i) => (
-              <div
-                key={i}
-                className="marquee__part"
-                data-text={
+    <>
+      {playing?.isPlaying ? (
+        <Link
+          href={playing?.isPlaying ? playing.url : "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          id="spotify-player"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="vinyl-wrapper">
+            <div className="vinyl">
+              <Image
+                fill
+                unoptimized
+                priority
+                src={playing?.isPlaying ? "/playing.gif" : "/not-playing.png"}
+                alt={
                   playing?.isPlaying
-                    ? `${playing.artistName} - ${playing.songName}`
-                    : "No track playing... it feels a little lonely."
+                    ? playing.songName
+                    : "No song playing right now"
                 }
-              >
-                {playing?.isPlaying
-                  ? `${playing.artistName} - ${playing.songName}`
-                  : "No track playing... it feels a little lonely."}
-              </div>
-            ))}
+              />
+            </div>
+          </div>
+          <div className="marquee" ref={marqueeRef}>
+            <div className="marquee__inner" aria-hidden="true">
+              {Array(6)
+                .fill(null)
+                .map((_, i) => (
+                  <div
+                    key={i}
+                    className="marquee__part"
+                    data-text={
+                      playing?.isPlaying
+                        ? `${playing.artistName} - ${playing.songName}`
+                        : "No track playing... it feels a little lonely."
+                    }
+                  >
+                    {playing?.isPlaying
+                      ? `${playing.artistName} - ${playing.songName}`
+                      : "No track playing... it feels a little lonely."}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </Link>
+      ) : (
+        <div
+          id="spotify-player"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="vinyl-wrapper">
+            <div className="vinyl">
+              <Image
+                fill
+                unoptimized
+                priority
+                src={playing?.isPlaying ? "/playing.gif" : "/not-playing.png"}
+                alt={
+                  playing?.isPlaying
+                    ? playing.songName
+                    : "No song playing right now"
+                }
+              />
+            </div>
+          </div>
+          <div className="marquee" ref={marqueeRef}>
+            <div className="marquee__inner" aria-hidden="true">
+              {Array(6)
+                .fill(null)
+                .map((_, i) => (
+                  <div
+                    key={i}
+                    className="marquee__part"
+                    data-text={
+                      playing?.isPlaying
+                        ? `${playing.artistName} - ${playing.songName}`
+                        : "No track playing... it feels a little lonely."
+                    }
+                  >
+                    {playing?.isPlaying
+                      ? `${playing.artistName} - ${playing.songName}`
+                      : "No track playing... it feels a little lonely."}
+                  </div>
+                ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </a>
+      )}
+    </>
   );
 };
 
