@@ -27,9 +27,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         return () => tween.kill();
       }}
     >
-      <main className="wrapper" ref={wrapperRef}>
-        {children}
-      </main>
+      {children}
     </TransitionRouter>
   );
 }
