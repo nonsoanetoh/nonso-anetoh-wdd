@@ -1,4 +1,6 @@
-@use "./abstract/index" as *;
+@use "../../node_modules/lenis/dist/lenis.css";
+
+@use "./abstract/index" as root;
 
 @use "./base/reset";
 @use "./vendor/vendor";
@@ -12,12 +14,26 @@
 @use "./components/preloader";
 @use "./components/logo";
 @use "./components/spotify-player";
+@use "./components/services-legend";
 @use "./components/reps";
+@use "./components/text-block";
+@use "./components/inactive-cover";
+@use "./components/project-list";
+@use "./components/button";
 @use "./components/jump-links";
+@use "./components/services";
 @use "./components/code-block";
+@use "./components/image-carousel";
+@use "./components/blog-highlight";
+@use "./components/event-container";
 
 @use "./layout/layout";
 @use "./layout/header";
+@use "./layout/footer";
 @use "./layout/content-sidebar";
 
 @use "./pages";
+
+.wrapper {
+  background-color: red;
+}

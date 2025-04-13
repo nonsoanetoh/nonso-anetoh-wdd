@@ -1,11 +1,11 @@
+@use "../abstract/index" as *;
+
 @use "./home";
 @use "./blog";
 @use "./work";
 
-#page {
+.page {
   position: relative;
   width: 100%;
   min-height: 100dvh;
-  flex: 1;
-  z-index: 999;
 }

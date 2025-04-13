@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
-const Clock = () => {
+interface ClockProps {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}
+
+const Clock: FC<ClockProps> = ({ containerRef }) => {
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
@@ -20,7 +24,11 @@ const Clock = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  return <span className="clock">{time}</span>;
+  return (
+    <div ref={containerRef} className="clock">
+      {/* <span>{time}</span> */}
+    </div>
+  );
 };
 
 export default Clock;

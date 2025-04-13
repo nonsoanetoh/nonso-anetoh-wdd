@@ -1,11 +1,44 @@
 .page--blog-list {
+  --cells: 1;
+  .inner {
+    padding: 0 calc((100vw / 12) * var(--cells));
+    margin: 4rem auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    .posts {
+      --min: 20rem;
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, var(--min)), 1fr)
+      );
+      gap: 1rem;
+    }
+
+    .post {
+      flex: 1;
+      width: 100%;
+      background-color: #fafafa;
+      padding: 1rem;
+      aspect-ratio: 1/1;
+    }
+
+    .description {
+      font-size: 1.2rem;
+      max-width: 42rem;
+      font-weight: 500;
+    }
+  }
 }
 
 .page--blog-list,
 .page--blog {
   .blog-hero {
     background-color: #d9d9d9;
-    aspect-ratio: 1920 / 494;
+    aspect-ratio: 1920 / 660;
     display: flex;
     align-items: center;
     justify-content: center;
