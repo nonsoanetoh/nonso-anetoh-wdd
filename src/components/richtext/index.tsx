@@ -16,12 +16,7 @@ export const richTextComponents: JSXMapSerializer = {
       return <code>{children}</code>;
     }
   },
-  heading1: ({ children }) => (
-    <h1>
-      {"––– "}
-      {children}
-    </h1>
-  ),
+  heading1: ({ children }) => <h1>{children}</h1>,
   heading2: ({ node, children }) => {
     const text = node.text;
     const match = text?.match(/##section--(.+?)\*\*(.+?)##/);
