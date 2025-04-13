@@ -1,7 +1,6 @@
 import React, { FC } from "react";
-import { NavigationDocumentData } from "../../../prismicio-types";
 import { PrismicNextImage } from "@prismicio/next";
-import useLogo from "@/hooks/useLogo";
+import { NavigationDocumentData } from "../../../prismicio-types";
 import Reps from "../reps";
 
 interface LogoProps {
@@ -9,43 +8,18 @@ interface LogoProps {
   isCollapsed: boolean;
 }
 
-const Logo: FC<LogoProps> = ({ frames, isCollapsed }) => {
-  const {
-    visibleFrame,
-    handleMouseEnter,
-    handleMouseLeave,
-    handleClick,
-    isAnimating,
-  } = useLogo(isCollapsed);
-
-  const [reps, setReps] = React.useState(433);
-
-  const incrementReps = () => {
-    setReps(reps + 1);
-  };
-
-  const onMouseLeave = () => {
-    if (!isAnimating) handleMouseLeave(incrementReps);
-  };
-
-  const handleMouseClick = () => {
-    if (!isAnimating) handleClick(incrementReps);
-  };
+const Logo: FC<LogoProps> = ({ frames }) => {
+  const [reps] = React.useState(433);
 
   return (
-    <div
-      className="logo-wrapper"
-      onMouseEnter={handleMouseEnter}
-      onClick={handleMouseClick}
-      onMouseLeave={onMouseLeave}
-    >
+    <div className="logo-wrapper">
       {frames.map((frame, index) => (
         <figure
           className="logo__frame"
           key={index}
           data-type={`${frame.image.alt}`}
           style={{
-            display: frame.image.alt === visibleFrame ? "block" : "none",
+            display: "block",
           }}
         >
           <PrismicNextImage field={frame.image} alt="" />
