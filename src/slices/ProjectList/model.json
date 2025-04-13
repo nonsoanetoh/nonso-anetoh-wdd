@@ -1,0 +1,96 @@
+{
+  "id": "project_list",
+  "type": "SharedSlice",
+  "name": "ProjectList",
+  "description": "ProjectList",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "title": {
+          "type": "Text",
+          "config": {
+            "label": "Title",
+            "placeholder": ""
+          }
+        },
+        "description": {
+          "type": "Text",
+          "config": {
+            "label": "Description",
+            "placeholder": ""
+          }
+        },
+        "projects": {
+          "type": "Group",
+          "config": {
+            "label": "Projects",
+            "repeat": true,
+            "fields": {
+              "title": {
+                "type": "Text",
+                "config": {
+                  "label": "Title",
+                  "placeholder": ""
+                }
+              },
+              "description": {
+                "type": "Text",
+                "config": {
+                  "label": "Description",
+                  "placeholder": ""
+                }
+              },
+              "media": {
+                "type": "Image",
+                "config": {
+                  "label": "Media",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "link": {
+                "type": "Link",
+                "config": {
+                  "label": "Link",
+                  "placeholder": "",
+                  "select": null,
+                  "allowTargetBlank": true,
+                  "allowText": true,
+                  "repeat": false
+                }
+              },
+              "prominent_tools": {
+                "type": "Text",
+                "config": {
+                  "label": "Prominent Tools",
+                  "placeholder": ""
+                }
+              },
+              "work_done": {
+                "type": "Text",
+                "config": {
+                  "label": "Work Done",
+                  "placeholder": ""
+                }
+              },
+              "collaborators": {
+                "type": "Text",
+                "config": {
+                  "label": "Collaborators",
+                  "placeholder": ""
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"projects": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"media",
+								{
+									"origin": {
+										"id": "main",
+										"url": "https://images.unsplash.com/photo-1607582278038-6bebbd4d7b72",
+										"width": 4010,
+										"height": 4010
+									},
+									"url": "https://images.unsplash.com/photo-1607582278038-6bebbd4d7b72",
+									"width": 4010,
+									"height": 4010,
+									"edit": {
+										"zoom": 1,
+										"crop": {
+											"x": 0,
+											"y": 0
+										},
+										"background": "transparent"
+									},
+									"credits": null,
+									"alt": null,
+									"__TYPE__": "ImageContent",
+									"thumbnails": {}
+								}
+							],
+							[
+								"title",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "noted",
+									"type": "Text"
+								}
+							],
+							[
+								"collaborators",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "information",
+									"type": "Text"
+								}
+							],
+							[
+								"prominent_tools",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "carbon",
+									"type": "Text"
+								}
+							],
+							[
+								"work_done",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "refused",
+									"type": "Text"
+								}
+							],
+							[
+								"link",
+								{
+									"key": "19a052cb-0e2e-4fc9-a9d1-cd15521aa6b5",
+									"__TYPE__": "LinkContent",
+									"value": {
+										"__TYPE__": "ExternalLink",
+										"url": "http://google.com",
+										"text": "arrangement"
+									}
+								}
+							],
+							[
+								"description",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "indeed",
+									"type": "Text"
+								}
+							]
+						]
+					}
+				]
+			},
+			"title": {
+				"__TYPE__": "FieldContent",
+				"value": "already",
+				"type": "Text"
+			},
+			"description": {
+				"__TYPE__": "FieldContent",
+				"value": "comfortable",
+				"type": "Text"
+			}
+		},
+		"items": []
+	}
+]
