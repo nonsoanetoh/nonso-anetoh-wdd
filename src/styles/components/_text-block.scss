@@ -1,0 +1,35 @@
+.text-block {
+  .space-between {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas: "title title title . . . . . . content content content";
+    padding: var(--row) var(--column);
+    gap: var(--gap);
+
+    .title {
+      grid-area: title;
+
+      h2 {
+        font-size: calc(5.8 * var(--r));
+        text-indent: calc(9 * var(--r));
+        line-height: 1.2;
+      }
+    }
+
+    .content {
+      grid-area: content;
+
+      p {
+        font-size: calc(2.2 * var(--r));
+      }
+
+      p + p {
+        margin-top: var(--row);
+      }
+
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--r) * 5);
+    }
+  }
+}
