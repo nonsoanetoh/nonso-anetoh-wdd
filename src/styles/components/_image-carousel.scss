@@ -1,0 +1,54 @@
+.image-carousel {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-areas: ". image image image counter . . . . . . .";
+  padding: var(--row) var(--column);
+  gap: var(--gap);
+  align-items: end;
+
+  margin-top: calc(var(--r) * 5);
+
+  .image-container,
+  canvas {
+    grid-area: image;
+  }
+
+  canvas {
+    position: relative;
+    z-index: 5;
+  }
+
+  .image-container {
+    position: relative;
+    width: calc(var(--r) * 43.3);
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .counter {
+    grid-area: counter;
+  }
+
+  .controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .control {
+      flex: 1;
+
+      &--left {
+        cursor: w-resize;
+      }
+
+      &--right {
+        cursor: e-resize;
+      }
+    }
+  }
+}
