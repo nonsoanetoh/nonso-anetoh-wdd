@@ -1,0 +1,15 @@
+.trinket {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  width: min(12rem, 25rem);
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+  }
+}
