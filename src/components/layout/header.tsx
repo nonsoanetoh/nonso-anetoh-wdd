@@ -1,7 +1,13 @@
+// components/Header.tsx
 "use client";
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { NavigationDocument } from "../../../prismicio-types";
-import Link from "next/link";
+import { useLenis } from "lenis/react";
+import { PrismicLink } from "@prismicio/react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { PrismicNextLink } from "@prismicio/next";
+import TrinketComponent from "../trinket";
 
 interface HeaderProps {
   data?: NavigationDocument;
@@ -10,26 +16,28 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ data }) => {
   return (
     <>
-      <header id="header">
-        <div className="title">
-          <Link href="/">
-            <h1>{data?.data.title}</h1>
-          </Link>
-        </div>
-        <p className="label">{data?.data.label}</p>
-        <nav>
-          <ul>
-            <li>
-              <Link href="/">Home</Link>
+      <header className="header">
+        <nav className="navigation">
+          <div className="group">
+            <div className="navigation__avatar">
+              {/* <TrinketComponent name="avatar__base" style="static" /> */}
+            </div>
+            <div className="navigation__text-content">
+              <h1 className="title">{data?.data.title}</h1>
+              <p className="label">{data?.data.label}</p>
+            </div>
+          </div>
+          <ul className="navigation__links">
+            <li className="link">
+              <PrismicNextLink field={null}>
+                <span className="link__text">About</span>
+              </PrismicNextLink>
             </li>
-            <li>
-              <Link href="/">About</Link>
+            <li className="link">
+              <PrismicNextLink field={null}>
+                <span className="link__text">Blog</span>
+              </PrismicNextLink>
             </li>
-            <li>
-              <Link href="/blog">Blog</Link>
-            </li>
-            <li>Contact</li>
-            <li>Book a Call</li>
           </ul>
         </nav>
       </header>

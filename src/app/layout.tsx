@@ -1,3 +1,4 @@
+import "@/utils/load-polyfills";
 import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from "@/prismicio";
 import "@/styles/main.scss";
@@ -5,6 +6,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import Layout from "@/components/layout/layout";
 import { createClient } from "@/prismicio";
+import "@/utils/preload-trinkets";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,9 +20,14 @@ export default async function RootLayout({
 }>) {
   const client = createClient();
   const navigation = await client.getSingle("navigation");
+  const spriteData = await client.getSingle("spritesheet");
 
   const data = {
     navigation,
+    spriteData: {
+      spriteSheet: spriteData.data.media_spritesheet.url ?? "",
+      collisionSheet: spriteData.data.media_collision.url ?? "",
+    },
   };
 
   return (

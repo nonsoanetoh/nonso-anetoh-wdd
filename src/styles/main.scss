@@ -1,12 +1,15 @@
+// @use "./abstract/functions" as *;
+
 @use "../../node_modules/lenis/dist/lenis.css";
 
-@use "./abstract/index" as root;
+// @use "./abstract/index" as root;
 
 @use "./base/reset";
 @use "./vendor/vendor";
 
 @use "./shared/titles";
 @use "./shared/descriptions";
+@use "./shared/utils";
 
 @use "./base/type";
 @use "./base/base";
@@ -18,13 +21,17 @@
 @use "./components/reps";
 @use "./components/text-block";
 @use "./components/inactive-cover";
+@use "./components/rapier-canvas";
 @use "./components/project-list";
 @use "./components/button";
 @use "./components/jump-links";
-@use "./components/services";
+@use "./components/process";
 @use "./components/code-block";
 @use "./components/image-carousel";
 @use "./components/blog-highlight";
+@use "./components/text";
+@use "./components/trinket";
+@use "./components/matter-canvas";
 @use "./components/event-container";
 
 @use "./layout/layout";
@@ -34,6 +41,88 @@
 
 @use "./pages";
 
-.wrapper {
-  background-color: red;
+main .wrapper {
+  --blr-scale: 1; /* starts unscaled */
+  transform: scale(var(--blr-scale));
+  transform-origin: 50% var(--origin-y, 50%);
+  transition: transform 0.4s ease;
+}
+
+.test-events {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: black;
+  padding: 1rem 2rem;
+  color: white;
+  z-index: 9999999999999999999999;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+main {
+}
+
+main .transition-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  transform: scaleX(0);
+  background-color: #6fea2a;
+
+  transform-origin: right;
+  z-index: 999999999999999999999;
+
+  display: flex;
+  align-items: center;
+  padding: var(--layout-spacing);
+  overflow: hidden;
+}
+
+.swap {
+  position: fixed;
+  top: 50%;
+  left: var(--layout-spacing);
+  transform: translateY(-50%);
+  z-index: 9999999999999999999999;
+
+  &--1 {
+    display: block;
+  }
+
+  &--2 {
+    display: none;
+  }
+}
+
+.circle-loader {
+  width: 200px;
+  height: 200px;
+  background: white;
+  border-radius: 50%;
+  transition:
+    transform 0.8s ease-in-out,
+    opacity 0.8s ease-in-out;
+}
+
+.shrink-and-fade .circle-loader {
+  transform: scale(0);
+  opacity: 0;
+}
+
+canvas {
+  pointer-events: none;
+}
+
+.preloader-av {
+  position: absolute;
+  top: 0;
+  left: 0;
+  top: 50%;
+  left: 50%;
+  width: 16vw;
+  height: 16vw;
+  transform: translate(-50%, -50%);
 }

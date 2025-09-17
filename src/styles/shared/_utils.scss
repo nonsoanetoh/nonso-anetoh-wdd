@@ -1,0 +1,10 @@
+.pointer-events {
+  pointer-events: auto;
+  &--none {
+    pointer-events: none;
+  }
+
+  &--all {
+    pointer-events: all;
+  }
+}

@@ -4,6 +4,7 @@
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { PrismicNextLink } from "@prismicio/next";
+import IndentedSectionTitle from "@/components/text/indented-section-title";
 
 export async function generateMetadata() {
   const client = createClient();
@@ -32,24 +33,37 @@ export default async function Index() {
     ],
   });
   return (
-    <section className="page--blog-list">
+    <section className="page page--blog-list">
       <div className="inner">
-        <p className="description">
-          A collection of articles detailing my journey — ideas, experiments,
-          and lessons learned while building projects.
-        </p>
-        <div className="posts">
-          {posts.map((post) => (
-            <PrismicNextLink className="post" key={post.id} field={post}>
-              <article>
-                <header>
-                  <h3>{prismic.asText(post.data.title)}</h3>
-                </header>
-              </article>
-            </PrismicNextLink>
-          ))}
+        <div className="header">
+          <div className="title">
+            <IndentedSectionTitle text={"All Posts"} />
+          </div>
+          <p className="description">
+            A collection of articles detailing my journey — ideas, experiments,
+            and lessons learned while building projects.
+          </p>
         </div>
+        <ul className="posts">
+          {posts.map((post) => (
+            <li key={post.id}>
+              <PrismicNextLink className="post" field={post}>
+                <article
+                  className="post__face post__face--front"
+                  style={{ backgroundColor: post.data.background_color }}
+                >
+                  <header className="front">
+                    <h3 className="title">{prismic.asText(post.data.title)}</h3>
+                  </header>
+                  <div className="back">dsadsa</div>
+                </article>
+              </PrismicNextLink>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
+}
+{
 }

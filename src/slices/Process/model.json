@@ -12,6 +12,31 @@
       "description": "Default",
       "imageUrl": "",
       "primary": {
+        "title": {
+          "type": "Text",
+          "config": {
+            "label": "Title",
+            "placeholder": ""
+          }
+        },
+        "description": {
+          "type": "Text",
+          "config": {
+            "label": "Description",
+            "placeholder": ""
+          }
+        },
+        "cta": {
+          "type": "Link",
+          "config": {
+            "label": "CTA",
+            "placeholder": "",
+            "select": null,
+            "allowTargetBlank": true,
+            "allowText": true,
+            "repeat": false
+          }
+        },
         "services": {
           "type": "Group",
           "config": {

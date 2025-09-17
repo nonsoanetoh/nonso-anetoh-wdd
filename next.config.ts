@@ -1,9 +1,10 @@
+// next.config.js
+import path from "path";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ["i.scdn.co"],
-  },
+  reactStrictMode: false,
+  images: { domains: ["i.scdn.co"] },
 };
 
 module.exports = nextConfig;

@@ -9,8 +9,10 @@ import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 import { RichTextComponent } from "@/components/richtext";
-import JumpLinks from "@/components/jump-links";
 import Image from "next/image";
+import Title from "@/components/blog/_title";
+import Description from "@/components/blog/_description";
+import SkipLinks from "@/components/blog/_skip-links";
 
 export async function generateMetadata({ params }) {
   const client = createClient();
@@ -43,11 +45,37 @@ export default async function Page({ params }) {
     .getByUID("blog_post", param.uid)
     .catch(() => notFound());
 
-  const { slices, title, publication_date } = page.data;
+  const { slices, title, publication_date, gif, description } = page.data;
 
   return (
-    <div className="page page--blog">
-      <section className="blog-hero">
+    <div className="page page--article">
+      <article className="inner">
+        <header>
+          <Title title={title} gif={gif} />
+        </header>
+        <div className="content">
+          <aside>
+            <Description text={description} />
+            <SkipLinks />
+          </aside>
+          <div className="post">
+            <SliceZone
+              slices={slices}
+              components={components}
+              context={{
+                publicationDate: new Date(
+                  publication_date || ""
+                ).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }),
+              }}
+            />
+          </div>
+        </div>
+        {/* <section className="blog-hero">
         <Image
           src="/blog-hero.png"
           width={300}
@@ -76,6 +104,7 @@ export default async function Page({ params }) {
             }}
           />
         </div>
+      </article> */}
       </article>
     </div>
   );

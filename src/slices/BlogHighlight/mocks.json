@@ -31,13 +31,21 @@
 							[
 								"post",
 								{
-									"__TYPE__": "LinkContent",
 									"key": "d1b2bee7-a733-45fb-b203-3209ee9ef07f",
+									"__TYPE__": "LinkContent",
 									"value": {
 										"__TYPE__": "ExternalLink",
 										"url": "http://google.com",
 										"text": "tool"
 									}
+								}
+							],
+							[
+								"excerpt",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "whole",
+									"type": "Text"
 								}
 							]
 						]

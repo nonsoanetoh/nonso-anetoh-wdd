@@ -1,8 +1,10 @@
 .image-carousel {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-areas: ". image image image counter . . . . . . .";
-  padding: var(--row) var(--column);
+  grid-template-areas: ". image image image . . . . . . . .";
+  padding: 0 var(--my);
+  padding-top: calc(var(--cell-spacing) * 2);
   gap: var(--gap);
   align-items: end;
 
@@ -20,7 +22,7 @@
 
   .image-container {
     position: relative;
-    width: calc(var(--r) * 43.3);
+    width: 100%;
     aspect-ratio: 4/5;
     overflow: hidden;
     z-index: 1;
@@ -50,5 +52,15 @@
         cursor: e-resize;
       }
     }
+  }
+
+  @media (max-width: 64rem) {
+    grid-template-areas: ". image image image image image . . . . . .";
+    padding-top: calc(var(--cell-spacing) * 2);
+  }
+
+  @media (max-width: 26rem) {
+    grid-template-areas: ". image image image image image image image image image . .";
+    padding-top: calc(var(--cell-spacing) * 5);
   }
 }

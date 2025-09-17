@@ -4,12 +4,23 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
-type BlogPostDocumentDataSlicesSlice = RichTextSlice;
+type BlogPostDocumentDataSlicesSlice = ImageCarouselSlice | RichTextSlice;
 
 /**
  * Content for Blog Post documents
  */
 interface BlogPostDocumentData {
+  /**
+   * Gif field in *Blog Post*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_post.gif
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  gif: prismic.ImageField<never>;
+
   /**
    * Title field in *Blog Post*
    *
@@ -24,24 +35,13 @@ interface BlogPostDocumentData {
   /**
    * Description field in *Blog Post*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
    * - **API ID Path**: blog_post.description
    * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  description: prismic.RichTextField;
-
-  /**
-   * Featured Image field in *Blog Post*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.featured_image
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  featured_image: prismic.ImageField<never>;
+  description: prismic.KeyTextField;
 
   /**
    * Publication Date field in *Blog Post*
@@ -207,6 +207,7 @@ export type NavigationDocument<Lang extends string = string> =
   >;
 
 type PageDocumentDataSlicesSlice =
+  | HeroSlice
   | ProcessSlice
   | ProjectListSlice
   | BlogHighlightSlice
@@ -330,11 +331,55 @@ export type PreloaderDocument<Lang extends string = string> =
     Lang
   >;
 
+/**
+ * Content for SpriteSheet documents
+ */
+interface SpritesheetDocumentData {
+  /**
+   * media-spritesheet field in *SpriteSheet*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: spritesheet.media_spritesheet
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  media_spritesheet: prismic.ImageField<never>;
+
+  /**
+   * media-collision field in *SpriteSheet*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: spritesheet.media_collision
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  media_collision: prismic.ImageField<never>;
+}
+
+/**
+ * SpriteSheet document from Prismic
+ *
+ * - **API ID**: `spritesheet`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type SpritesheetDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<SpritesheetDocumentData>,
+    "spritesheet",
+    Lang
+  >;
+
 export type AllDocumentTypes =
   | BlogPostDocument
   | NavigationDocument
   | PageDocument
-  | PreloaderDocument;
+  | PreloaderDocument
+  | SpritesheetDocument;
 
 /**
  * Item in *BlogHighlight → Default → Primary → Posts*
@@ -349,6 +394,16 @@ export interface BlogHighlightSliceDefaultPrimaryPostsItem {
    * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
    */
   post: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * Excerpt field in *BlogHighlight → Default → Primary → Posts*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blog_highlight.default.primary.posts[].excerpt
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  excerpt: prismic.KeyTextField;
 }
 
 /**
@@ -429,6 +484,132 @@ export type BlogHighlightSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *Hero → Default → Primary → Trinkets*
+ */
+export interface HeroSliceDefaultPrimaryTrinketsItem {
+  /**
+   * Trinket field in *Hero → Default → Primary → Trinkets*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.trinkets[].trinket
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  trinket: prismic.SelectField<"1" | "2">;
+
+  /**
+   * Size field in *Hero → Default → Primary → Trinkets*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.trinkets[].size
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  size: prismic.NumberField;
+}
+
+/**
+ * Item in *Hero → Default → Primary → Interactive Trinkets*
+ */
+export interface HeroSliceDefaultPrimaryInteractiveTrinketsItem {
+  /**
+   * Type field in *Hero → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.interactive_trinkets[].type
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  type: prismic.SelectField<"click" | "hover">;
+
+  /**
+   * Trinket field in *Hero → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.interactive_trinkets[].trinket
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  trinket: prismic.KeyTextField;
+
+  /**
+   * Callback field in *Hero → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.interactive_trinkets[].callback
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  callback: prismic.SelectField<
+    "explode" | "sound__clock" | "next" | "previous" | "count__up"
+  >;
+
+  /**
+   * Size field in *Hero → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.interactive_trinkets[].size
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  size: prismic.NumberField;
+}
+
+/**
+ * Primary content in *Hero → Default → Primary*
+ */
+export interface HeroSliceDefaultPrimary {
+  /**
+   * Trinkets field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.trinkets[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  trinkets: prismic.GroupField<Simplify<HeroSliceDefaultPrimaryTrinketsItem>>;
+
+  /**
+   * Interactive Trinkets field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.interactive_trinkets[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  interactive_trinkets: prismic.GroupField<
+    Simplify<HeroSliceDefaultPrimaryInteractiveTrinketsItem>
+  >;
+}
+
+/**
+ * Default variation for Hero Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type HeroSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<HeroSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Hero*
+ */
+type HeroSliceVariation = HeroSliceDefault;
+
+/**
+ * Hero Shared Slice
+ *
+ * - **API ID**: `hero`
+ * - **Description**: Hero
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
+
+/**
  * Item in *ImageCarousel → Default → Primary → Images*
  */
 export interface ImageCarouselSliceDefaultPrimaryImagesItem {
@@ -448,14 +629,49 @@ export interface ImageCarouselSliceDefaultPrimaryImagesItem {
  */
 export interface ImageCarouselSliceDefaultPrimaryTrinketsItem {
   /**
-   * trinket field in *ImageCarousel → Default → Primary → Trinkets*
+   * Trinket field in *ImageCarousel → Default → Primary → Trinkets*
    *
-   * - **Field Type**: Image
+   * - **Field Type**: Select
    * - **Placeholder**: *None*
    * - **API ID Path**: image_carousel.default.primary.trinkets[].trinket
-   * - **Documentation**: https://prismic.io/docs/field#image
+   * - **Documentation**: https://prismic.io/docs/field#select
    */
-  trinket: prismic.ImageField<never>;
+  trinket: prismic.SelectField<"Option 1" | "Option 2">;
+}
+
+/**
+ * Item in *ImageCarousel → Default → Primary → Interactive Trinkets*
+ */
+export interface ImageCarouselSliceDefaultPrimaryInteractiveTrinketsItem {
+  /**
+   * Type field in *ImageCarousel → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: image_carousel.default.primary.interactive_trinkets[].type
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  type: prismic.SelectField<"click" | "hover">;
+
+  /**
+   * Trinket field in *ImageCarousel → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: image_carousel.default.primary.interactive_trinkets[].trinket
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  trinket: prismic.KeyTextField;
+
+  /**
+   * Callback field in *ImageCarousel → Default → Primary → Interactive Trinkets*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: image_carousel.default.primary.interactive_trinkets[].callback
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  callback: prismic.SelectField<"next" | "previous">;
 }
 
 /**
@@ -484,6 +700,18 @@ export interface ImageCarouselSliceDefaultPrimary {
    */
   trinkets: prismic.GroupField<
     Simplify<ImageCarouselSliceDefaultPrimaryTrinketsItem>
+  >;
+
+  /**
+   * Interactive Trinkets field in *ImageCarousel → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: image_carousel.default.primary.interactive_trinkets[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  interactive_trinkets: prismic.GroupField<
+    Simplify<ImageCarouselSliceDefaultPrimaryInteractiveTrinketsItem>
   >;
 }
 
@@ -586,6 +814,36 @@ export interface ProcessSliceDefaultPrimaryServicesItem {
  * Primary content in *Process → Default → Primary*
  */
 export interface ProcessSliceDefaultPrimary {
+  /**
+   * Title field in *Process → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: process.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Description field in *Process → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: process.default.primary.description
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  description: prismic.KeyTextField;
+
+  /**
+   * CTA field in *Process → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: process.default.primary.cta
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  cta: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
   /**
    * Services field in *Process → Default → Primary*
    *
@@ -817,6 +1075,21 @@ export type RichTextSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *TextBlock → Default → Primary → Text*
+ */
+export interface TextBlockSliceDefaultPrimaryTextItem {
+  /**
+   * paragraph field in *TextBlock → Default → Primary → Text*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.default.primary.text[].paragraph
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  paragraph: prismic.KeyTextField;
+}
+
+/**
  * Item in *TextBlock → SpaceBetween → Primary → Text*
  */
 export interface TextBlockSliceSpaceBetweenPrimaryTextItem {
@@ -844,6 +1117,26 @@ export interface TextBlockSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   title: prismic.KeyTextField;
+
+  /**
+   * Text field in *TextBlock → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.default.primary.text[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  text: prismic.GroupField<Simplify<TextBlockSliceDefaultPrimaryTextItem>>;
+
+  /**
+   * CTA field in *TextBlock → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.default.primary.cta
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  cta: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
 }
 
 /**
@@ -959,15 +1252,24 @@ declare module "@prismicio/client" {
       PreloaderDocument,
       PreloaderDocumentData,
       PreloaderDocumentDataImagesItem,
+      SpritesheetDocument,
+      SpritesheetDocumentData,
       AllDocumentTypes,
       BlogHighlightSlice,
       BlogHighlightSliceDefaultPrimaryPostsItem,
       BlogHighlightSliceDefaultPrimary,
       BlogHighlightSliceVariation,
       BlogHighlightSliceDefault,
+      HeroSlice,
+      HeroSliceDefaultPrimaryTrinketsItem,
+      HeroSliceDefaultPrimaryInteractiveTrinketsItem,
+      HeroSliceDefaultPrimary,
+      HeroSliceVariation,
+      HeroSliceDefault,
       ImageCarouselSlice,
       ImageCarouselSliceDefaultPrimaryImagesItem,
       ImageCarouselSliceDefaultPrimaryTrinketsItem,
+      ImageCarouselSliceDefaultPrimaryInteractiveTrinketsItem,
       ImageCarouselSliceDefaultPrimary,
       ImageCarouselSliceVariation,
       ImageCarouselSliceDefault,
@@ -986,6 +1288,7 @@ declare module "@prismicio/client" {
       RichTextSliceVariation,
       RichTextSliceDefault,
       TextBlockSlice,
+      TextBlockSliceDefaultPrimaryTextItem,
       TextBlockSliceDefaultPrimary,
       TextBlockSliceSpaceBetweenPrimaryTextItem,
       TextBlockSliceSpaceBetweenPrimary,

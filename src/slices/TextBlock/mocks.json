@@ -7,6 +7,33 @@
 				"__TYPE__": "FieldContent",
 				"value": "affect",
 				"type": "Text"
+			},
+			"text": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"paragraph",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "no",
+									"type": "Text"
+								}
+							]
+						]
+					}
+				]
+			},
+			"cta": {
+				"__TYPE__": "LinkContent",
+				"key": "91cfb331-463d-4c46-ab26-7760fc7fb6e5",
+				"value": {
+					"__TYPE__": "ExternalLink",
+					"url": "http://google.com",
+					"text": "paid"
+				}
 			}
 		},
 		"items": []

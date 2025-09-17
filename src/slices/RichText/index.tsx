@@ -27,10 +27,10 @@ const RichText: FC<
         data-slice-type={slice.slice_type}
         data-slice-variation={slice.variation}
       >
-        <div className="text-group">
+        {/* <div className="text-group">
           <span className="read-time">{readTime}</span>
           <span className="publication-date">{context.publicationDate}</span>
-        </div>
+        </div> */}
         <RichTextComponent field={slice.primary.body} />
       </section>
     </>

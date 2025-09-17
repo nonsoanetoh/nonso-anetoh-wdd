@@ -1,0 +1,94 @@
+{
+  "id": "hero",
+  "type": "SharedSlice",
+  "name": "Hero",
+  "description": "Hero",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "trinkets": {
+          "type": "Group",
+          "config": {
+            "label": "Trinkets",
+            "repeat": true,
+            "fields": {
+              "trinket": {
+                "type": "Select",
+                "config": {
+                  "label": "Trinket",
+                  "placeholder": "",
+                  "options": [
+                    "1",
+                    "2"
+                  ]
+                }
+              },
+              "size": {
+                "type": "Number",
+                "config": {
+                  "label": "Size",
+                  "placeholder": ""
+                }
+              }
+            }
+          }
+        },
+        "interactive_trinkets": {
+          "type": "Group",
+          "config": {
+            "label": "Interactive Trinkets",
+            "repeat": true,
+            "fields": {
+              "type": {
+                "type": "Select",
+                "config": {
+                  "label": "Type",
+                  "placeholder": "",
+                  "options": [
+                    "click",
+                    "hover"
+                  ]
+                }
+              },
+              "trinket": {
+                "type": "Text",
+                "config": {
+                  "label": "Trinket",
+                  "placeholder": ""
+                }
+              },
+              "callback": {
+                "type": "Select",
+                "config": {
+                  "label": "Callback",
+                  "placeholder": "",
+                  "options": [
+                    "explode",
+                    "sound__clock",
+                    "next",
+                    "previous",
+                    "count__up"
+                  ]
+                }
+              },
+              "size": {
+                "type": "Number",
+                "config": {
+                  "label": "Size",
+                  "placeholder": ""
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

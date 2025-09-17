@@ -36,11 +36,52 @@
             "repeat": true,
             "fields": {
               "trinket": {
-                "type": "Image",
+                "type": "Select",
                 "config": {
-                  "label": "trinket",
-                  "constraint": {},
-                  "thumbnails": []
+                  "label": "Trinket",
+                  "placeholder": "",
+                  "options": [
+                    "Option 1",
+                    "Option 2"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "interactive_trinkets": {
+          "type": "Group",
+          "config": {
+            "label": "Interactive Trinkets",
+            "repeat": true,
+            "fields": {
+              "type": {
+                "type": "Select",
+                "config": {
+                  "label": "Type",
+                  "placeholder": "",
+                  "options": [
+                    "click",
+                    "hover"
+                  ]
+                }
+              },
+              "trinket": {
+                "type": "Text",
+                "config": {
+                  "label": "Trinket",
+                  "placeholder": ""
+                }
+              },
+              "callback": {
+                "type": "Select",
+                "config": {
+                  "label": "Callback",
+                  "placeholder": "",
+                  "options": [
+                    "next",
+                    "previous"
+                  ]
                 }
               }
             }

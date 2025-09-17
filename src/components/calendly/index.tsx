@@ -11,8 +11,8 @@ const Calendly = () => {
 
   return (
     <>
-      <button onClick={handleCalendly} className="schedule-cta">
-        Schedule a Call
+      <button onClick={handleCalendly} className="book-cta">
+        Book a Call
       </button>
     </>
   );

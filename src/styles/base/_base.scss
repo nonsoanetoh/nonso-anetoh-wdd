@@ -10,7 +10,7 @@ body {
   overscroll-behavior-y: none;
   padding: 0;
   margin: 0;
-  background-color: $color-white;
+  background-color: #ffffff;
   color: $color-grey;
   font-family: "PP Neue Montreal", sans-serif;
   font-weight: 500;
@@ -46,6 +46,7 @@ button {
   border: none;
   outline: none;
   font: inherit;
+  cursor: pointer;
 }
 
 [data-state="disabled"] {
@@ -58,21 +59,21 @@ a {
   color: inherit;
 }
 
-p::selection,
-span::selection,
-h1::selection,
-h2::selection,
-h3::selection,
-h4::selection,
-h5::selection,
-h6::selection,
-a::selection,
-label::selection,
-img::selection,
-li::selection {
-  color: black;
-  background-color: #6eea29;
-}
+// p::selection,
+// span::selection,
+// h1::selection,
+// h2::selection,
+// h3::selection,
+// h4::selection,
+// h5::selection,
+// h6::selection,
+// a::selection,
+// label::selection,
+// img::selection,
+// li::selection {
+//   color: black;
+//   background-color: #6eea29;
+// }
 
 html.lenis,
 html.lenis body {

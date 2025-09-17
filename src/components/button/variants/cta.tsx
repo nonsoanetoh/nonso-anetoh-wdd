@@ -19,8 +19,6 @@ const CTA: FC<CTAProps> = ({ label, link, linkType }) => {
       linkRef.current?.querySelectorAll(".circle") || []
     ).reverse();
 
-    console.log(linkRef);
-
     if (!circles) return;
 
     const timeline = gsap.timeline({ paused: true });
@@ -40,6 +38,8 @@ const CTA: FC<CTAProps> = ({ label, link, linkType }) => {
       {
         x: (i) => angles[i].x,
         y: (i) => angles[i].y,
+        rotate: 180,
+        transformOrigin: "50% 50%",
         duration: 0.2,
         ease: "back.in(7)",
         stagger: 0.01,
@@ -109,7 +109,7 @@ const Icon: FC<IconProps> = ({ linkType }) => {
               key={index}
               cx={cx}
               cy={cy}
-              r="2"
+              r={2}
               fill="#454545"
               className="circle"
             />

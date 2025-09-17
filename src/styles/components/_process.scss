@@ -1,0 +1,163 @@
+.process {
+  padding: 0 var(--my);
+  padding-top: calc(var(--cell-spacing) * 4);
+
+  .header {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas:
+      "title title title . . . . . . . . ."
+      ". . . group group group . . . . . .";
+    padding-bottom: calc(var(--cell-spacing) * 3);
+
+    @media (max-width: 64rem) {
+      grid-template-areas:
+        "title title title title title . . . . . . ."
+        ". . . . group group group group group . . .";
+    }
+
+    @media (max-width: 26rem) {
+      grid-template-areas:
+        "title title title title title title title title title title title title"
+        ". . group group group group group group group group group .";
+      gap: calc(var(--cell-spacing) * 5);
+    }
+
+    .title {
+      grid-area: title;
+    }
+
+    .group {
+      display: flex;
+      flex-direction: column;
+      grid-area: group;
+      gap: var(--cell-spacing);
+
+      @media (max-width: 64rem) {
+        gap: var(--cell-spacing);
+      }
+
+      @media (max-width: 26rem) {
+        gap: calc(var(--cell-spacing) * 3);
+      }
+
+      .description {
+        width: 100%;
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas:
+      "legend legend legend . . . . . . . . ."
+      "card-1 card-1 card-1 card-1 card-1 card-1 card-1 card-1 card-1 card-1 card-1 card-1"
+      "card-2 card-2 card-2 card-2 card-2 card-2 card-2 card-2 card-2 card-2 card-2 card-2"
+      "card-3 card-3 card-3 card-3 card-3 card-3 card-3 card-3 card-3 card-3 card-3 card-3"
+      "card-4 card-4 card-4 card-4 card-4 card-4 card-4 card-4 card-4 card-4 card-4 card-4";
+  }
+
+  .card {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas: ". . . . . content content content content content content content";
+    padding-bottom: calc(var(--r) * 9);
+
+    &--1 {
+      grid-area: legend-start / card-1-start / auto / card-1-end;
+    }
+
+    &--2 {
+      grid-area: card-2;
+    }
+
+    &--3 {
+      grid-area: card-3;
+    }
+
+    &--4 {
+      grid-area: card-4;
+    }
+
+    .content {
+      grid-area: content;
+      display: flex;
+      flex-direction: row;
+      gap: calc((100vw / 12) + var(--gap));
+
+      .index {
+        font-size: calc(var(--r) * 30);
+        margin-top: calc(var(--r) * 10 * -1);
+        width: calc(var(--r) * 80);
+
+        span {
+          width: 100%;
+        }
+      }
+
+      .inner {
+        .text {
+          .title {
+            text-transform: uppercase;
+            font-size: calc(var(--r) * 1.8);
+            color: #9d9d9d;
+            margin-bottom: calc(var(--r) * 2.6);
+          }
+
+          p {
+            font-size: calc(var(--r) * 2.4);
+          }
+
+          p + p {
+            text-indent: calc(9 * var(--r));
+          }
+
+          ul {
+            margin-top: calc(9 * var(--r));
+            margin-bottom: calc(12 * var(--r));
+            font-size: calc(var(--r) * 2.4);
+
+            display: flex;
+            flex-direction: column;
+            gap: calc(3 * var(--r));
+
+            li {
+              position: relative;
+              &::after {
+                content: "";
+                position: absolute;
+                bottom: calc(-1 * var(--r));
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background-color: #eaeaea;
+              }
+            }
+          }
+        }
+        .medias {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+          margin-top: calc(var(--r) * 9);
+          justify-content: end;
+          align-items: end;
+
+          .media {
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 64rem) {
+    padding-top: calc(var(--cell-spacing) * 5);
+  }
+
+  @media (max-width: 26rem) {
+    padding-top: calc(var(--cell-spacing) * 6);
+  }
+}

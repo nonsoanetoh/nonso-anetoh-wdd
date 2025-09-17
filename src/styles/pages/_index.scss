@@ -8,4 +8,6 @@
   position: relative;
   width: 100%;
   min-height: 100dvh;
+
+  padding: calc(var(--r) * 2) calc(var(--r) * 3);
 }

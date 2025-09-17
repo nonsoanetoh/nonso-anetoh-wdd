@@ -18,6 +18,33 @@
             "label": "Title",
             "placeholder": ""
           }
+        },
+        "text": {
+          "type": "Group",
+          "config": {
+            "label": "Text",
+            "repeat": true,
+            "fields": {
+              "paragraph": {
+                "type": "Text",
+                "config": {
+                  "label": "paragraph",
+                  "placeholder": ""
+                }
+              }
+            }
+          }
+        },
+        "cta": {
+          "type": "Link",
+          "config": {
+            "label": "CTA",
+            "placeholder": "",
+            "select": null,
+            "allowTargetBlank": true,
+            "allowText": true,
+            "repeat": false
+          }
         }
       },
       "items": {}

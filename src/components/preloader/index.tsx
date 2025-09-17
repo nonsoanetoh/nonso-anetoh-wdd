@@ -1,60 +1,41 @@
-import { usePreloaderContext } from "@/context/PreloaderContext";
-import React, { FC, useEffect, useState } from "react";
-import { PrismicNextImage } from "@prismicio/next";
-import usePreloader from "@/hooks/usePreloader";
+import React, { FC, useEffect } from "react";
 import { NavigationDocument } from "../../../prismicio-types";
+import { usePathname } from "next/navigation";
+import { LenisRef } from "lenis/react";
 
 interface PreloaderProps {
+  lenis: React.RefObject<LenisRef | null>;
   data?: NavigationDocument;
 }
 
-const Preloader: FC<PreloaderProps> = ({ data }) => {
-  const { isPreloaded, setIsPreloaded } = usePreloaderContext();
+const Preloader: FC<PreloaderProps> = ({ lenis, data }) => {
+  const pathname = usePathname();
 
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  console.log("Preloader data:", data);
+  console.log("lenis:", lenis.current);
 
-  const { preloaderRef, startAnimation } = usePreloader({
-    swapSpeed: 0.35,
-  });
+  const isHomePage = pathname === "/";
 
-  useEffect(() => {
-    if (data) {
-      const images = document.querySelectorAll(".preloader img");
-      if (images.length > 0) {
-        setImagesLoaded(true);
-      }
+  const stopScroll = () => {
+    if (lenis.current) {
+      lenis.current.lenis?.stop();
     }
-  }, [data]);
+  };
 
-  useEffect(() => {
-    if (imagesLoaded) {
-      const currentPreloaderRef = preloaderRef.current;
-
-      if (currentPreloaderRef) {
-        const frames = Array.from(
-          currentPreloaderRef.querySelectorAll(".preloader__image img")
-        ) as HTMLElement[];
-
-        startAnimation(frames).then(() => {
-          setIsPreloaded(true);
-        });
-      }
+  const startScroll = () => {
+    if (lenis.current) {
+      lenis.current.lenis?.start();
     }
-  }, [imagesLoaded, preloaderRef, startAnimation, setIsPreloaded]);
+  };
 
   return (
     <>
-      {!isPreloaded && (
+      <section className="preloader">preloader</section>
+      {/* {!isPreloaded && (
         <section className="preloader" ref={preloaderRef}>
-          {data?.data.images.map((image, index) => {
-            return (
-              <figure className="preloader__image" key={index}>
-                <PrismicNextImage field={image.image} alt="" priority />
-              </figure>
-            );
-          })}
+          preloader
         </section>
-      )}
+      )} */}
     </>
   );
 };

@@ -53,6 +53,13 @@
                   "allowText": true,
                   "repeat": false
                 }
+              },
+              "excerpt": {
+                "type": "Text",
+                "config": {
+                  "label": "Excerpt",
+                  "placeholder": ""
+                }
               }
             }
           }

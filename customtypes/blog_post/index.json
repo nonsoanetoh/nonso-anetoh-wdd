@@ -12,6 +12,14 @@
           "label": "UID"
         }
       },
+      "gif": {
+        "type": "Image",
+        "config": {
+          "label": "Gif",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
       "title": {
         "type": "StructuredText",
         "config": {
@@ -22,20 +30,10 @@
         }
       },
       "description": {
-        "type": "StructuredText",
+        "type": "Text",
         "config": {
           "label": "Description",
-          "placeholder": "",
-          "allowTargetBlank": true,
-          "multi": "strong,em,paragraph"
-        }
-      },
-      "featured_image": {
-        "type": "Image",
-        "config": {
-          "label": "Featured Image",
-          "constraint": {},
-          "thumbnails": []
+          "placeholder": ""
         }
       },
       "publication_date": {
@@ -50,6 +48,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "image_carousel": {
+              "type": "SharedSlice"
+            },
             "rich_text": {
               "type": "SharedSlice"
             }

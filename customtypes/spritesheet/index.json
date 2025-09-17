@@ -1,0 +1,27 @@
+{
+  "format": "custom",
+  "id": "spritesheet",
+  "label": "SpriteSheet",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "media_spritesheet": {
+        "type": "Image",
+        "config": {
+          "label": "media-spritesheet",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "media_collision": {
+        "type": "Image",
+        "config": {
+          "label": "media-collision",
+          "constraint": {},
+          "thumbnails": []
+        }
+      }
+    }
+  }
+}

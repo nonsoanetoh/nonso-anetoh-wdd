@@ -4,9 +4,49 @@
   --row: calc(2 * var(--r));
   --gap: calc(1.6 * var(--r));
   --column: calc(3 * var(--r));
+  --cell: calc(5 * var(--r));
 
   --color-bg-grey: #3f3f3f;
+  --color-text-grey: #9d9d9d;
+  --color-orange: #ff4433;
   --color-white: #fff;
+
+  --fs-title: calc(var(--r) * 5.8);
+  --fs-body: calc(var(--r) * 2.4);
+
+  --column-gap: calc(var(--r) * 1.6);
+  --cell-spacing: calc(var(--r) * 7);
+
+  --mx: calc(var(--r) * 3);
+  --my: calc(var(--r) * 2);
+}
+
+@media (max-width: 64rem) {
+  :root {
+    --r: calc((100vw / 1024) * 10);
+    --fs-title: calc(var(--r) * 4.2);
+    --fs-body: calc(var(--r) * 2);
+
+    --column-gap: calc(var(--r) * 2);
+    --cell-spacing: calc(var(--r) * 5);
+
+    --mx: calc(var(--r) * 3);
+    --my: calc(var(--r) * 2);
+  }
+}
+
+@media (max-width: 26rem) {
+  :root {
+    --r: calc((100vw / 430) * 10);
+    --fs-title: calc(var(--r) * 3.8);
+    --fs-body: calc(var(--r) * 2);
+
+    --column-gap: calc(var(--r) * 1);
+    --cell-spacing: calc(var(--r) * 1.5);
+
+    --mx: calc(var(--r) * 1);
+    --my: calc(var(--r) * 1.5);
+  }
 }
 
 $color-white: #ffffff;

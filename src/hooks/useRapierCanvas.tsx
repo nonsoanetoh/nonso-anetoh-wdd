@@ -1,124 +1,134 @@
 "use client";
-import { Canvas } from "@react-three/fiber";
-import { Physics, RigidBody } from "@react-three/rapier";
-import { useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 
-type UseRapierCanvasConfig = {
-  container?: HTMLElement | null;
+import React, { useLayoutEffect, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { Canvas, useThree } from "@react-three/fiber";
+import { OrbitControls, OrthographicCamera } from "@react-three/drei";
+import { Physics, CuboidCollider } from "@react-three/rapier";
+
+interface UseRapierCanvasConfig {
   background?: string;
   gravity?: [number, number, number];
-  cameraZoom?: number;
-  floor?: {
-    width?: number;
-    depth?: number;
-    height?: number;
-    color?: string;
-  };
-  children: React.ReactNode;
-};
+  showDebug?: boolean;
+  children?: React.ReactNode;
+}
 
-export function useRapierCanvas(config: UseRapierCanvasConfig | null) {
-  const canvasContainerRef = useRef<HTMLDivElement | null>(null);
-  const [canvasReady, setCanvasReady] = useState(false);
-  const [floorY, setFloorY] = useState(0);
-  const [dynamicFloorWidth, setDynamicFloorWidth] = useState(10); // Add state for floor width
+interface UseRapierCanvasReturn {
+  canvas: React.ReactPortal | null;
+  zoom: number;
+  viewport: { width: number; height: number };
+}
+
+export function useRapierCanvas(
+  containerRef: React.RefObject<HTMLElement | null>,
+  config?: UseRapierCanvasConfig
+): UseRapierCanvasReturn {
+  const [mounted, setMounted] = useState(false);
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const [zoom, setZoom] = useState(100);
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
+
+  const floorHeight = 2;
 
   useLayoutEffect(() => {
-    if (!config?.container || canvasContainerRef.current) return;
-
-    const wrapper = document.createElement("div");
-    Object.assign(wrapper.style, {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      pointerEvents: "auto",
-      zIndex: "10",
-      background: config.background || "transparent",
-    });
-
-    config.container.appendChild(wrapper);
-    canvasContainerRef.current = wrapper;
-
-    const updateDimensions = () => {
-      const containerWidth = config.container?.clientWidth || 300;
-      const containerHeight = config.container?.clientHeight || 300;
-      const zoom = config.cameraZoom ?? 100;
-      const worldHeight = containerHeight / zoom;
-      const floorHeight = config.floor?.height ?? 1;
-
-      setDynamicFloorWidth(containerWidth / zoom);
-      setFloorY(-worldHeight / 2 + floorHeight / 2);
-    };
-
-    updateDimensions();
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", updateDimensions);
+    if (containerRef.current) {
+      setMounted(true);
     }
+  }, [containerRef]);
 
-    setCanvasReady(true);
+  useEffect(() => {
+    if (!containerRef.current) return;
 
-    return () => {
-      wrapper.remove();
-      canvasContainerRef.current = null;
-      setCanvasReady(false);
-
-      if (typeof window !== "undefined") {
-        window.removeEventListener("resize", updateDimensions);
-      }
+    const updateSize = () => {
+      const width = containerRef.current!.offsetWidth;
+      const height = containerRef.current!.offsetHeight;
+      setCanvasSize({ width, height });
     };
-  }, [
-    config?.container,
-    config?.background,
-    config?.cameraZoom,
-    config?.floor?.height,
-  ]);
 
-  if (!config || !canvasReady || !canvasContainerRef.current) return null;
+    updateSize();
+
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, [containerRef]);
 
   const {
-    children,
+    background = "#f0f0f0",
     gravity = [0, -9.81, 0],
-    background = "transparent",
-    cameraZoom = 100,
-    floor,
-  } = config;
+    showDebug = true,
+    children,
+  } = config || {};
 
-  const floorWidth = dynamicFloorWidth;
-  const floorDepth = floor?.depth ?? 1;
-  const floorHeight = floor?.height ?? 1;
-  const floorColor = floor?.color ?? "gray";
+  const ResizeAware = () => {
+    const { viewport, camera } = useThree();
+    useEffect(() => {
+      setZoom((camera as any).zoom);
+      setViewport(viewport);
+    }, [viewport, camera]);
+    return null;
+  };
 
-  return createPortal(
+  if (!mounted || !containerRef.current) {
+    return {
+      canvas: null,
+      zoom: 100,
+      viewport: { width: 0, height: 0 },
+    };
+  }
+
+  const floorY = -viewport.height / 2 + floorHeight;
+
+  const canvas = createPortal(
     <Canvas
       orthographic
-      camera={{
-        zoom: cameraZoom,
-        position: [0, 0, 10],
-        near: 0.1,
-        far: 100,
-      }}
       style={{
-        pointerEvents: "auto",
+        width: canvasSize.width,
+        height: canvasSize.height,
+        position: "absolute",
+        top: 0,
+        left: 0,
         background,
       }}
     >
+      <ResizeAware />
+
+      <OrthographicCamera
+        makeDefault
+        zoom={canvasSize.width / 10}
+        position={[0, 0, 10]}
+      />
       <ambientLight intensity={0.5} />
-      <directionalLight position={[0, 10, 10]} />
-      <Physics gravity={gravity}>
-        {/* Aligned Floor */}
-        <RigidBody type="fixed" colliders="cuboid" position={[0, floorY, 0]}>
-          <mesh>
-            <boxGeometry args={[floorWidth, floorHeight, floorDepth]} />
-            <meshStandardMaterial color={floorColor} />
-          </mesh>
-        </RigidBody>
+      <directionalLight position={[10, 10, 5]} intensity={0.8} />
+      <OrbitControls enableZoom={false} enableRotate={false} />
+
+      <Physics gravity={gravity} debug={showDebug}>
+        {/* Floor */}
+        <CuboidCollider args={[5, floorHeight, 1]} position={[0, floorY, 0]} />
+
+        {/* Ceiling */}
+        <CuboidCollider
+          args={[5, 2, 1]}
+          position={[0, viewport.height / 2 - 2, 0]}
+        />
+
+        {/* Side walls */}
+        <CuboidCollider args={[1, 5, 1]} position={[-6, 0, 0]} />
+        <CuboidCollider args={[1, 5, 1]} position={[6, 0, 0]} />
+
+        {/* Front and back walls */}
+        <CuboidCollider args={[5, 5, 0.1]} position={[0, 0, -1]} />
+        <CuboidCollider args={[5, 5, 0.1]} position={[0, 0, 1]} />
+
         {children}
       </Physics>
     </Canvas>,
-    canvasContainerRef.current
+    containerRef.current
   );
+
+  return {
+    canvas,
+    zoom,
+    viewport,
+  };
 }

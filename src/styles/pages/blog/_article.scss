@@ -1,0 +1,110 @@
+@use "../../abstract/functions" as *;
+
+.page--article {
+  .inner {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    grid-template-areas:
+      "header header header header header header header header header header header header header header"
+      "content content content content content content content content content content content content content content";
+    gap: r(100);
+
+    header {
+      grid-area: header;
+
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      gap: r(20);
+
+      .title-wrapper {
+        position: relative;
+        grid-column: 1 / 12;
+
+        figure {
+          position: absolute;
+          top: r(12);
+          left: 0;
+
+          height: r(68);
+          width: r(82);
+
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            vertical-align: middle;
+          }
+        }
+
+        h1 {
+          font-size: r(91.5);
+          text-transform: uppercase;
+          font-weight: bold;
+          text-indent: r(99);
+          line-height: r(99);
+          color: #231f20;
+        }
+      }
+    }
+
+    .content {
+      position: relative;
+      grid-area: content;
+      padding-top: r(20);
+      display: grid;
+      min-height: 100vh;
+      align-items: start;
+      grid-template-columns: repeat(14, 1fr);
+      grid-template-areas: "aside aside aside . post post post post post post post post post post";
+      gap: r(20);
+
+      aside {
+        grid-area: aside;
+        align-self: start;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: r(50);
+        position: sticky;
+        left: 0;
+        top: r(20);
+      }
+
+      .description {
+        p {
+          font-size: r(23.5);
+        }
+      }
+
+      .skip-links {
+      }
+
+      .section-label {
+        display: inline-block;
+        padding: r(5) r(7);
+        background-color: #f2f2f2;
+        justify-self: start;
+        margin-bottom: r(14);
+
+        .inner {
+          font-size: r(16);
+          text-transform: uppercase;
+          display: inline-block;
+        }
+      }
+
+      .post {
+        grid-area: post;
+
+        // font definitions
+
+        h2 {
+          font-size: r(36);
+          text-transform: uppercase;
+          margin-bottom: r(14);
+        }
+      }
+    }
+  }
+}

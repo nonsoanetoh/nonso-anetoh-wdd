@@ -48,25 +48,43 @@
 							[
 								"trinket",
 								{
-									"__TYPE__": "ImageContent",
-									"origin": {
-										"id": "main",
-										"url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
-										"width": 4016,
-										"height": 6016
-									},
-									"url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
-									"width": 4016,
-									"height": 6016,
-									"edit": {
-										"zoom": 1,
-										"crop": {
-											"x": 0,
-											"y": 0
-										},
-										"background": "transparent"
-									},
-									"thumbnails": {}
+									"__TYPE__": "FieldContent",
+									"value": "Option 1",
+									"type": "Select"
+								}
+							]
+						]
+					}
+				]
+			},
+			"interactive_trinkets": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"type",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "click",
+									"type": "Select"
+								}
+							],
+							[
+								"callback",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "previous",
+									"type": "Select"
+								}
+							],
+							[
+								"trinket",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "night",
+									"type": "Text"
 								}
 							]
 						]

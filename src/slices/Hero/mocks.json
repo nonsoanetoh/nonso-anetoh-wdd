@@ -1,0 +1,77 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"trinkets": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"trinket",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "2",
+									"type": "Select"
+								}
+							],
+							[
+								"size",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "47",
+									"type": "Number"
+								}
+							]
+						]
+					}
+				]
+			},
+			"interactive_trinkets": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"type",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "hover",
+									"type": "Select"
+								}
+							],
+							[
+								"trinket",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "green",
+									"type": "Text"
+								}
+							],
+							[
+								"callback",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "count__up",
+									"type": "Select"
+								}
+							],
+							[
+								"size",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "74",
+									"type": "Number"
+								}
+							]
+						]
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]

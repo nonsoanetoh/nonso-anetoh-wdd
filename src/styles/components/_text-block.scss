@@ -1,35 +1,65 @@
 .text-block {
-  .space-between {
+  .inner {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-areas: "title title title . . . . . . content content content";
-    padding: var(--row) var(--column);
-    gap: var(--gap);
+    padding: 0 var(--my);
+    padding-top: calc(var(--cell-spacing));
+    gap: var(--column-gap);
 
-    .title {
-      grid-area: title;
-
-      h2 {
-        font-size: calc(5.8 * var(--r));
-        text-indent: calc(9 * var(--r));
-        line-height: 1.2;
-      }
+    &--default {
+      grid-template-areas:
+        "title title title . . . . . . . . ."
+        ". . . content content content . . . . . .";
     }
 
-    .content {
-      grid-area: content;
+    &--space-between {
+      grid-template-areas: "title title title . . . . . . content content content";
 
-      p {
-        font-size: calc(2.2 * var(--r));
+      .title {
+        grid-area: title;
       }
 
-      p + p {
-        margin-top: var(--row);
+      .content {
+        grid-area: content;
+
+        p,
+        button,
+        a {
+          font-size: var(--fs-body);
+        }
+
+        p + p {
+          margin-top: calc(var(--cell-spacing) / 2);
+        }
+
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--cell-spacing) / 2);
       }
 
-      display: flex;
-      flex-direction: column;
-      gap: calc(var(--r) * 5);
+      @media (max-width: 64rem) {
+        grid-template-areas: "title title title title . . . content content content content content";
+
+        .content {
+          gap: calc(var(--cell-spacing) * 1);
+        }
+      }
+
+      @media (max-width: 26rem) {
+        grid-template-areas:
+          "title title title title title title title title title . . ."
+          ". . content content content content content content content content content .";
+        gap: calc(3 * var(--cell-spacing)) var(--column-gap);
+        padding-top: calc(1.5 * var(--cell-spacing));
+
+        .content {
+          gap: calc(var(--cell-spacing) * 5);
+
+          p + p {
+            margin-top: calc(var(--cell-spacing));
+          }
+        }
+      }
     }
   }
 }

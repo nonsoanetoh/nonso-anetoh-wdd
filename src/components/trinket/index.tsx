@@ -24,10 +24,8 @@ const TrinketComponent = forwardRef<HTMLDivElement, TrinketComponentProps>(
       if (!doc) return;
       const parseSymbol = (symId: string): ParsedSymbol | null => {
         const sym = doc.getElementById(symId);
-        if (!sym) {
-          console.warn(`Symbol #${symId} not found in sprite sheet`);
-          return null;
-        }
+        if (!sym) return null;
+
         const viewBox = sym.getAttribute("viewBox") || "0 0 24 24";
 
         const serialize = (node: Element): string => {
@@ -65,39 +63,38 @@ const TrinketComponent = forwardRef<HTMLDivElement, TrinketComponentProps>(
       const parsed = ids
         .map(parseSymbol)
         .filter((s): s is ParsedSymbol => Boolean(s));
-
       setSvgSymbols(parsed);
-      parsed.forEach((ps) => ({ id: ps.id, path: ps.inner }));
     }, [doc, name]);
-
-    if (!doc || svgSymbols.length === 0) return null;
 
     return (
       <div className="trinket" ref={ref} data-body-ready="false">
-        {svgSymbols.map((symbol, i) => {
-          const isLast = i === svgSymbols.length - 1 && style === "interactive";
-
-          return (
-            <svg
-              key={symbol.id}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox={symbol.viewBox}
-              data-id={symbol.id}
-              id={symbol.id}
-              style={{
-                zIndex: svgSymbols.length - i,
-                display: i !== 0 ? "none" : "initial",
-                pointerEvents: "none",
-              }}
-              aria-hidden="true"
-            >
-              <g
-                dangerouslySetInnerHTML={{ __html: symbol.inner }}
-                style={{ pointerEvents: "all", cursor: "pointer" }}
-              />
-            </svg>
-          );
-        })}
+        {/* Only render SVGs when ready */}
+        {doc &&
+          svgSymbols.length > 0 &&
+          svgSymbols.map((symbol, i) => {
+            const isCollision = symbol.id.endsWith("--collision");
+            return (
+              <svg
+                key={symbol.id}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox={symbol.viewBox}
+                data-id={symbol.id}
+                id={symbol.id}
+                data-collision={isCollision ? "true" : undefined}
+                style={{
+                  zIndex: svgSymbols.length - i,
+                  display: i !== 0 ? "none" : "initial",
+                  pointerEvents: "none",
+                }}
+                aria-hidden="true"
+              >
+                <g
+                  dangerouslySetInnerHTML={{ __html: symbol.inner }}
+                  style={{ pointerEvents: "all", cursor: "pointer" }}
+                />
+              </svg>
+            );
+          })}
       </div>
     );
   }

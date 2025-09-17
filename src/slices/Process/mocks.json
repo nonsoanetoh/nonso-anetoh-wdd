@@ -34,7 +34,6 @@
 							[
 								"media_one",
 								{
-									"__TYPE__": "ImageContent",
 									"origin": {
 										"id": "main",
 										"url": "https://images.unsplash.com/photo-1560762484-813fc97650a0",
@@ -52,13 +51,15 @@
 										},
 										"background": "transparent"
 									},
+									"credits": null,
+									"alt": null,
+									"__TYPE__": "ImageContent",
 									"thumbnails": {}
 								}
 							],
 							[
 								"media_two",
 								{
-									"__TYPE__": "ImageContent",
 									"origin": {
 										"id": "main",
 										"url": "https://images.unsplash.com/photo-1606248897732-2c5ffe759c04",
@@ -76,13 +77,15 @@
 										},
 										"background": "transparent"
 									},
+									"credits": null,
+									"alt": null,
+									"__TYPE__": "ImageContent",
 									"thumbnails": {}
 								}
 							],
 							[
 								"media_three",
 								{
-									"__TYPE__": "ImageContent",
 									"origin": {
 										"id": "main",
 										"url": "https://images.unsplash.com/photo-1531771686035-25f47595c87a",
@@ -100,13 +103,15 @@
 										},
 										"background": "transparent"
 									},
+									"credits": null,
+									"alt": null,
+									"__TYPE__": "ImageContent",
 									"thumbnails": {}
 								}
 							],
 							[
 								"media_four",
 								{
-									"__TYPE__": "ImageContent",
 									"origin": {
 										"id": "main",
 										"url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
@@ -124,12 +129,34 @@
 										},
 										"background": "transparent"
 									},
+									"credits": null,
+									"alt": null,
+									"__TYPE__": "ImageContent",
 									"thumbnails": {}
 								}
 							]
 						]
 					}
 				]
+			},
+			"title": {
+				"__TYPE__": "FieldContent",
+				"value": "suggest",
+				"type": "Text"
+			},
+			"description": {
+				"__TYPE__": "FieldContent",
+				"value": "proud",
+				"type": "Text"
+			},
+			"cta": {
+				"key": "847e4449-4d8f-4a56-8d58-5ee752ef42e0",
+				"__TYPE__": "LinkContent",
+				"value": {
+					"__TYPE__": "ExternalLink",
+					"url": "https://slicemachine.dev",
+					"text": "eat"
+				}
 			}
 		},
 		"items": []

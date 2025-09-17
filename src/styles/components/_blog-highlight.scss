@@ -14,10 +14,7 @@
     gap: calc(var(--row) * 4);
 
     h2 {
-      font-size: calc(5.8 * var(--r));
-      text-indent: calc(9 * var(--r));
-      max-width: calc(var(--r) * 45);
-      line-height: 1.2;
+      max-width: calc(var(--r) * 36);
     }
 
     .group {

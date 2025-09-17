@@ -10,3 +10,8 @@
 // .noscript {
 //   z-index: z("unsupported");
 // }
+
+@function r($value) {
+  $factor: calc($value / 10);
+  @return calc(var(--r) * #{$factor});
+}

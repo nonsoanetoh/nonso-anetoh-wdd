@@ -1,0 +1,13 @@
+.text-component {
+  &--indented-section-title {
+    h2 {
+      font-size: var(--fs-title);
+      text-indent: calc(9 * var(--r));
+      line-height: 1.2;
+
+      & > * {
+        text-indent: initial;
+      }
+    }
+  }
+}
