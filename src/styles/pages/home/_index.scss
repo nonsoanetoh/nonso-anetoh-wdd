@@ -1,6 +1,8 @@
 @use "../../abstract/variables" as b;
 
 .page--home {
+  padding: 0;
+
   .inner {
     position: relative;
     background-color: white;

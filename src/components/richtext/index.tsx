@@ -7,7 +7,6 @@ import {
   PrismicRichText,
   PrismicLink,
 } from "@prismicio/react";
-import CodeBlock from "../codeblock";
 import { PrismicNextImage } from "@prismicio/next";
 
 const slugify = (s: string) =>
@@ -134,7 +133,7 @@ export const richTextComponents: JSXMapSerializer = {
     return <PrismicLink field={node.data}>{children}</PrismicLink>;
   },
   preformatted: ({ node }) => {
-    return <CodeBlock code={node.text} />;
+    return <></>;
   },
   image: ({ node }) => {
     return (

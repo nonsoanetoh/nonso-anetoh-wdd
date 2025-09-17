@@ -41,7 +41,7 @@ const HeroComponent: FC<HeroProps> = ({ data }) => {
       ref={containerRef}
     >
       <div className="matter-container">
-        {trinketData.map((trinket: ParsedTrinket) => (
+        {/* {trinketData.map((trinket: ParsedTrinket) => (
           <TrinketComponent
             id={trinket.id}
             key={trinket.id}
@@ -53,7 +53,7 @@ const HeroComponent: FC<HeroProps> = ({ data }) => {
             size={trinket.size}
           />
         ))}
-        <MatterCanvas trinketData={trinketData} />
+        <MatterCanvas trinketData={trinketData} /> */}
       </div>
     </section>
   );

@@ -1,5 +1,4 @@
 import Button from "@/components/button";
-import IndentedSectionTitle from "@/components/text/indented-section-title";
 import { Content } from "@prismicio/client";
 import React, { FC } from "react";
 
@@ -18,9 +17,7 @@ interface DefaultTextBlockProps {
 const Default: FC<DefaultTextBlockProps> = ({ data }) => {
   return (
     <div className="inner inner--default">
-      <div className="title">
-        <IndentedSectionTitle text={data.primary.title ?? ""} />
-      </div>
+      <div className="title">Title</div>
       <div className="content">
         <div className="text">
           {data.primary.text.map((item, index) => {

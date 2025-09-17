@@ -4,7 +4,6 @@ import { extractLink } from "@/utils/parseString";
 import Link from "next/link";
 import { PrismicNextImage } from "@prismicio/next";
 import Button from "../button";
-import IndentedSectionTitle from "../text/indented-section-title";
 
 interface PLProps {
   data: Content.ProjectListSlice;
@@ -19,7 +18,7 @@ const ProjectListComponent: FC<PLProps> = ({ data }) => {
       data-slice-variation={data.variation}
     >
       <div className="header">
-        <IndentedSectionTitle text={data.primary.title ?? ""} />
+        Title
         <div className="group">
           <p>{data.primary.description}</p>
           <Button

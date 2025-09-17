@@ -2,7 +2,6 @@ import { asDate, Content } from "@prismicio/client";
 import React, { FC } from "react";
 import Button from "../button";
 import { PrismicNextLink } from "@prismicio/next";
-import IndentedSectionTitle from "../text/indented-section-title";
 
 interface BHProps {
   data: Content.BlogHighlightSlice;
@@ -16,8 +15,7 @@ const BlogHighlightComponent: FC<BHProps> = ({ data }) => {
       data-slice-variation={data.variation}
     >
       <div className="text-content">
-        <IndentedSectionTitle text={data.primary.title ?? ""} />
-
+        Title
         <div className="group">
           <p>{data.primary.description}</p>
           <Button

@@ -5,7 +5,6 @@ import { PrismicImage } from "@prismicio/react";
 import { slugify } from "@/utils/parseString";
 import ServiceLegend from "../service-legend";
 import Button from "../button";
-import IndentedSectionTitle from "../text/indented-section-title";
 
 interface PCProps {
   data: Content.ProcessSlice;
@@ -50,9 +49,7 @@ const ProcessComponent: FC<PCProps> = ({ data }) => {
       data-slice-variation={data?.variation}
     >
       <div className="header">
-        <div className="title">
-          <IndentedSectionTitle text={data.primary.title ?? ""} />
-        </div>
+        <div className="title">Title</div>
         {/* <div className="group">
           <div className="description">
             <p>{data.primary.description}</p>
