@@ -47,7 +47,7 @@ const Layout: FC<CLProps> = ({ children, data }) => {
         }}
         root
       >
-        {/* <Preloader lenis={lenisRef} data={data.navigation} /> */}
+        <Preloader lenis={lenisRef} data={data.navigation} />
         <Header data={data.navigation} />
         <PageContent data={data}>{children}</PageContent>
         <Footer />
