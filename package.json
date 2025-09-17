@@ -5,7 +5,8 @@
   "license": "Apache-2.0",
   "author": "Prismic <contact@prismic.io> (https://prismic.io)",
   "scripts": {
-    "dev": "concurrently \"npm:next:dev\" \"npm:slicemachine\" --names \"next,slicemachine\" --prefix-colors blue,magenta",
+    "dev": "concurrently \"npm:next:dev\" \"npm:tunnel\" \"npm:slicemachine\" --names \"next,slicemachine\" --prefix-colors blue,magenta",
+    "tunnel": "ngrok http 3000",
     "next:dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
