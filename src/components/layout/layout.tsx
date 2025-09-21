@@ -4,7 +4,7 @@ import { DataProvider, useDataContext } from "@/context/DataContext";
 import PageContent from "./page-content";
 import { LenisRef, ReactLenis, useLenis } from "lenis/react";
 import Footer from "./footer";
-import Header from "./header";
+import Header from "./header/header";
 import { NavigationDocument } from "../../../prismicio-types";
 import Preloader from "../preloader";
 import gsap from "gsap";
@@ -47,7 +47,7 @@ const Layout: FC<CLProps> = ({ children, data }) => {
         }}
         root
       >
-        <Preloader lenis={lenisRef} data={data.navigation} />
+        {/* <Preloader lenis={lenisRef} data={data.navigation} /> */}
         <Header data={data.navigation} />
         <PageContent data={data}>{children}</PageContent>
         <Footer />
