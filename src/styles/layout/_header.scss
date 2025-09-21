@@ -1,29 +1,62 @@
 @use "../abstract/functions" as *;
 
 .header {
+  --indicator-size: 13;
   font-size: r(20);
 
-  .navigation {
+  .backdrop {
     position: fixed;
-    bottom: 2rem;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: r(79);
+
+    z-index: -1;
+    background-color: #232323;
+    border-radius: r(38);
+    transition: height 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+  }
+
+  .navigation {
+    --bottom-spacing: #{r(20)};
+    isolation: isolate;
+    position: fixed;
+    top: calc(100dvh - var(--bottom-spacing));
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateY(-100%) translateX(-50%);
     z-index: 5000;
     background-color: #232323;
-    border-radius: r(18);
-    height: r(88);
+    border-radius: r(38);
 
     display: flex;
-    flex-direction: row;
-    gap: r(50);
+    align-items: flex-end;
 
-    padding: r(20);
+    .inner {
+      display: flex;
+      height: r(79);
+      flex-direction: row;
+      gap: r(40);
+      border-radius: r(38);
+      padding: r(12) r(14);
+    }
 
     .group {
+      position: relative;
       display: flex;
       flex-direction: row;
       gap: r(18);
       align-items: center;
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: r(-19);
+        top: 50%;
+        height: r(41);
+        transform: translateY(-50%);
+        background-color: #343434;
+        width: r(1);
+      }
     }
 
     &__avatar {
@@ -57,30 +90,122 @@
       }
     }
 
+    .contact-cta {
+      padding: r(16) r(30);
+      background-color: #ff4433;
+      border-radius: r(80);
+      color: white;
+
+      display: flex;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: r(var(--indicator-size));
+      height: r(var(--indicator-size));
+      background-color: #6fea2a;
+
+      visibility: hidden;
+    }
+
     &__links {
+      position: relative;
       display: flex;
       flex-direction: row;
-      gap: r(10);
+      gap: r(30);
       flex: 1;
 
       .link {
-        width: 100%;
+        --base-color: #a5a5a5;
+        --fill-color: #fff;
+        --dur: 700ms;
+        --delay: 100ms;
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+        --feather: 2px;
+
+        height: 100%;
         flex: 1;
-        border-radius: r(5);
-
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        color: #a5a5a5;
 
-        &:nth-child(1) {
-          background-color: #5d5d5d;
-          color: #a5a5a5;
+        .ind {
+          position: relative;
+          display: block;
+          top: r(10);
+          background-color: transparent;
+          width: r(var(--indicator-size));
+          height: r(var(--indicator-size));
+          visibility: hidden;
         }
-        &:nth-child(2) {
-          background-color: #393939;
-          color: #a5a5a5;
+
+        &__text {
+          color: var(--base-color);
+          background-image: linear-gradient(
+            to top,
+            var(--fill-color) 0 calc(100% - var(--feather)),
+            rgba(255, 255, 255, 0) 100%
+          );
+          background-repeat: no-repeat;
+          background-position: 0 100%;
+          background-size: 100% 0%;
+
+          -webkit-text-fill-color: currentColor;
+        }
+
+        &.active {
+          color: inherit;
+
+          .link__text {
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            animation: text-fill-up var(--dur) var(--ease) var(--delay) forwards;
+          }
         }
       }
     }
+
+    @media (max-width: 26rem) {
+      .inner {
+        padding: r(18) r(30);
+        height: r(81);
+      }
+
+      .group {
+        display: none;
+      }
+
+      &__links {
+        gap: r(52);
+      }
+
+      .contact-cta {
+        display: none;
+      }
+
+      &__links {
+        .link {
+          .ind {
+            top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes text-fill-up {
+  to {
+    background-size: 100% 100%;
   }
 }
