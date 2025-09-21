@@ -114,21 +114,6 @@ export type BlogPostDocument<Lang extends string = string> =
   >;
 
 /**
- * Item in *Navigation → images*
- */
-export interface NavigationDocumentDataImagesItem {
-  /**
-   * image field in *Navigation → images*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: navigation.images[].image
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  image: prismic.ImageField<never>;
-}
-
-/**
  * Content for Navigation documents
  */
 interface NavigationDocumentData {
@@ -155,17 +140,6 @@ interface NavigationDocumentData {
   label: prismic.KeyTextField;
 
   /**
-   * Location field in *Navigation*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: navigation.location
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  location: prismic.KeyTextField;
-
-  /**
    * Navigation Link field in *Navigation*
    *
    * - **Field Type**: Link
@@ -179,15 +153,17 @@ interface NavigationDocumentData {
   >;
 
   /**
-   * images field in *Navigation*
+   * Contact Link field in *Navigation*
    *
-   * - **Field Type**: Group
+   * - **Field Type**: Link
    * - **Placeholder**: *None*
-   * - **API ID Path**: navigation.images[]
+   * - **API ID Path**: navigation.contact_link
    * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#group
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
    */
-  images: prismic.GroupField<Simplify<NavigationDocumentDataImagesItem>>;
+  contact_link: prismic.Repeatable<
+    prismic.LinkField<string, string, unknown, prismic.FieldState, never>
+  >;
 }
 
 /**
@@ -1245,7 +1221,6 @@ declare module "@prismicio/client" {
       BlogPostDocumentDataSlicesSlice,
       NavigationDocument,
       NavigationDocumentData,
-      NavigationDocumentDataImagesItem,
       PageDocument,
       PageDocumentData,
       PageDocumentDataSlicesSlice,

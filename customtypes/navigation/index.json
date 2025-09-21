@@ -27,13 +27,6 @@
           "placeholder": ""
         }
       },
-      "location": {
-        "type": "Text",
-        "config": {
-          "label": "Location",
-          "placeholder": ""
-        }
-      },
       "navigation_link": {
         "type": "Link",
         "config": {
@@ -45,21 +38,15 @@
           "repeat": true
         }
       },
-      "images": {
-        "type": "Group",
+      "contact_link": {
+        "type": "Link",
         "config": {
-          "label": "images",
-          "repeat": true,
-          "fields": {
-            "image": {
-              "type": "Image",
-              "config": {
-                "label": "image",
-                "constraint": {},
-                "thumbnails": []
-              }
-            }
-          }
+          "label": "Contact Link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": true
         }
       }
     }
