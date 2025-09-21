@@ -6,6 +6,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import Layout from "@/components/layout/layout";
 import { createClient } from "@/prismicio";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default async function RootLayout({
           type="text/javascript"
           async
         />
+        <SpeedInsights />
       </body>
       <PrismicPreview repositoryName={repositoryName} />
     </html>
