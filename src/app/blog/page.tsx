@@ -4,7 +4,6 @@
 import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { PrismicNextLink } from "@prismicio/next";
-import IndentedSectionTitle from "@/components/text/indented-section-title";
 
 export async function generateMetadata() {
   const client = createClient();
@@ -36,9 +35,7 @@ export default async function Index() {
     <section className="page page--blog-list">
       <div className="inner">
         <div className="header">
-          <div className="title">
-            <IndentedSectionTitle text={"All Posts"} />
-          </div>
+          <div className="title">All Posts</div>
           <p className="description">
             A collection of articles detailing my journey — ideas, experiments,
             and lessons learned while building projects.
