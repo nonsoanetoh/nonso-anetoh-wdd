@@ -1,6 +1,5 @@
 "use client";
 import React, { FC, useEffect } from "react";
-import useLogo from "@/hooks/useLogo";
 import { database } from "@/firebaseConfig";
 import { ref, onValue, runTransaction } from "firebase/database";
 import Image from "next/image";
@@ -10,7 +9,6 @@ interface TriggerProps {
 }
 
 const Trigger: FC<TriggerProps> = ({ containerRef }) => {
-  const { visibleFrame, handleMouseEnter, handleMouseLeave } = useLogo();
   const [, setCount] = React.useState(0);
   const images = [
     {
@@ -39,15 +37,7 @@ const Trigger: FC<TriggerProps> = ({ containerRef }) => {
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="rep-trigger"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={() => {
-        handleMouseLeave();
-        incrementCounter();
-      }}
-    >
+    <div ref={containerRef} className="rep-trigger">
       {/* <div className="content">
         <div className="image-container">
           {images.map((item, index) => {
