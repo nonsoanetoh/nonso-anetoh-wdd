@@ -122,7 +122,7 @@
 
       .link {
         --base-color: #a5a5a5;
-        --fill-color: #fff;
+        --fill-color: white;
         --dur: 700ms;
         --delay: 100ms;
         --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -148,16 +148,8 @@
 
         &__text {
           color: var(--base-color);
-          background-image: linear-gradient(
-            to top,
-            var(--fill-color) 0 calc(100% - var(--feather)),
-            rgba(255, 255, 255, 0) 100%
-          );
-          background-repeat: no-repeat;
-          background-position: 0 100%;
-          background-size: 100% 0%;
-
           -webkit-text-fill-color: currentColor;
+          background: none;
         }
 
         &.active {
@@ -168,6 +160,19 @@
             -webkit-text-fill-color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
+            background-image: linear-gradient(
+                to top,
+                var(--fill-color) 0 calc(100% - var(--feather)),
+                rgba(255, 255, 255, 0) 100%
+              ),
+              linear-gradient(var(--base-color), var(--base-color));
+            background-size:
+              100% 0%,
+              100% 100%;
+            background-position:
+              0 100%,
+              0 0;
+            background-repeat: no-repeat;
 
             animation: text-fill-up var(--dur) var(--ease) var(--delay) forwards;
           }
