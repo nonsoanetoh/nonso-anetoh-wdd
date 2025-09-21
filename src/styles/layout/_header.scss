@@ -1,6 +1,7 @@
+@use "../abstract/functions" as *;
+
 .header {
-  display: none;
-  font-size: calc(var(--r) * 2);
+  font-size: r(20);
 
   .navigation {
     position: fixed;
@@ -9,26 +10,25 @@
     transform: translateX(-50%);
     z-index: 5000;
     background-color: #232323;
-    border-radius: calc(var(--r) * 1.8);
-    height: calc(var(--r) * 8.8);
-    width: calc(var(--r) * 56.8);
+    border-radius: r(18);
+    height: r(88);
 
     display: flex;
     flex-direction: row;
-    gap: calc(var(--r) * 5);
+    gap: r(50);
 
-    padding: calc(var(--r) * 2);
+    padding: r(20);
 
     .group {
       display: flex;
       flex-direction: row;
-      gap: calc(var(--r) * 1.8);
+      gap: r(18);
       align-items: center;
     }
 
     &__avatar {
-      width: calc(var(--r) * 5.5);
-      height: calc(var(--r) * 5.5);
+      width: r(55);
+      height: r(55);
       background-color: #c0c0c0;
       border-radius: 50%;
       overflow: hidden;
@@ -60,13 +60,13 @@
     &__links {
       display: flex;
       flex-direction: row;
-      gap: calc(var(--r) * 1);
+      gap: r(10);
       flex: 1;
 
       .link {
         width: 100%;
         flex: 1;
-        border-radius: calc(var(--r) * 0.5);
+        border-radius: r(5);
 
         display: flex;
         align-items: center;
