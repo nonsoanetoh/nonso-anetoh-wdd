@@ -532,6 +532,21 @@ export interface HeroSliceDefaultPrimaryInteractiveTrinketsItem {
 }
 
 /**
+ * Item in *Hero → About → Primary → Image Grid*
+ */
+export interface HeroSliceAboutPrimaryImageGridItem {
+  /**
+   * Image field in *Hero → About → Primary → Image Grid*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.about.primary.image_grid[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
  * Primary content in *Hero → Default → Primary*
  */
 export interface HeroSliceDefaultPrimary {
@@ -572,9 +587,47 @@ export type HeroSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
+ * Primary content in *Hero → About → Primary*
+ */
+export interface HeroSliceAboutPrimary {
+  /**
+   * Intro field in *Hero → About → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Intro Paragraph
+   * - **API ID Path**: hero.about.primary.intro
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  intro: prismic.KeyTextField;
+
+  /**
+   * Image Grid field in *Hero → About → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.about.primary.image_grid[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  image_grid: prismic.GroupField<Simplify<HeroSliceAboutPrimaryImageGridItem>>;
+}
+
+/**
+ * About variation for Hero Slice
+ *
+ * - **API ID**: `about`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type HeroSliceAbout = prismic.SharedSliceVariation<
+  "about",
+  Simplify<HeroSliceAboutPrimary>,
+  never
+>;
+
+/**
  * Slice variation for *Hero*
  */
-type HeroSliceVariation = HeroSliceDefault;
+type HeroSliceVariation = HeroSliceDefault | HeroSliceAbout;
 
 /**
  * Hero Shared Slice
@@ -1239,8 +1292,11 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimaryTrinketsItem,
       HeroSliceDefaultPrimaryInteractiveTrinketsItem,
       HeroSliceDefaultPrimary,
+      HeroSliceAboutPrimaryImageGridItem,
+      HeroSliceAboutPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      HeroSliceAbout,
       ImageCarouselSlice,
       ImageCarouselSliceDefaultPrimaryImagesItem,
       ImageCarouselSliceDefaultPrimaryTrinketsItem,

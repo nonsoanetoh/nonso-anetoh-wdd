@@ -89,6 +89,41 @@
         }
       },
       "items": {}
+    },
+    {
+      "id": "about",
+      "name": "About",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "intro": {
+          "type": "Text",
+          "config": {
+            "label": "Intro",
+            "placeholder": "Intro Paragraph"
+          }
+        },
+        "image_grid": {
+          "type": "Group",
+          "config": {
+            "label": "Image Grid",
+            "repeat": true,
+            "fields": {
+              "image": {
+                "type": "Image",
+                "config": {
+                  "label": "Image",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
     }
   ]
 }
