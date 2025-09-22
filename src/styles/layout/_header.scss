@@ -18,7 +18,7 @@
   }
 
   .navigation {
-    --bottom-spacing: #{r(20)};
+    --bottom-spacing: #{r(60)};
     isolation: isolate;
     position: fixed;
     top: calc(100dvh - var(--bottom-spacing));
