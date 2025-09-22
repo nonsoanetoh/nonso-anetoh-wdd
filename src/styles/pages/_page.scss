@@ -6,4 +6,8 @@
   min-height: 100dvh;
 
   padding: r(20) r(30);
+
+  @media (max-width: 64rem) {
+    padding: r(30) r(10);
+  }
 }
