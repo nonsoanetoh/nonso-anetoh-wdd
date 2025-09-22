@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
+import type { Metadata } from "next";
 import * as prismic from "@prismicio/client";
 import { SliceZone } from "@prismicio/react";
 import { notFound } from "next/navigation";
@@ -8,30 +6,29 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 
+type PageParams = { params: { uid: string } };
+
 export async function generateMetadata({
   params,
-}: {
-  params: { uid: string };
-}) {
-  const { uid } = await params;
+}: PageParams): Promise<Metadata> {
+  const { uid } = params; // <- no await here
   const client = createClient();
+
   const page = await client.getByUID("page", uid).catch(() => notFound());
 
   return {
-    title: `${prismic.asText(page.data.title)}`,
-    description: page.data.meta_description,
+    title: prismic.asText(page.data.title),
+    description: page.data.meta_description ?? "",
     openGraph: {
       title: page.data.meta_title ?? "",
-      images: [
-        {
-          url: page.data.meta_image?.url ?? "",
-        },
-      ],
+      images: page.data.meta_image?.url
+        ? [{ url: page.data.meta_image.url }]
+        : [],
     },
   };
 }
 
-export default async function Page({ params }: { params: { uid: string } }) {
+export default async function Page({ params }: PageParams) {
   const { uid } = params;
   const client = createClient();
 
@@ -48,10 +45,7 @@ export default async function Page({ params }: { params: { uid: string } }) {
 
 export async function generateStaticParams() {
   const client = createClient();
-
   const pages = await client.getAllByType("page");
 
-  return pages.map((page) => {
-    return { uid: page.uid };
-  });
+  return pages.map((page) => ({ uid: page.uid }));
 }
