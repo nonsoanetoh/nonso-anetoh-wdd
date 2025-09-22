@@ -1,0 +1,12 @@
+@use "../../abstract/functions" as *;
+
+.page--about {
+  .inner {
+    position: relative;
+    background-color: white;
+  }
+
+  .hero {
+    height: 300px;
+  }
+}
