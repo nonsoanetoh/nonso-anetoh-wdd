@@ -43,7 +43,7 @@ const NAV_ANIM = {
   backdropMs: 220 as number,
   spinMs: 500,
   curveHeight: 80,
-  spacer: 0,
+  spacer: 20,
   positionEase: "inOutSine",
   spinEase: "outExpo",
   backdropEase: "inOutQuad",
