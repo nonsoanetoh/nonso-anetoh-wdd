@@ -1,6 +1,6 @@
 import { Content } from "@prismicio/client";
 import React, { FC } from "react";
-import ImageGrid from "../partials/image-grid";
+import RingGallery from "../partials/ring-gallery";
 
 type AboutSlice = Extract<Content.HeroSlice, { variation: "about" }>;
 
@@ -9,7 +9,7 @@ const About: FC<{ data: AboutSlice }> = ({ data }) => {
     <section className="hero">
       <div className="inner">
         <p className="intro">{data.primary.intro}</p>
-        <ImageGrid images={data.primary.image_grid} />
+        <RingGallery images={data.primary.ring_gallery} />
       </div>
     </section>
   );

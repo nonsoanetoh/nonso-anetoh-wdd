@@ -532,15 +532,15 @@ export interface HeroSliceDefaultPrimaryInteractiveTrinketsItem {
 }
 
 /**
- * Item in *Hero → About → Primary → Image Grid*
+ * Item in *Hero → About → Primary → Ring Gallery*
  */
-export interface HeroSliceAboutPrimaryImageGridItem {
+export interface HeroSliceAboutPrimaryRingGalleryItem {
   /**
-   * Image field in *Hero → About → Primary → Image Grid*
+   * Image field in *Hero → About → Primary → Ring Gallery*
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
-   * - **API ID Path**: hero.about.primary.image_grid[].image
+   * - **API ID Path**: hero.about.primary.ring_gallery[].image
    * - **Documentation**: https://prismic.io/docs/field#image
    */
   image: prismic.ImageField<never>;
@@ -601,14 +601,16 @@ export interface HeroSliceAboutPrimary {
   intro: prismic.KeyTextField;
 
   /**
-   * Image Grid field in *Hero → About → Primary*
+   * Ring Gallery field in *Hero → About → Primary*
    *
    * - **Field Type**: Group
    * - **Placeholder**: *None*
-   * - **API ID Path**: hero.about.primary.image_grid[]
+   * - **API ID Path**: hero.about.primary.ring_gallery[]
    * - **Documentation**: https://prismic.io/docs/field#group
    */
-  image_grid: prismic.GroupField<Simplify<HeroSliceAboutPrimaryImageGridItem>>;
+  ring_gallery: prismic.GroupField<
+    Simplify<HeroSliceAboutPrimaryRingGalleryItem>
+  >;
 }
 
 /**
@@ -1292,7 +1294,7 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimaryTrinketsItem,
       HeroSliceDefaultPrimaryInteractiveTrinketsItem,
       HeroSliceDefaultPrimary,
-      HeroSliceAboutPrimaryImageGridItem,
+      HeroSliceAboutPrimaryRingGalleryItem,
       HeroSliceAboutPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
