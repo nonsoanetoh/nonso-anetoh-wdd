@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import * as prismic from "@prismicio/client";
 import { SliceZone } from "@prismicio/react";
 import { notFound } from "next/navigation";

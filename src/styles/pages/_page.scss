@@ -1,7 +1,9 @@
+@use "../abstract/functions" as *;
+
 .page {
   position: relative;
   width: 100%;
   min-height: 100dvh;
 
-  padding: calc(var(--r) * 2) calc(var(--r) * 3);
+  padding: r(20) r(30);
 }

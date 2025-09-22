@@ -7,6 +7,26 @@
   }
 
   .hero {
-    height: 300px;
+    .inner {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-areas:
+        ". . . intro intro intro intro intro intro . . ."
+        ". . . . image-grid image-grid image-grid image-grid . . . .";
+      column-gap: r(20);
+      row-gap: r(70);
+
+      .intro {
+        grid-area: intro;
+        text-align: center;
+        font-size: r(24);
+        font-weight: 500;
+        white-space: pre-line;
+      }
+
+      .image-grid {
+        grid-area: image-grid;
+      }
+    }
   }
 }
