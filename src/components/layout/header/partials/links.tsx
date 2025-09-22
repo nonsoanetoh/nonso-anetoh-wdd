@@ -179,13 +179,12 @@ const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
         2 * (1 - t) * t * control.y +
         t * t * end.y;
 
-      const spin = 360 * spinEase(tLin);
-      indicator.style.transform = `translateX(${x}px) translateY(${y}px) rotate(${spin}deg)`;
+      indicator.style.transform = `translateX(${x}px) translateY(${y}px)`;
 
       if (tLin < 1) {
         requestAnimationFrame(tick);
       } else {
-        indicator.style.transform = `translateX(${end.x}px) translateY(${end.y}px) rotate(360deg)`;
+        indicator.style.transform = `translateX(${end.x}px) translateY(${end.y}px)`;
 
         if (navEl) {
           navEl.style.transitionDelay = "0ms";
