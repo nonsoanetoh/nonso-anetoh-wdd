@@ -6,6 +6,9 @@
 
 @use "./base/reset";
 @use "./vendor/vendor";
+@use "./abstract/variables";
+
+@use "./abstract/functions";
 
 @use "./shared/titles";
 @use "./shared/descriptions";
