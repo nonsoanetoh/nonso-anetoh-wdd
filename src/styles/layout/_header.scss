@@ -83,10 +83,12 @@
     &__text-content {
       h1 {
         color: #fff;
+        white-space: nowrap;
       }
 
       p {
         color: #9f9f9f;
+        white-space: nowrap;
       }
     }
 
@@ -99,6 +101,7 @@
       display: flex;
       align-content: center;
       justify-content: center;
+      white-space: nowrap;
     }
 
     .indicator {
