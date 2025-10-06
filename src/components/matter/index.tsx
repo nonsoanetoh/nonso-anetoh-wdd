@@ -1,15 +1,17 @@
+// components/matter/index.tsx
 "use client";
-import { initMatterScene } from "@/utils/matter/initMatterScene";
 import React, { useEffect, useRef } from "react";
-import { EngineContext } from "../../../types/matter";
+import { Render, Runner, Engine, World, Body, Events } from "matter-js";
+import { initMatterScene } from "@/utils/matter/initMatterScene";
 import { handleCanvasResize } from "@/utils/matter/handleCanvasResize";
-import { Render, Runner, Engine, World, Events, Body } from "matter-js";
 import { handleMouseInteraction } from "@/utils/matter/handleMouseInteraction";
+import { useDataContext } from "@/context/DataContext";
+import { loadSpriteDefs } from "@/utils/svg/loadSpriteDefs";
+import { spawnBodyFromGeom } from "@/utils/matter/spawnFromGeom";
 import { ParsedTrinket } from "../../../types/trinket";
-import { spawnBodyFromTrinketRef } from "@/utils/matter/spawnFromTrinket";
 
 type MatterCanvasProps = {
-  trinketData: ParsedTrinket[];
+  trinketData: (ParsedTrinket & { ref?: React.RefObject<HTMLDivElement> })[];
 };
 
 type FollowTarget = {
@@ -19,258 +21,167 @@ type FollowTarget = {
   halfW: number;
   halfH: number;
   targetW: number;
+  viewAspect: number;
 };
 
-const widthPctForSize = (size01to05: number) =>
-  Math.max(1, Math.min(5, size01to05)) * 0.04; // 1=>4%, 5=>20%
+const widthPctForSize = (n: number) => Math.max(1, Math.min(5, n)) * 0.04;
 
-const getCanvasWidth = (render?: Render) =>
-  render?.options?.width ?? render?.canvas?.width ?? window.innerWidth;
-
-const MatterCanvas = ({ trinketData }: MatterCanvasProps) => {
+const MatterCanvas: React.FC<MatterCanvasProps> = ({ trinketData }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const engineContext = useRef<EngineContext>({
-    engine: null,
-    render: null,
-    runner: null,
-    bounds: null,
-  });
-
-  // map from trinket id -> follow target
+  const engineRef = useRef<{
+    engine: Engine;
+    render: Render;
+    runner: Runner;
+  } | null>(null);
   const followMapRef = useRef(new Map<string, FollowTarget>());
-  const resizeObsRef = useRef<ResizeObserver | null>(null);
 
-  // rAF throttle
-  const rafState = useRef({
-    handle: 0 as number,
-    frameStep: 1, // update every Nth frame when many trinkets
-    frameCount: 0,
-    running: false,
-  });
+  const { spriteData } = useDataContext(); // { spriteSheet, collisionSheet } — we just need spriteSheet
 
-  // compute and set the DOM size to match physics width rule
-  const applyDomScaleForTrinket = (
-    t: ParsedTrinket,
-    el: HTMLDivElement,
-    render: Render
-  ) => {
-    const canvasW = getCanvasWidth(render);
-    const targetW = widthPctForSize(t.size ?? 3) * canvasW; // px
-    // We scale the whole trinket wrapper; the inner SVG preserves aspect via viewBox
-    el.style.width = `${Math.max(8, Math.round(targetW))}px`;
-    el.style.height = "auto"; // let SVG aspect handle height
-    return targetW;
-  };
+  // world → container mapping + optional DOM-follow
+  const updateTransforms = () => {
+    const stuff = engineRef.current;
+    if (!stuff) return;
+    const { engine, render } = stuff;
 
-  // (re)measure a target’s half sizes after DOM size changes
-  const measureTarget = (target: FollowTarget) => {
-    // prefer the first *visible* inner svg (your main art)
-    const innerSvg =
-      target.el.querySelector('svg:not([data-collision="true"])') ||
-      target.el.querySelector("svg");
+    const { bounds, options, canvas } = render;
+    const rw = options.width!,
+      rh = options.height!;
+    const cRect = canvas.getBoundingClientRect();
+    const rootRect = containerRef.current!.getBoundingClientRect();
+    const scaleX = cRect.width / rw;
+    const scaleY = cRect.height / rh;
 
-    const box = (
-      innerSvg as SVGGraphicsElement | null
-    )?.getBoundingClientRect?.();
-    const rect = box ?? target.el.getBoundingClientRect();
-
-    target.halfW = rect.width / 2;
-    target.halfH = rect.height / 2;
-  };
-
-  // start a single rAF loop that applies transforms for all trinkets
-  const startRAF = () => {
-    if (rafState.current.running) return;
-    rafState.current.running = true;
-
-    const tick = () => {
-      const { render } = engineContext.current;
-      if (!render) return;
-
-      // simple adaptive throttling: more trinkets => lower DOM update rate
-      const size = followMapRef.current.size;
-      const desiredStep = size > 120 ? 3 : size > 60 ? 2 : 1;
-      rafState.current.frameStep = desiredStep;
-
-      rafState.current.frameCount =
-        (rafState.current.frameCount + 1) % rafState.current.frameStep;
-      const shouldUpdate = rafState.current.frameCount === 0;
-
-      if (shouldUpdate) {
-        const bounds = render.bounds;
-        const rw = render.options.width!;
-        const rh = render.options.height!;
-        const sx = rw / (bounds.max.x - bounds.min.x);
-        const sy = rh / (bounds.max.y - bounds.min.y);
-
-        followMapRef.current.forEach(({ body, el, halfW, halfH }) => {
-          const x = (body.position.x - bounds.min.x) * sx;
-          const y = (body.position.y - bounds.min.y) * sy;
-
-          // plugin offset from the spawner (centroid - viewBox center), if available
-          const off = (body as any).plugin?.followOffsetPx || { x: 0, y: 0 };
-
-          // additional vertical shift: move up by 50% of element height
-          const verticalShift = 0.5 * (halfH * 2); // = -halfH * 1.0 in translate coordinates below
-
-          // Center on body, apply offsets, rotate around center
-          el.style.transform = `translate3d(${x - halfW + off.x}px, ${y - halfH + off.y + verticalShift}px, 0) rotate(${body.angle}rad)`;
-        });
-      }
-
-      rafState.current.handle = requestAnimationFrame(tick);
+    const worldToContainer = (wx: number, wy: number) => {
+      const lx = (wx - bounds.min.x) * (rw / (bounds.max.x - bounds.min.x));
+      const ly = (wy - bounds.min.y) * (rh / (bounds.max.y - bounds.min.y));
+      return {
+        x: lx * scaleX + (cRect.left - rootRect.left),
+        y: ly * scaleY + (cRect.top - rootRect.top),
+      };
     };
 
-    rafState.current.handle = requestAnimationFrame(tick);
-  };
-
-  const stopRAF = () => {
-    if (!rafState.current.running) return;
-    cancelAnimationFrame(rafState.current.handle);
-    rafState.current.running = false;
+    followMapRef.current.forEach(({ body, el, halfW, halfH }) => {
+      const { x, y } = worldToContainer(body.position.x, body.position.y);
+      const off = (body as any).plugin.followOffsetPx || { x: 0, y: 0 };
+      el.style.transform = `translate3d(${x - halfW + off.x}px, ${y - halfH + off.y}px, 0) rotate(${body.angle}rad)`;
+    });
   };
 
   useEffect(() => {
-    const { engine, render, bounds } = initMatterScene({
-      targetElement: containerRef,
-    });
-
-    // Make fills visible over wireframes
+    const { engine, render } = initMatterScene({ targetElement: containerRef });
     render.options.wireframes = false;
     render.options.background = "transparent";
+    const runner = Runner.create();
 
-    engineContext.current = { engine, render, runner: null, bounds };
+    handleMouseInteraction({ engine, render, container: containerRef });
 
-    handleMouseInteraction({
-      engine: engineContext.current.engine!,
-      render: engineContext.current.render!,
-      container: containerRef,
-    });
+    engineRef.current = { engine, render, runner };
+    Render.run(render);
+    Runner.run(runner, engine);
 
-    // spawn trinket bodies and bind DOM followers
-    const DELAY_MS = 300;
+    const boundUpdate = () => updateTransforms();
+    Events.on(engine, "afterUpdate", boundUpdate);
 
-    trinketData.forEach((t, i) => {
-      setTimeout(() => {
-        const el = t.ref.current;
-        if (!el) return;
+    (async () => {
+      console.log("Loading sprite defs from", spriteData.spriteSheet);
+      const defs = await loadSpriteDefs(spriteData.spriteSheet);
 
-        // ensure DOM element is absolutely positioned and GPU-friendly
-        el.style.position = "absolute";
-        el.style.left = "0px";
-        el.style.top = "0px";
-        el.style.willChange = "transform";
+      trinketData.forEach((t, i) => {
+        const baseName = Array.isArray(t.name) ? t.name[0] : t.name;
+        const sym =
+          defs.get(`${baseName}--collision`) || // prefer explicit collision symbol
+          defs.get(baseName);
 
-        // Set DOM width to match physics rule (size → % canvas width)
-        const targetW = applyDomScaleForTrinket(t, el, render);
+        if (!sym) {
+          console.warn("No symbol found for", baseName);
+          return;
+        }
 
-        spawnBodyFromTrinketRef(
-          engineContext.current.engine!,
-          engineContext.current.render!,
-          t.ref,
-          i,
-          t.size ?? 3,
+        const body = spawnBodyFromGeom(
+          engine,
+          render,
+          {
+            index: i,
+            sizeLevel: t.size ?? 3,
+            viewBox: sym.viewBox,
+            collisionPathD: sym.collisionPathD,
+            trinketName: Array.isArray(t.name) ? t.name[0] : t.name, // ✅ pass name/id here
+          },
           {
             mode: "sequential",
             offscreenMult: 2.5,
             zigzagMult: 0.5,
             sampleLength: 10,
+            showBody: !t.ref?.current,
           }
-        ).then((body) => {
-          if (!body) {
-            console.warn(`Failed to spawn body for trinket ${t.id}`);
-            return;
-          }
+        );
 
-          body.label = t.id;
+        if (!body) return;
+        body.label = t.id;
 
-          const target: FollowTarget = {
+        console.log("Spawned body for", t.id, body);
+
+        // Optional DOM-follow if you rendered a visual element for this trinket
+        const el = t.ref?.current;
+        if (el) {
+          const canvasW = render.canvas.getBoundingClientRect().width;
+          const targetW = widthPctForSize(t.size ?? 3) * canvasW;
+          const viewAspect = sym.viewBox.h / sym.viewBox.w;
+          el.style.position = "absolute";
+          el.style.left = "0";
+          el.style.top = "0";
+          el.style.willChange = "transform";
+          el.style.transformOrigin = "50% 50%";
+          el.style.width = `${Math.max(8, Math.round(targetW))}px`;
+          el.style.height = "auto";
+
+          followMapRef.current.set(t.id, {
             id: t.id,
             body,
             el,
-            halfW: 0,
-            halfH: 0,
+            halfW: targetW / 2,
+            halfH: (targetW * viewAspect) / 2,
             targetW,
-          };
-          measureTarget(target);
-          followMapRef.current.set(t.id, target);
-        });
-      }, i * DELAY_MS);
-    });
+            viewAspect,
+          });
+        }
+      });
+    })();
 
-    // renderer
-    Render.run(render);
-    const runner = Runner.create();
-    engineContext.current.runner = runner;
-    Runner.run(runner, engine);
-
-    // single rAF updater for all trinkets
-    startRAF();
-
-    // keep sizes fresh on canvas resize
     const onResize = () => {
-      handleCanvasResize({
-        container: containerRef,
-        render: engineContext.current.render,
-        bounds: engineContext.current.bounds,
+      handleCanvasResize({ container: containerRef, render, bounds: null });
+      // recompute sizes for followers (if any)
+      followMapRef.current.forEach((f) => {
+        const canvasW = render.canvas.getBoundingClientRect().width;
+        f.targetW =
+          widthPctForSize(trinketData.find((x) => x.id === f.id)?.size ?? 3) *
+          canvasW;
+        f.halfW = f.targetW / 2;
+        f.halfH = (f.targetW * f.viewAspect) / 2;
+        if (f.el) {
+          f.el.style.width = `${Math.max(8, Math.round(f.targetW))}px`;
+        }
       });
-
-      // update each DOM trinket width to match new canvas width, then re-measure
-      followMapRef.current.forEach((target) => {
-        const t = trinketData.find((x) => x.id === target.id);
-        if (!t) return;
-        target.targetW = applyDomScaleForTrinket(t, target.el, render);
-        measureTarget(target);
-      });
+      updateTransforms();
     };
     window.addEventListener("resize", onResize);
 
-    // observe DOM trinkets for intrinsic size changes (e.g., different symbol variants)
-    if ("ResizeObserver" in window) {
-      resizeObsRef.current = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          // find which target this element belongs to
-          const pair = Array.from(followMapRef.current.values()).find(
-            (p) => p.el === entry.target
-          );
-          if (!pair) continue;
-          measureTarget(pair);
-        }
-      });
-
-      trinketData.forEach((t) => {
-        const el = t.ref.current;
-        if (el) resizeObsRef.current!.observe(el);
-      });
-    }
-
-    // Capture the current followMapRef value for cleanup
-    const followMap = followMapRef.current;
-
     return () => {
-      stopRAF();
-      resizeObsRef.current?.disconnect();
-      followMap.clear();
-
+      Events.off(engine, "afterUpdate", boundUpdate);
+      followMapRef.current?.clear();
       window.removeEventListener("resize", onResize);
-      Runner.stop(engineContext.current.runner!);
+      Runner.stop(runner);
       Render.stop(render);
-      if (engineContext.current.engine && engineContext.current.engine.world) {
-        World.clear(engineContext.current.engine.world, false);
-        Engine.clear(engineContext.current.engine);
+      if (engine.world) {
+        World.clear(engine.world, false);
+        Engine.clear(engine);
       }
       render.canvas.remove();
-      render.textures = {};
+      (render as any).textures = {};
     };
-  }, [trinketData]);
+  }, [trinketData, spriteData.spriteSheet]);
 
-  return (
-    <div
-      className="matter-canvas"
-      style={{ zIndex: 4999990000 }}
-      ref={containerRef}
-    />
-  );
+  return <div className="matter-canvas" ref={containerRef} />;
 };
 
 export default MatterCanvas;
