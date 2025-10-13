@@ -1,4 +1,3 @@
-// utils/matter/spawnFromGeom.ts
 import Matter, {
   Bodies,
   Body,
@@ -11,7 +10,7 @@ import Matter, {
   Vertex,
 } from "matter-js";
 
-export type SpawnMode = "sequential" | "stacked";
+export type SpawnMode = "sequential" | "stacked" | "manual";
 export interface SpawnOptions {
   mode?: SpawnMode;
   offscreenMult?: number;
@@ -23,11 +22,9 @@ export interface SpawnOptions {
   sampleLength?: number;
   debug?: boolean;
 
-  /** If true, shift vertices so their centroid aligns with the viewBox center. */
   normalizeToViewCenter?: boolean;
-
-  /** If true (and not using DOM overlay), draw bodies on the canvas. */
   showBody?: boolean;
+  position?: { x: number; y: number };
 }
 
 const widthPctForSize = (n: number) => Math.max(1, Math.min(5, n)) * 0.04;
@@ -44,8 +41,13 @@ const getSpawnPos = (
     offscreenMult = 2.5,
     zigzagMult = 0.5,
     stackStepMult = 0.75,
+    position,
   }: SpawnOptions = {}
 ) => {
+  if (mode === "manual" && position) {
+    return position;
+  }
+
   const cw = getCanvasWidth(render);
   const centerX = cw / 2;
   const unit = Math.max(halfW, halfH);
@@ -64,7 +66,6 @@ const pathToVertices = (d: string, sample = 12): Vector[] => {
 
   let verts = Svg.pathToVertices(p, sample);
 
-  // Ensure closed
   if (
     verts.length &&
     (verts[0].x !== verts[verts.length - 1].x ||
@@ -73,13 +74,11 @@ const pathToVertices = (d: string, sample = 12): Vector[] => {
     verts = [...verts, { x: verts[0].x, y: verts[0].y }];
   }
 
-  // Remove degenerate edges
   verts = verts.filter((v, i, a) => {
     const prev = a[(i + a.length - 1) % a.length];
     return Math.hypot(v.x - prev.x, v.y - prev.y) > 1e-6;
   });
 
-  // Consistent winding
   return Vertices.clockwiseSort(verts);
 };
 
@@ -103,9 +102,9 @@ export function spawnBodyFromGeom(
 ): Matter.Body | null {
   const {
     sampleLength = 12,
-    restitution = 0.9,
-    frictionAir = 0.01,
-    friction = 0.3,
+    restitution = 0.6,
+    frictionAir = 0.015,
+    friction = 0.5,
     debug = false,
     normalizeToViewCenter = false,
     showBody = false,
@@ -119,6 +118,9 @@ export function spawnBodyFromGeom(
   const viewAspect = viewBox.h / viewBox.w;
 
   let verts = pathToVertices(collisionPathD, sampleLength);
+
+  const originalCentroid = Vertices.centre(verts);
+
   verts = Vertices.scale(verts, scale, scale, { x: 0, y: 0 });
 
   if (viewBox.minX || viewBox.minY) {
@@ -126,6 +128,16 @@ export function spawnBodyFromGeom(
     const ty = -viewBox.minY * scale;
     verts = verts.map((v) => ({ x: v.x + tx, y: v.y + ty }));
   }
+
+  const artboardCenter = {
+    x: viewBox.w / 2,
+    y: viewBox.h / 2,
+  };
+
+  const collisionOffset = {
+    x: (originalCentroid.x - artboardCenter.x) * scale,
+    y: (originalCentroid.y - artboardCenter.y) * scale,
+  };
 
   if (normalizeToViewCenter) {
     const c = Vertices.centre(verts);
@@ -157,10 +169,11 @@ export function spawnBodyFromGeom(
           lineWidth: 1,
         }
       : {
-          visible: false,
-          fillStyle: "#000000",
-          strokeStyle: "#000000",
-          lineWidth: 1,
+          visible: true,
+          fillStyle: "transparent",
+          strokeStyle: "transparent",
+          lineWidth: 0,
+          opacity: 0,
         };
 
   const hasDecomp = !!(Common as any)._decomp || !!(globalThis as any).decomp;
@@ -191,11 +204,16 @@ export function spawnBodyFromGeom(
 
   if (!body) return null;
 
+  (body as any).plugin = (body as any).plugin || {};
+  (body as any).plugin.wrapBounds = {
+    min: { x: 0, y: 0 },
+    max: { x: canvasW, y: (render?.options?.height ?? window.innerHeight) },
+  };
+
   (body as any).label = trinketName;
   (body as any).id = trinketName;
-  (body as any).plugin.data = { viewBox };
+  (body as any).plugin.data = { viewBox, scale, collisionOffset };
 
-  // Recompute true centroid shift vs. spawn pos (captures poly-decomp recentering)
   const followOffsetPx = {
     x: body.position.x - pos.x,
     y: body.position.y - pos.y,
@@ -204,6 +222,8 @@ export function spawnBodyFromGeom(
   (body as any).plugin ??= {};
   (body as any).plugin.followOffsetPx = followOffsetPx;
   (body as any).plugin.viewAspect = viewAspect;
+
+  Matter.Body.setVelocity(body, { x: 0, y: 5 });
 
   Composite.add(engine.world, body);
   return body;
