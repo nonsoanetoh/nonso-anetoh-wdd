@@ -1,195 +1,190 @@
-// components/slices/home/index.tsx (or your Home slice path)
+// components/hero/variants/home.tsx
 "use client";
 import { Content } from "@prismicio/client";
-import React, { FC, useEffect, useMemo, useRef, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { parseTrinkets } from "@/utils/trinkets";
 import MatterCanvas from "../../matter";
-import { ParsedTrinket } from "../../../../types/trinket";
+import Body from "../../body";
 import Trinket from "../../trinket";
 import type { MatterCanvasHandle } from "../../../../types/matter";
+import Matter from "matter-js";
 
 type HomeSlice = Extract<Content.HeroSlice, { variation: "default" }>;
 
 const Home: FC<{ data: HomeSlice }> = ({ data }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const canvasRef = useRef<MatterCanvasHandle | null>(null);
-  const [canvasMounted, setCanvasMounted] = useState(false);
+  const canvasRef = React.useRef<MatterCanvasHandle | null>(null);
+  const [bodies, setBodies] = useState<Matter.Body[]>([]);
+  const [preloaderTrinketIndex, setPreloaderTrinketIndex] = useState(0);
 
-  // use a callback ref to avoid racing .current
-  const setCanvasHandle = (node: MatterCanvasHandle | null) => {
-    canvasRef.current = node;
-    setCanvasMounted(!!node);
+  // Define preloader trinket cycle
+  const preloaderCycle = ["dev__circle", "dev__polygon", "dev__triangle"];
+
+  const triggerTimeScaleEffect = (
+    intensity: "low" | "medium" | "high" = "high"
+  ) => {
+    const engine = canvasRef.current?.getEngine();
+    if (!engine) return;
+
+    const intensitySettings = {
+      low: { minScale: 0.3, duration: 1200 },
+      medium: { minScale: 0.15, duration: 1500 },
+      high: { minScale: 0.05, duration: 2000 },
+    };
+
+    const settings = intensitySettings[intensity];
+    engine.timing.timeScale = settings.minScale;
+
+    const startTime = Date.now();
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = elapsed / settings.duration;
+
+      if (progress < 1) {
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        engine.timing.timeScale =
+          settings.minScale + (1 - settings.minScale) * easeOut;
+        requestAnimationFrame(animate);
+      } else {
+        engine.timing.timeScale = 1;
+      }
+    };
+
+    requestAnimationFrame(animate);
   };
 
-  // parse once
-  const parsed: ParsedTrinket[] = useMemo(
-    () =>
-      parseTrinkets([
-        ...data.primary.trinkets,
-        ...data.primary.interactive_trinkets,
-      ]),
-    [data]
-  );
+  const handleTriangleClick = () => {
+    triggerTimeScaleEffect("high");
+  };
 
-  // attach element refs to each wrapper
-  const [trinketData] = useState<
-    Array<ParsedTrinket & { ref: React.RefObject<HTMLDivElement> }>
-  >(() =>
-    parsed.map((t) => ({
-      ...t,
-      ref: React.createRef<HTMLDivElement>(),
-    }))
-  );
+  // Parse trinkets from Prismic data
+  const trinketData = useMemo(() => {
+    const parsed = parseTrinkets([
+      ...data.primary.trinkets,
+      ...data.primary.interactive_trinkets,
+    ]);
 
+    return parsed.map(
+      (t: { name: any[]; id: any; size: any; style: string }) => {
+        const name = Array.isArray(t.name) ? t.name[0] : t.name;
+        return {
+          id: `${name}-${t.id}`,
+          name,
+          size: t.size || 2,
+          type: t.style as "static" | "interactive",
+        };
+      }
+    );
+  }, [data]);
+
+  // Cycle through preloader trinkets every 500ms for 3.5 seconds
   useEffect(() => {
-    let unsub: (() => void) | undefined;
+    const cycleInterval = setInterval(() => {
+      setPreloaderTrinketIndex((prev) => (prev + 1) % preloaderCycle.length);
+    }, 500);
 
-    const run = async () => {
-      if (!canvasRef.current) return;
-      await canvasRef.current.awaitReady();
-
-      // Prep wrappers
-      trinketData.forEach((t) => {
-        const el = t.ref?.current;
-        if (!el) return;
-        el.style.position = "absolute";
-        el.style.left = "0";
-        el.style.top = "0";
-        el.style.willChange = "transform,width,height";
-        el.style.transformOrigin = "50% 50%";
-      });
-
-      unsub = canvasRef.current.subscribe(() => {
-        for (const t of trinketData) {
-          const label = Array.isArray(t.name) ? t.name[0] : t.name;
-          const el = t.ref?.current;
-          if (!el) continue;
-
-          const box = canvasRef.current!.getBodyClientBox(label);
-          if (!box) {
-            // Helpful once to catch mismatches, not spamming every frame:
-            if (!el.dataset.warnedNoBody) {
-              console.warn(
-                `[Home] No body for label "${label}". Check body.label and names.`
-              );
-              el.dataset.warnedNoBody = "1";
-            }
-            continue;
-          }
-
-          // ✨ Set exact size every frame (cheap, and guarantees no 0s)
-          el.style.width = `${Math.max(1, Math.round(box.w))}px`;
-          el.style.height = `${Math.max(1, Math.round(box.h))}px`;
-
-          // Center + rotate to match body
-          el.style.transform = `translate3d(${box.x}px, ${box.y}px, 0) translate(-50%, -50%) rotate(${box.angle}rad)`;
-        }
-      });
-    };
-
-    run();
-    return () => unsub?.();
-  }, [trinketData]);
-
-  useEffect(() => {
-    let unsub: (() => void) | undefined;
-
-    const run = async () => {
-      if (!canvasRef.current) return;
-
-      // wait for engine + spawn
-      await canvasRef.current.awaitReady();
-
-      // prep wrappers
-      trinketData.forEach((t) => {
-        const el = t.ref?.current;
-        if (!el) return;
-        el.style.position = "absolute";
-        el.style.left = "0";
-        el.style.top = "0";
-        el.style.willChange = "transform";
-        el.style.transformOrigin = "50% 50%";
-      });
-
-      // follow bodies by their readable label (sprite/class name)
-      const unsub = canvasRef.current.subscribe(() => {
-        for (const t of trinketData) {
-          const label = Array.isArray(t.name) ? t.name[0] : t.name;
-          const el = t.ref?.current;
-          if (!el) continue;
-
-          const body = canvasRef.current!.getBodyById(label);
-          if (!body) continue;
-
-          const meta: any = canvasRef.current!.getBodyDataById(label);
-          const offsetNorm = meta?.offsetNorm || { x: 0, y: 0 };
-
-          // wrapper dimensions (assumes you've set width via CSS/JS)
-          const w = el.clientWidth || 1;
-          const h = el.clientHeight || w; // fallback square if height auto
-
-          // convert normalized offset to pixels (relative to wrapper size)
-          // Note: dy is positive downward in screen coords; SVG viewBox uses same Y-down in browsers
-          const offPxX = offsetNorm.x * w;
-          const offPxY = offsetNorm.y * h;
-
-          // rotate this local offset by the body's angle to keep it aligned when rotating
-          const a = body.angle;
-          const cos = Math.cos(a);
-          const sin = Math.sin(a);
-          const rotX = offPxX * cos - offPxY * sin;
-          const rotY = offPxX * sin + offPxY * cos;
-
-          // project world → client for the body center
-          const { x, y } = canvasRef.current!.worldToClient(
-            body.position.x,
-            body.position.y
-          );
-
-          // apply: center at body, then add rotated offset, then rotate the wrapper
-          el.style.transform = `translate3d(${x + rotX}px, ${y + rotY}px, 0) translate(-50%, -50%) rotate(${a}rad)`;
-        }
-      });
-    };
-
-    run();
+    // Stop cycling after 3.5 seconds and reset to first trinket
+    const stopTimeout = setTimeout(() => {
+      clearInterval(cycleInterval);
+      setPreloaderTrinketIndex(0);
+    }, 3500);
 
     return () => {
-      unsub?.();
+      clearInterval(cycleInterval);
+      clearTimeout(stopTimeout);
     };
-  }, [canvasMounted, trinketData]);
+  }, [preloaderCycle.length]);
+
+  // Wait for canvas to be ready, then continuously poll for bodies
+  useEffect(() => {
+    let mounted = true;
+    let intervalId: NodeJS.Timeout;
+
+    const startPolling = async () => {
+      await canvasRef.current?.awaitReady();
+      if (!mounted) return;
+
+      const engine = canvasRef.current?.getEngine();
+      if (!engine) return;
+
+      intervalId = setInterval(() => {
+        if (!mounted) return;
+
+        const allBodies = Matter.Composite.allBodies(engine.world).filter(
+          (body) => body.label === "preloader" || !body.isStatic
+        );
+
+        setBodies((prevBodies) => {
+          if (prevBodies.length !== allBodies.length) {
+            return allBodies;
+          }
+          return allBodies;
+        });
+      }, 100);
+    };
+
+    startPolling();
+
+    return () => {
+      mounted = false;
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [trinketData]);
 
   return (
     <section
       data-slice-type={data.slice_type}
       data-slice-variation={data.variation}
       className="hero"
-      ref={containerRef}
     >
       <div className="matter-container" style={{ position: "relative" }}>
-        {trinketData.map((trinket) => (
-          <div
-            className="trinket"
-            key={trinket.id}
-            ref={trinket.ref}
-            data-label={
-              Array.isArray(trinket.name) ? trinket.name[0] : trinket.name
-            }
-          >
-            <Trinket
-              id={trinket.id}
-              key={trinket.id}
-              name={trinket.name}
-              ref={trinket.ref}
-              style={trinket.style}
-              type={trinket.type}
-              callback={trinket.callback}
-              size={trinket.size}
-            />
-          </div>
-        ))}
+        {/* Render Body components once bodies are spawned */}
+        {bodies.map((body) => {
+          // Handle preloader body separately with cycling trinkets
+          if (body.label === "preloader") {
+            return (
+              <Body key="preloader" body={body}>
+                <Trinket
+                  id="preloader"
+                  name={preloaderCycle[preloaderTrinketIndex]}
+                  type="static"
+                />
+              </Body>
+            );
+          }
 
-        <MatterCanvas ref={setCanvasHandle} trinketData={trinketData} />
+          // Find matching trinket by label
+          const trinket = trinketData.find((t: { id: string }) => t.id === body.label);
+          if (!trinket) return null;
+
+          const isTriangle = trinket.name.includes("triangle");
+
+          return (
+            <Body
+              key={trinket.id}
+              body={body}
+              onBodyClick={isTriangle ? handleTriangleClick : undefined}
+            >
+              {({ wasClicked }) => (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    outline: wasClicked ? "3px solid red" : "none",
+                    transition: "outline 0.1s",
+                  }}
+                >
+                  <Trinket
+                    id={trinket.id}
+                    name={trinket.name}
+                    type={trinket.type}
+                  />
+                </div>
+              )}
+            </Body>
+          );
+        })}
+
+        <MatterCanvas ref={canvasRef} trinketData={trinketData} />
       </div>
     </section>
   );
