@@ -16,12 +16,21 @@
 // }
 
 .trinket {
-  position: absolute;
-  z-index: 10000;
+  position: relative; // Relative within the Body container
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .trinket > * {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.matter-container {
+  pointer-events: auto; // Allow pointer events on canvas for dragging
 }
