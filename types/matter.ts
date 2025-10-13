@@ -47,41 +47,9 @@ export type MouseInteractionProps = {
 
 export type ScreenPoint = { x: number; y: number };
 
+// Simplified API for the new architecture
 export type MatterCanvasHandle = {
-  // core accessors
   getEngine(): Matter.Engine | null;
-  getWorld(): Matter.World | null;
-
-  // lookups use body.label (we set this to the trinket's readable name)
-  getBodyById(id: string): Matter.Body | null;
-  getBodyDataById<T = any>(id: string): T | null;
-  getBodyState(id: string): {
-    position: { x: number; y: number };
-    angle: number;
-    velocity: { x: number; y: number };
-    angularVelocity: number;
-    isSleeping: boolean;
-  } | null;
-
-  // coords mapping for DOM overlays
-  worldToClient(wx: number, wy: number): ScreenPoint;
-  getBodyClientBox(
-    id: string
-  ): { x: number; y: number; w: number; h: number; angle: number } | null;
-
-  // readiness
   isReady(): boolean;
   awaitReady(): Promise<void>;
-
-  // per-tick (afterUpdate)
-  subscribe(listener: (e: TickPayload) => void): () => void;
-  unsubscribe(listener: (e: TickPayload) => void): void;
-
-  // collisions
-  subscribeCollisionStart(listener: (e: CollisionPayload) => void): () => void;
-  subscribeCollisionActive(listener: (e: CollisionPayload) => void): () => void;
-  subscribeCollisionEnd(listener: (e: CollisionPayload) => void): () => void;
-  unsubscribeCollisionStart(listener: (e: CollisionPayload) => void): void;
-  unsubscribeCollisionActive(listener: (e: CollisionPayload) => void): void;
-  unsubscribeCollisionEnd(listener: (e: CollisionPayload) => void): void;
 };
