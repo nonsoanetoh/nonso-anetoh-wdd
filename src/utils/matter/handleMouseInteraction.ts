@@ -3,6 +3,7 @@ import Matter, {
   Mouse,
   MouseConstraint,
   Render as MRender,
+  Events,
 } from "matter-js";
 import { MouseInteractionProps } from "../../../types/matter";
 
@@ -13,13 +14,11 @@ export const handleMouseInteraction = ({
 }: MouseInteractionProps) => {
   const mouse = Mouse.create(container?.current as HTMLElement);
 
-  // keep render in sync
   (render as MRender).mouse = mouse;
   if (render.options && typeof render.options.pixelRatio === "number") {
     mouse.pixelRatio = render.options.pixelRatio;
   }
 
-  // better touch behavior
   if ((container as any).current.style)
     (container as any).current.style.touchAction = "none";
 
@@ -27,11 +26,46 @@ export const handleMouseInteraction = ({
     mouse,
     constraint: {
       stiffness: 0.2,
-      render: { visible: true },
+      render: { visible: false },
+    },
+    collisionFilter: {
+      mask: 0xFFFFFFFF,
     },
   });
 
   Composite.add(engine.world, mouseConstraint);
+
+  let dragStartPos = { x: 0, y: 0 };
+
+  Events.on(mouseConstraint, "startdrag", (event: any) => {
+    const body = event.body as Matter.Body;
+    dragStartPos = { x: mouse.position.x, y: mouse.position.y };
+    (body as any).plugin = (body as any).plugin || {};
+    (body as any).plugin.isDragging = true;
+    (body as any).plugin.isActive = true;
+  });
+
+  Events.on(mouseConstraint, "enddrag", (event: any) => {
+    const body = event.body as Matter.Body;
+    const dx = mouse.position.x - dragStartPos.x;
+    const dy = mouse.position.y - dragStartPos.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const wasClick = distance < 5;
+
+    (body as any).plugin.isDragging = false;
+
+    if (wasClick) {
+      (body as any).plugin.wasClicked = true;
+      setTimeout(() => {
+        if ((body as any).plugin) {
+          (body as any).plugin.isActive = false;
+          (body as any).plugin.wasClicked = false;
+        }
+      }, 150);
+    } else {
+      (body as any).plugin.isActive = false;
+    }
+  });
 
   return { mouse: { mouse, mouseConstraint } };
 };
