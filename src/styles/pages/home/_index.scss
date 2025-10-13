@@ -14,7 +14,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #d9d9d9;
+    background-color: #ededed;
     z-index: 3;
 
     display: flex;
@@ -29,7 +29,7 @@
       position: relative;
       width: calc(var(--column) * 6);
       height: calc(100vh - (var(--column) * 2));
-      background-color: #bebebe;
+      background-color: #6fea2a;
 
       @media (max-aspect-ratio: 1/1) {
         width: calc(100vw - (var(--column) * 2));
