@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="660" height="660"
+     viewBox="0 0 660 660" preserveAspectRatio="xMidYMid meet" role="img" aria-label="2x2 grid of shapes">
+     <defs>
+          <symbol id="dev__circle" viewBox="0 0 320 320">
+               <path d="M285 160C285 229.036 229.036 285 160 285C90.9644 285 35 229.036 35 160C35 90.9644 90.9644 35 160 35C229.036 35 285 90.9644 285 160Z"
+                    fill="#FF4433" />
+          </symbol>
+
+          <symbol id="dev__polygon" viewBox="0 0 320 320">
+               <path d="M252.174 74H109.861L37 146.802L77.9044 246H261.548L282 163.406L252.174 74Z" fill="#808080" />
+          </symbol>
+
+          <symbol id="dev__triangle" viewBox="0 0 320 320">
+               <path d="M175 70L276.325 257.5H73.675L175 70Z" fill="#6FEA2A" />
+          </symbol>
+
+          <symbol id="dev__blob" viewBox="0 0 320 320">
+               <path d="M254.571 96.9708C209.213 52.7511 129.818 73.449 103.046 96.9708C76.2736 120.493 47.4092 190.507 75.526 232.344C103.643 274.181 192.568 305.161 242.967 246.907C293.365 188.654 299.93 141.19 254.571 96.9708Z"
+                    fill="#E6BD07" />
+          </symbol>
+
+          <!-- collision paths -->
+
+          <symbol id="dev__circle--collision" viewBox="0 0 320 320">
+               <path d="M285 160C285 229.036 229.036 285 160 285C90.9644 285 35 229.036 35 160C35 90.9644 90.9644 35 160 35C229.036 35 285 90.9644 285 160Z"
+                    fill="#000" />
+          </symbol>
+
+          <symbol id="dev__polygon--collision" viewBox="0 0 320 320">
+               <path d="M252.174 74H109.861L37 146.802L77.9044 246H261.548L282 163.406L252.174 74Z" fill="#000" />
+          </symbol>
+
+          <symbol id="dev__triangle--collision" viewBox="0 0 320 320">
+               <path d="M175 70L276.325 257.5H73.675L175 70Z" fill="#000" />
+          </symbol>
+
+          <symbol id="dev__blob--collision" viewBox="0 0 320 320">
+               <path d="M254.571 96.9708C209.213 52.7511 129.818 73.449 103.046 96.9708C76.2736 120.493 47.4092 190.507 75.526 232.344C103.643 274.181 192.568 305.161 242.967 246.907C293.365 188.654 299.93 141.19 254.571 96.9708Z"
+                    fill="#000" />
+          </symbol>
+     </defs>
+
+     <use href="#dev__circle" xlink:href="#dev__circle" x="10" y="10" width="320" height="320" />
+     <use href="#dev__polygon" xlink:href="#dev__polygon" x="330" y="10" width="320" height="320" />
+     <use href="#dev__triangle" xlink:href="#dev__triangle" x="10" y="330" width="320" height="320" />
+     <use href="#dev__blob" xlink:href="#dev__blob" x="330" y="330" width="320" height="320" />
+</svg>
