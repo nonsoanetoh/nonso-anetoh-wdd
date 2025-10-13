@@ -36,11 +36,5 @@
         height: calc(100vh - (var(--column) * 2));
       }
     }
-
-    .trinket {
-      position: absolute;
-      transform-origin: center center;
-      will-change: transform;
-    }
   }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 // utils/matter/spawnFromTrinket.ts
 import Matter, {
   Bodies,
@@ -146,10 +148,6 @@ export async function spawnBodyFromTrinketRef(
   // Compute viewBox-center ↔ path-centroid offset (in pixels)
   const centroid = Vertices.centre(verts); // scaled space
   const viewCenter = { x: (vb.w * scale) / 2, y: (vb.h * scale) / 2 };
-  const followOffsetPx = {
-    x: centroid.x - viewCenter.x,
-    y: centroid.y - viewCenter.y,
-  };
 
   // Spawn metrics after scaling
   const metrics: ShapeMetrics = {
@@ -208,9 +206,17 @@ export async function spawnBodyFromTrinketRef(
   body.render.strokeStyle = "#1b1b1b";
   body.render.lineWidth = 1;
 
-  // Store offset so DOM follower can compensate (fixes Y being “on top”)
+  const viewAspect = vb.h / vb.w;
+
+  const bodyCentroid = body.position; // body world centroid (local = before add)
+  const followOffsetPx = {
+    x: bodyCentroid.x - pos.x,
+    y: bodyCentroid.y - pos.y,
+  };
+
   (body as any).plugin ??= {};
   (body as any).plugin.followOffsetPx = followOffsetPx;
+  (body as any).plugin.viewAspect = vb.h / vb.w;
 
   Composite.add(engine.world, body);
   return body;

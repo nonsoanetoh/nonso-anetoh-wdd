@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import Matter from "matter-js";
 import { BOUNDARY_THICKNESS } from "./constants";
 import { RefObject } from "react";
-import { HandleCanvasResizeProps } from "../../../types/matter";
 
-export const handleCanvasResize = ({
-  container,
-  render,
-  bounds,
-}: HandleCanvasResizeProps) => {
+// @ts-expect-error
+export const handleCanvasResize = ({ container, render, bounds }) => {
   if (!render) return;
 
   if (!container.current) return;

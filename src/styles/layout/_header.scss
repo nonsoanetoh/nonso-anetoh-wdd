@@ -66,18 +66,19 @@
       border-radius: 50%;
       overflow: hidden;
 
-      .trinket {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        top: initial;
-        left: initial;
-        display: block;
+      // .trinket {
+      //   width: 100%;
+      //   height: 100%;
+      //   position: relative;
+      //   top: initial;
+      //   left: initial;
+      //   display: block;
+      //   transform-origin: 50% 50%;
 
-        svg {
-          position: relative;
-        }
-      }
+      //   svg {
+      //     position: relative;
+      //   }
+      // }
     }
 
     &__text-content {
