@@ -7,15 +7,23 @@ type BodyComponentProps = {
   onBodyClick?: () => void;
   children?:
     | React.ReactNode
-    | ((state: { isDragging: boolean; isActive: boolean; wasClicked: boolean }) => React.ReactNode);
+    | ((state: {
+        isDragging: boolean;
+        isActive: boolean;
+        wasClicked: boolean;
+      }) => React.ReactNode);
 };
 
-const Body: React.FC<BodyComponentProps> = ({ body, onBodyClick, children }) => {
+const Body: React.FC<BodyComponentProps> = ({
+  body,
+  onBodyClick,
+  children,
+}) => {
   const elemRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [wasClicked, setWasClicked] = useState(false);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number>(0);
 
   useEffect(() => {
     const checkState = () => {
