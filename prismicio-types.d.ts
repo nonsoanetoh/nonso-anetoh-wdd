@@ -182,13 +182,7 @@ export type NavigationDocument<Lang extends string = string> =
     Lang
   >;
 
-type PageDocumentDataSlicesSlice =
-  | HeroSlice
-  | ProcessSlice
-  | ProjectListSlice
-  | BlogHighlightSlice
-  | ImageCarouselSlice
-  | TextBlockSlice;
+type PageDocumentDataSlicesSlice = TextBlockSlice | HeroSlice;
 
 /**
  * Content for Page documents
@@ -532,21 +526,6 @@ export interface HeroSliceDefaultPrimaryInteractiveTrinketsItem {
 }
 
 /**
- * Item in *Hero → About → Primary → Ring Gallery*
- */
-export interface HeroSliceAboutPrimaryRingGalleryItem {
-  /**
-   * Image field in *Hero → About → Primary → Ring Gallery*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: hero.about.primary.ring_gallery[].image
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  image: prismic.ImageField<never>;
-}
-
-/**
  * Primary content in *Hero → Default → Primary*
  */
 export interface HeroSliceDefaultPrimary {
@@ -587,49 +566,9 @@ export type HeroSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
- * Primary content in *Hero → About → Primary*
- */
-export interface HeroSliceAboutPrimary {
-  /**
-   * Intro field in *Hero → About → Primary*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: Intro Paragraph
-   * - **API ID Path**: hero.about.primary.intro
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  intro: prismic.KeyTextField;
-
-  /**
-   * Ring Gallery field in *Hero → About → Primary*
-   *
-   * - **Field Type**: Group
-   * - **Placeholder**: *None*
-   * - **API ID Path**: hero.about.primary.ring_gallery[]
-   * - **Documentation**: https://prismic.io/docs/field#group
-   */
-  ring_gallery: prismic.GroupField<
-    Simplify<HeroSliceAboutPrimaryRingGalleryItem>
-  >;
-}
-
-/**
- * About variation for Hero Slice
- *
- * - **API ID**: `about`
- * - **Description**: Default
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type HeroSliceAbout = prismic.SharedSliceVariation<
-  "about",
-  Simplify<HeroSliceAboutPrimary>,
-  never
->;
-
-/**
  * Slice variation for *Hero*
  */
-type HeroSliceVariation = HeroSliceDefault | HeroSliceAbout;
+type HeroSliceVariation = HeroSliceDefault;
 
 /**
  * Hero Shared Slice
@@ -1106,61 +1045,51 @@ export type RichTextSlice = prismic.SharedSlice<
 >;
 
 /**
- * Item in *TextBlock → Default → Primary → Text*
- */
-export interface TextBlockSliceDefaultPrimaryTextItem {
-  /**
-   * paragraph field in *TextBlock → Default → Primary → Text*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: text_block.default.primary.text[].paragraph
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  paragraph: prismic.KeyTextField;
-}
-
-/**
- * Item in *TextBlock → SpaceBetween → Primary → Text*
- */
-export interface TextBlockSliceSpaceBetweenPrimaryTextItem {
-  /**
-   * paragraph field in *TextBlock → SpaceBetween → Primary → Text*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: text_block.spaceBetween.primary.text[].paragraph
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  paragraph: prismic.KeyTextField;
-}
-
-/**
- * Primary content in *TextBlock → Default → Primary*
+ * Primary content in *TextBlock → Section Intro → Primary*
  */
 export interface TextBlockSliceDefaultPrimary {
   /**
-   * Title field in *TextBlock → Default → Primary*
+   * Heading field in *TextBlock → Section Intro → Primary*
    *
    * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: text_block.default.primary.title
+   * - **API ID Path**: text_block.default.primary.heading
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  title: prismic.KeyTextField;
+  heading: prismic.KeyTextField;
 
   /**
-   * Text field in *TextBlock → Default → Primary*
+   * Heading GIF field in *TextBlock → Section Intro → Primary*
    *
-   * - **Field Type**: Group
+   * - **Field Type**: Image
    * - **Placeholder**: *None*
-   * - **API ID Path**: text_block.default.primary.text[]
-   * - **Documentation**: https://prismic.io/docs/field#group
+   * - **API ID Path**: text_block.default.primary.heading_gif
+   * - **Documentation**: https://prismic.io/docs/field#image
    */
-  text: prismic.GroupField<Simplify<TextBlockSliceDefaultPrimaryTextItem>>;
+  heading_gif: prismic.ImageField<never>;
 
   /**
-   * CTA field in *TextBlock → Default → Primary*
+   * GIF Offset field in *TextBlock → Section Intro → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.default.primary.gif_offset
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  gif_offset: prismic.NumberField;
+
+  /**
+   * Heading Indent field in *TextBlock → Section Intro → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.default.primary.heading_indent
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  heading_indent: prismic.NumberField;
+
+  /**
+   * CTA field in *TextBlock → Section Intro → Primary*
    *
    * - **Field Type**: Link
    * - **Placeholder**: *None*
@@ -1168,10 +1097,20 @@ export interface TextBlockSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
    */
   cta: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * Text Content field in *TextBlock → Section Intro → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.default.primary.text_content
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  text_content: prismic.KeyTextField;
 }
 
 /**
- * Default variation for TextBlock Slice
+ * Section Intro variation for TextBlock Slice
  *
  * - **API ID**: `default`
  * - **Description**: Default
@@ -1184,31 +1123,61 @@ export type TextBlockSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
- * Primary content in *TextBlock → SpaceBetween → Primary*
+ * Primary content in *TextBlock → Space Between → Primary*
  */
 export interface TextBlockSliceSpaceBetweenPrimary {
   /**
-   * Title field in *TextBlock → SpaceBetween → Primary*
+   * Heading field in *TextBlock → Space Between → Primary*
    *
    * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: text_block.spaceBetween.primary.title
+   * - **API ID Path**: text_block.spaceBetween.primary.heading
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  title: prismic.KeyTextField;
+  heading: prismic.KeyTextField;
 
   /**
-   * Text field in *TextBlock → SpaceBetween → Primary*
+   * Heading GIF field in *TextBlock → Space Between → Primary*
    *
-   * - **Field Type**: Group
+   * - **Field Type**: Image
    * - **Placeholder**: *None*
-   * - **API ID Path**: text_block.spaceBetween.primary.text[]
-   * - **Documentation**: https://prismic.io/docs/field#group
+   * - **API ID Path**: text_block.spaceBetween.primary.heading_gif
+   * - **Documentation**: https://prismic.io/docs/field#image
    */
-  text: prismic.GroupField<Simplify<TextBlockSliceSpaceBetweenPrimaryTextItem>>;
+  heading_gif: prismic.ImageField<never>;
 
   /**
-   * CTA field in *TextBlock → SpaceBetween → Primary*
+   * GIF Offset field in *TextBlock → Space Between → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.spaceBetween.primary.gif_offset
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  gif_offset: prismic.NumberField;
+
+  /**
+   * Heading Indent field in *TextBlock → Space Between → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.spaceBetween.primary.heading_indent
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  heading_indent: prismic.NumberField;
+
+  /**
+   * Text Content field in *TextBlock → Space Between → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_block.spaceBetween.primary.text_content
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  text_content: prismic.KeyTextField;
+
+  /**
+   * CTA field in *TextBlock → Space Between → Primary*
    *
    * - **Field Type**: Link
    * - **Placeholder**: *None*
@@ -1219,7 +1188,7 @@ export interface TextBlockSliceSpaceBetweenPrimary {
 }
 
 /**
- * SpaceBetween variation for TextBlock Slice
+ * Space Between variation for TextBlock Slice
  *
  * - **API ID**: `spaceBetween`
  * - **Description**: Default
@@ -1294,11 +1263,8 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimaryTrinketsItem,
       HeroSliceDefaultPrimaryInteractiveTrinketsItem,
       HeroSliceDefaultPrimary,
-      HeroSliceAboutPrimaryRingGalleryItem,
-      HeroSliceAboutPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
-      HeroSliceAbout,
       ImageCarouselSlice,
       ImageCarouselSliceDefaultPrimaryImagesItem,
       ImageCarouselSliceDefaultPrimaryTrinketsItem,
@@ -1321,9 +1287,7 @@ declare module "@prismicio/client" {
       RichTextSliceVariation,
       RichTextSliceDefault,
       TextBlockSlice,
-      TextBlockSliceDefaultPrimaryTextItem,
       TextBlockSliceDefaultPrimary,
-      TextBlockSliceSpaceBetweenPrimaryTextItem,
       TextBlockSliceSpaceBetweenPrimary,
       TextBlockSliceVariation,
       TextBlockSliceDefault,
