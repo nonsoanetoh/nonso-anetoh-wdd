@@ -12,7 +12,8 @@ export const handleMouseInteraction = ({
   render,
   container,
 }: MouseInteractionProps) => {
-  const mouse = Mouse.create(container?.current as HTMLElement);
+  // IMPORTANT: Mouse must be created on the canvas element, not the container!
+  const mouse = Mouse.create(render.canvas);
 
   (render as MRender).mouse = mouse;
   if (render.options && typeof render.options.pixelRatio === "number") {
@@ -25,7 +26,7 @@ export const handleMouseInteraction = ({
   const mouseConstraint = MouseConstraint.create(engine, {
     mouse,
     constraint: {
-      stiffness: 0.2,
+      stiffness: 0.5,
       render: { visible: false },
     },
     collisionFilter: {
@@ -37,9 +38,21 @@ export const handleMouseInteraction = ({
 
   let dragStartPos = { x: 0, y: 0 };
 
+  // Wake bodies on hover for more responsive dragging
+  Events.on(mouseConstraint, "mousemove", () => {
+    const body = mouseConstraint.body;
+    if (body && body.isSleeping) {
+      Matter.Sleeping.set(body, false);
+    }
+  });
+
   Events.on(mouseConstraint, "startdrag", (event: any) => {
     const body = event.body as Matter.Body;
     dragStartPos = { x: mouse.position.x, y: mouse.position.y };
+
+    // Wake up the body if it's sleeping
+    Matter.Sleeping.set(body, false);
+
     (body as any).plugin = (body as any).plugin || {};
     (body as any).plugin.isDragging = true;
     (body as any).plugin.isActive = true;

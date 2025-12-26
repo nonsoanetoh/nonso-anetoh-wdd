@@ -102,9 +102,9 @@ export function spawnBodyFromGeom(
 ): Matter.Body | null {
   const {
     sampleLength = 12,
-    restitution = 0.6,
+    restitution = 0.2,        // Reduced from 0.6 to minimize bouncing
     frictionAir = 0.015,
-    friction = 0.5,
+    friction = 0.5,            // Keep at 0.5 for smooth dragging
     debug = false,
     normalizeToViewCenter = false,
     showBody = false,
@@ -184,6 +184,8 @@ export function spawnBodyFromGeom(
         frictionAir,
         friction,
         render: renderStyle,
+        sleepThreshold: 60,      // Higher threshold = sleeps faster when at rest
+        density: 0.001,          // Lower density = lighter bodies, less force on collision
       }) as Body)
     : (() => {
         const vv = Vertices.create(
@@ -199,6 +201,8 @@ export function spawnBodyFromGeom(
           frictionAir,
           friction,
           render: renderStyle,
+          sleepThreshold: 60,
+          density: 0.001,
         }) as Body;
       })();
 
@@ -207,7 +211,7 @@ export function spawnBodyFromGeom(
   (body as any).plugin = (body as any).plugin || {};
   (body as any).plugin.wrapBounds = {
     min: { x: 0, y: 0 },
-    max: { x: canvasW, y: (render?.options?.height ?? window.innerHeight) },
+    max: { x: canvasW, y: render?.options?.height ?? window.innerHeight },
   };
 
   (body as any).label = trinketName;

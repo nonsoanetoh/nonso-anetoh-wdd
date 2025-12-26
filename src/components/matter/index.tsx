@@ -55,6 +55,7 @@ const MatterCanvas = forwardRef<MatterCanvasHandle, MatterCanvasProps>(
       ref,
       () => ({
         getEngine: () => engineRef.current?.engine ?? null,
+        getRender: () => engineRef.current?.render ?? null,
         isReady: () => readyRef.current,
         awaitReady: () =>
           readyRef.current
@@ -127,101 +128,92 @@ const MatterCanvas = forwardRef<MatterCanvasHandle, MatterCanvasProps>(
         const defs = await loadSpriteDefs(spriteData.spriteSheet);
         if (defs.size === 0) return;
 
-        // Spawn static preloader body at CENTER of canvas using dev__circle
-        const preloaderSym = defs.get("dev__circle--collision") || defs.get("dev__circle");
-        if (preloaderSym) {
-          const centerX = render.canvas.width / 2;
-          const centerY = render.canvas.height / 2;
+        // Add navigation boundary FIRST - matching actual nav element
+        const navElement = document.querySelector(".navigation") as HTMLElement;
+        if (navElement) {
+          const navRect = navElement.getBoundingClientRect();
+          const canvasRect = render.canvas.getBoundingClientRect();
 
-          const preloaderBody = spawnBodyFromGeom(
+          // Convert nav position from viewport to canvas coordinates
+          const navX = navRect.left - canvasRect.left + navRect.width / 2;
+          const navY = navRect.top - canvasRect.top + navRect.height / 2;
+
+          // Get border radius from computed styles
+          const computedStyle = window.getComputedStyle(navElement);
+          const borderRadius = parseFloat(computedStyle.borderRadius) || 38;
+
+          const navBoundary = Matter.Bodies.rectangle(
+            navX,
+            navY,
+            navRect.width,
+            navRect.height,
+            {
+              isStatic: true,
+              render: {
+                fillStyle: "transparent",
+                strokeStyle: "transparent",
+                lineWidth: 0,
+              },
+              label: "nav-boundary",
+              chamfer: { radius: borderRadius },
+            }
+          );
+          Matter.Composite.add(engine.world, navBoundary);
+        }
+
+        // Spawn all trinkets immediately
+        trinketData.forEach((trinket, i) => {
+          const sym = defs.get(`${trinket.name}--collision`) || defs.get(trinket.name);
+          if (!sym) return;
+
+          const canvasWidth = render.canvas.width;
+          const padding = canvasWidth * 0.2;
+          const randomX = padding + Math.random() * (canvasWidth - padding * 2);
+          const aboveScreen = -100;
+
+          const body = spawnBodyFromGeom(
             engine,
             render,
             {
-              index: 0,
-              sizeLevel: 3,
-              viewBox: preloaderSym.viewBox,
-              collisionPathD: preloaderSym.collisionPathD,
-              trinketName: "dev__circle",
+              index: i,
+              sizeLevel: trinket.size,
+              viewBox: sym.viewBox,
+              collisionPathD: sym.collisionPathD,
+              trinketName: trinket.name,
             },
             {
               mode: "manual",
-              position: { x: centerX, y: centerY },
+              position: { x: randomX, y: aboveScreen },
               sampleLength: 10,
               showBody: false,
             }
           );
 
-          if (preloaderBody) {
-            preloaderBody.label = "preloader";
-            Matter.Body.setStatic(preloaderBody, true);
-            Matter.Body.setVelocity(preloaderBody, { x: 0, y: 0 });
-            delete (preloaderBody as any).plugin.wrapBounds;
-
-            setTimeout(() => {
-              Matter.Body.setStatic(preloaderBody, false);
-              Matter.Body.setVelocity(preloaderBody, { x: 0, y: 0 });
-
-              trinketData.forEach((trinket, i) => {
-                setTimeout(() => {
-                  const sym = defs.get(`${trinket.name}--collision`) || defs.get(trinket.name);
-                  if (!sym) return;
-
-                  const canvasWidth = render.canvas.width;
-                  const padding = canvasWidth * 0.2;
-                  const randomX = padding + Math.random() * (canvasWidth - padding * 2);
-                  const aboveScreen = -100;
-
-                  const body = spawnBodyFromGeom(
-                    engine,
-                    render,
-                    {
-                      index: i,
-                      sizeLevel: trinket.size,
-                      viewBox: sym.viewBox,
-                      collisionPathD: sym.collisionPathD,
-                      trinketName: trinket.name,
-                    },
-                    {
-                      mode: "manual",
-                      position: { x: randomX, y: aboveScreen },
-                      sampleLength: 10,
-                      showBody: false,
-                    }
-                  );
-
-                  if (body) {
-                    body.label = trinket.id;
-                    delete (body as any).plugin.wrapBounds;
-                  }
-                }, i * 200);
-              });
-
-              const totalSpawnTime = trinketData.length * 200;
-              const fallTime = 2000;
-              setTimeout(() => {
-                const containerWidth = render.canvas.width;
-                const ceiling = Matter.Bodies.rectangle(
-                  containerWidth / 2,
-                  -BOUNDARY_THICKNESS / 2,
-                  27184,
-                  BOUNDARY_THICKNESS,
-                  { isStatic: true, render: { fillStyle: "transparent" } }
-                );
-                Matter.Composite.add(engine.world, ceiling);
-
-                const allBodies = Matter.Composite.allBodies(engine.world);
-                allBodies.forEach((body) => {
-                  if (!body.isStatic && (body as any).plugin) {
-                    (body as any).plugin.wrapBounds = {
-                      min: { x: 0, y: 0 },
-                      max: { x: render.canvas.width, y: render.canvas.height },
-                    };
-                  }
-                });
-              }, totalSpawnTime + fallTime);
-            }, 3500);
+          if (body) {
+            body.label = trinket.id;
           }
-        }
+        });
+
+        // Add ceiling and wrapping immediately
+        const containerWidth = render.canvas.width;
+        const ceiling = Matter.Bodies.rectangle(
+          containerWidth / 2,
+          -BOUNDARY_THICKNESS / 2,
+          27184,
+          BOUNDARY_THICKNESS,
+          { isStatic: true, render: { fillStyle: "transparent" } }
+        );
+        Matter.Composite.add(engine.world, ceiling);
+
+        const allBodies = Matter.Composite.allBodies(engine.world);
+        allBodies.forEach((body) => {
+          if (!body.isStatic && (body as any).plugin) {
+            (body as any).plugin.wrapBounds = {
+              min: { x: 0, y: 0 },
+              max: { x: render.canvas.width, y: render.canvas.height },
+            };
+          }
+        });
 
         readyRef.current = true;
         const waiters = [...readyWaitersRef.current];

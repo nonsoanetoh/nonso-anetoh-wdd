@@ -50,6 +50,7 @@ export type ScreenPoint = { x: number; y: number };
 // Simplified API for the new architecture
 export type MatterCanvasHandle = {
   getEngine(): Matter.Engine | null;
+  getRender(): Matter.Render | null;
   isReady(): boolean;
   awaitReady(): Promise<void>;
 };
