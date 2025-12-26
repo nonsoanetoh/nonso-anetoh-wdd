@@ -32,6 +32,7 @@ export default async function Index() {
     <div className="page page--home">
       <div className="inner">
         <SliceZone slices={home.data.slices} components={components} />
+        <div className="rest"></div>
       </div>
     </div>
   );

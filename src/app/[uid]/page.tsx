@@ -10,7 +10,7 @@ import { createClient } from "@/prismicio";
 import { components } from "@/slices";
 
 export async function generateMetadata({ params }) {
-  const { uid } = params;
+  const { uid } = await params;
   const client = createClient();
 
   const page = await client.getByUID("page", uid).catch(() => notFound());
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const { uid } = params;
+  const { uid } = await params;
   const client = createClient();
 
   const page = await client.getByUID("page", uid).catch(() => notFound());
