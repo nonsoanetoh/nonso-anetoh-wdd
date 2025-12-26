@@ -6,33 +6,39 @@
   "variations": [
     {
       "id": "default",
-      "name": "Default",
+      "name": "Section Intro",
       "docURL": "...",
       "version": "initial",
       "description": "Default",
       "imageUrl": "",
       "primary": {
-        "title": {
+        "heading": {
           "type": "Text",
           "config": {
-            "label": "Title",
+            "label": "Heading",
             "placeholder": ""
           }
         },
-        "text": {
-          "type": "Group",
+        "heading_gif": {
+          "type": "Image",
           "config": {
-            "label": "Text",
-            "repeat": true,
-            "fields": {
-              "paragraph": {
-                "type": "Text",
-                "config": {
-                  "label": "paragraph",
-                  "placeholder": ""
-                }
-              }
-            }
+            "label": "Heading GIF",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "gif_offset": {
+          "type": "Number",
+          "config": {
+            "label": "GIF Offset",
+            "placeholder": ""
+          }
+        },
+        "heading_indent": {
+          "type": "Number",
+          "config": {
+            "label": "Heading Indent",
+            "placeholder": ""
           }
         },
         "cta": {
@@ -45,39 +51,59 @@
             "allowText": true,
             "repeat": false
           }
+        },
+        "text_content": {
+          "type": "Text",
+          "config": {
+            "label": "Text Content",
+            "placeholder": ""
+          }
         }
       },
       "items": {}
     },
     {
       "id": "spaceBetween",
-      "name": "SpaceBetween",
+      "name": "Space Between",
       "docURL": "...",
       "version": "initial",
       "description": "Default",
       "imageUrl": "",
       "primary": {
-        "title": {
+        "heading": {
           "type": "Text",
           "config": {
-            "label": "Title",
+            "label": "Heading",
             "placeholder": ""
           }
         },
-        "text": {
-          "type": "Group",
+        "heading_gif": {
+          "type": "Image",
           "config": {
-            "label": "Text",
-            "repeat": true,
-            "fields": {
-              "paragraph": {
-                "type": "Text",
-                "config": {
-                  "label": "paragraph",
-                  "placeholder": ""
-                }
-              }
-            }
+            "label": "Heading GIF",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "gif_offset": {
+          "type": "Number",
+          "config": {
+            "label": "GIF Offset",
+            "placeholder": ""
+          }
+        },
+        "heading_indent": {
+          "type": "Number",
+          "config": {
+            "label": "Heading Indent",
+            "placeholder": ""
+          }
+        },
+        "text_content": {
+          "type": "Text",
+          "config": {
+            "label": "Text Content",
+            "placeholder": ""
           }
         },
         "cta": {

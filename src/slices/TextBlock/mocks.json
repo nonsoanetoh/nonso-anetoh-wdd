@@ -3,37 +3,57 @@
 		"__TYPE__": "SharedSliceContent",
 		"variation": "default",
 		"primary": {
-			"title": {
+			"heading": {
 				"__TYPE__": "FieldContent",
-				"value": "affect",
+				"value": "molecular",
 				"type": "Text"
 			},
-			"text": {
-				"__TYPE__": "GroupContentType",
-				"value": [
-					{
-						"__TYPE__": "GroupItemContent",
-						"value": [
-							[
-								"paragraph",
-								{
-									"__TYPE__": "FieldContent",
-									"value": "no",
-									"type": "Text"
-								}
-							]
-						]
-					}
-				]
+			"heading_gif": {
+				"origin": {
+					"id": "main",
+					"url": "https://images.unsplash.com/photo-1586952518485-11b180e92764",
+					"width": 4172,
+					"height": 4000
+				},
+				"url": "https://images.unsplash.com/photo-1586952518485-11b180e92764",
+				"width": 4172,
+				"height": 4000,
+				"edit": {
+					"zoom": 1,
+					"crop": {
+						"x": 0,
+						"y": 0
+					},
+					"background": "transparent"
+				},
+				"credits": null,
+				"alt": null,
+				"__TYPE__": "ImageContent",
+				"thumbnails": {}
 			},
 			"cta": {
+				"key": "ece6ecdf-b97f-4e6d-9269-d3ad452aa8c4",
 				"__TYPE__": "LinkContent",
-				"key": "91cfb331-463d-4c46-ab26-7760fc7fb6e5",
 				"value": {
 					"__TYPE__": "ExternalLink",
-					"url": "http://google.com",
-					"text": "paid"
+					"url": "https://slicemachine.dev",
+					"text": "exactly"
 				}
+			},
+			"text_content": {
+				"__TYPE__": "FieldContent",
+				"value": "know",
+				"type": "Text"
+			},
+			"heading_indent": {
+				"__TYPE__": "FieldContent",
+				"value": "6",
+				"type": "Number"
+			},
+			"gif_offset": {
+				"__TYPE__": "FieldContent",
+				"value": "61",
+				"type": "Number"
 			}
 		},
 		"items": []
@@ -42,37 +62,57 @@
 		"__TYPE__": "SharedSliceContent",
 		"variation": "spaceBetween",
 		"primary": {
-			"title": {
+			"heading": {
 				"__TYPE__": "FieldContent",
-				"value": "quietly",
+				"value": "book",
 				"type": "Text"
 			},
-			"text": {
-				"__TYPE__": "GroupContentType",
-				"value": [
-					{
-						"__TYPE__": "GroupItemContent",
-						"value": [
-							[
-								"paragraph",
-								{
-									"__TYPE__": "FieldContent",
-									"value": "contain",
-									"type": "Text"
-								}
-							]
-						]
-					}
-				]
+			"heading_gif": {
+				"origin": {
+					"id": "main",
+					"url": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68",
+					"width": 8640,
+					"height": 8640
+				},
+				"url": "https://images.unsplash.com/photo-1593642532973-d31b6557fa68",
+				"width": 8640,
+				"height": 8640,
+				"edit": {
+					"zoom": 1,
+					"crop": {
+						"x": 0,
+						"y": 0
+					},
+					"background": "transparent"
+				},
+				"credits": null,
+				"alt": null,
+				"__TYPE__": "ImageContent",
+				"thumbnails": {}
+			},
+			"text_content": {
+				"__TYPE__": "FieldContent",
+				"value": "meal",
+				"type": "Text"
 			},
 			"cta": {
-				"key": "5c75a611-9744-412b-971b-13198277dd1f",
+				"key": "1370e9d4-a301-48e2-a54d-9b3daa8e2e44",
 				"__TYPE__": "LinkContent",
 				"value": {
 					"__TYPE__": "ExternalLink",
-					"url": "https://prismic.io",
-					"text": "away"
+					"url": "https://slicemachine.dev",
+					"text": "image"
 				}
+			},
+			"heading_indent": {
+				"__TYPE__": "FieldContent",
+				"value": "66",
+				"type": "Number"
+			},
+			"gif_offset": {
+				"__TYPE__": "FieldContent",
+				"value": "54",
+				"type": "Number"
 			}
 		},
 		"items": [
