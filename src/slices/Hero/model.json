@@ -89,41 +89,6 @@
         }
       },
       "items": {}
-    },
-    {
-      "id": "about",
-      "name": "About",
-      "docURL": "...",
-      "version": "initial",
-      "description": "Default",
-      "imageUrl": "",
-      "primary": {
-        "intro": {
-          "type": "Text",
-          "config": {
-            "label": "Intro",
-            "placeholder": "Intro Paragraph"
-          }
-        },
-        "ring_gallery": {
-          "type": "Group",
-          "config": {
-            "label": "Ring Gallery",
-            "repeat": true,
-            "fields": {
-              "image": {
-                "type": "Image",
-                "config": {
-                  "label": "Image",
-                  "constraint": {},
-                  "thumbnails": []
-                }
-              }
-            }
-          }
-        }
-      },
-      "items": {}
     }
   ]
 }
