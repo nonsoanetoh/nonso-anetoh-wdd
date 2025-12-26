@@ -1,31 +1,63 @@
-import Button from "@/components/button";
-import { Content } from "@prismicio/client";
-import React, { FC } from "react";
+import { Content, isFilled } from "@prismicio/client";
+import React, { CSSProperties, FC } from "react";
+import { PrismicNextImage } from "@prismicio/next";
+import CTA from "@/components/button/variants/cta";
+import Copy from "@/components/copy";
 
-interface TextBlockSpaceBetweenProps {
-  data: Content.TextBlockSliceSpaceBetween;
+type SpaceBetweenSlice = Extract<
+  Content.TextBlockSlice,
+  { variation: "spaceBetween" }
+>;
+
+interface SpaceBetweenProps {
+  data: SpaceBetweenSlice;
 }
 
-const SpaceBetween: FC<TextBlockSpaceBetweenProps> = ({ data }) => {
+const SpaceBetween: FC<SpaceBetweenProps> = ({ data }) => {
+  const {
+    heading,
+    heading_gif,
+    gif_offset,
+    heading_indent,
+    text_content,
+    cta,
+  } = data.primary;
+
+  // Split text_content by ** to create separate paragraphs
+  const textParagraphs = text_content ? text_content.split("**") : [];
+
   return (
     <div className="inner inner--space-between">
-      <div className="title">Title</div>
+      <div
+        className="heading"
+        style={
+          heading_indent
+            ? ({
+                "--text-indent": heading_indent,
+                "--gif-offset": gif_offset,
+              } as CSSProperties)
+            : undefined
+        }
+      >
+        <h2>{heading}</h2>
+        {isFilled.image(heading_gif) && (
+          <div className="heading__gif">
+            <PrismicNextImage field={heading_gif} />
+          </div>
+        )}
+      </div>
       <div className="content">
-        <div className="text">
-          {data.primary.text.map((item, index) => {
-            return (
-              <p key={index} className="text">
-                {item.paragraph}
-              </p>
-            );
-          })}
-        </div>
-        <Button
-          label={data.primary.cta.text ?? "Call to Action"}
-          link={"#work"}
-          type="cta"
-          linkType="within-page"
-        />
+        <Copy>
+          {textParagraphs.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+        </Copy>
+        {isFilled.link(cta) && (
+          <div className="cta-wrapper">
+            <CTA label={cta.text || ""} link={cta} />
+            {/* <PrismicNextLink field={cta} className="cta" /> */}
+          </div>
+        )}
       </div>
     </div>
   );

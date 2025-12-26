@@ -1,63 +1,68 @@
+@use "../abstract/functions" as *;
+
 .text-block {
   .inner {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    padding: 0 var(--my);
-    padding-top: calc(var(--cell-spacing));
-    gap: var(--column-gap);
+    padding: r(40) r(20);
 
-    &--default {
-      grid-template-areas:
-        "title title title . . . . . . . . ."
-        ". . . content content content . . . . . .";
+    &--section-intro {
+      .heading-wrapper {
+        .heading {
+          font-family: "Cooper Hewitt", sans-serif;
+          font-size: r(90);
+          font-weight: 900;
+          white-space: pre-line;
+        }
+      }
     }
 
     &--space-between {
-      grid-template-areas: "title title title . . . . . . content content content";
+      grid-template-areas: "heading heading heading heading heading . . . . content content content content";
 
-      .title {
-        grid-area: title;
+      .heading {
+        grid-area: heading;
+        width: 100%;
+        position: relative;
+        font-family: "Cooper Hewitt", sans-serif;
+        font-size: r(90);
+        font-weight: 900;
+        white-space: pre-line;
+        line-height: r(95);
+        color: black;
+        text-indent: r(var(--text-indent));
+
+        &__gif {
+          position: absolute;
+          top: 0%;
+          left: r(var(--gif-offset));
+          width: r(160);
+          aspect-ratio: 1/1;
+
+          img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+          }
+        }
       }
 
       .content {
         grid-area: content;
+        font-size: r(24);
 
-        p,
-        button,
-        a {
-          font-size: var(--fs-body);
-        }
+        p {
+          white-space: pre-line;
+          margin-bottom: r(15);
+          font-weight: 500;
 
-        p + p {
-          margin-top: calc(var(--cell-spacing) / 2);
-        }
-
-        display: flex;
-        flex-direction: column;
-        gap: calc(var(--cell-spacing) / 2);
-      }
-
-      @media (max-width: 64rem) {
-        grid-template-areas: "title title title title . . . content content content content content";
-
-        .content {
-          gap: calc(var(--cell-spacing) * 1);
-        }
-      }
-
-      @media (max-width: 26rem) {
-        grid-template-areas:
-          "title title title title title title title title title . . ."
-          ". . content content content content content content content content content .";
-        gap: calc(3 * var(--cell-spacing)) var(--column-gap);
-        padding-top: calc(1.5 * var(--cell-spacing));
-
-        .content {
-          gap: calc(var(--cell-spacing) * 5);
-
-          p + p {
-            margin-top: calc(var(--cell-spacing));
+          &:last-of-type {
+            margin-bottom: 0;
           }
+        }
+
+        .cta-wrapper {
+          margin-top: r(60);
         }
       }
     }
