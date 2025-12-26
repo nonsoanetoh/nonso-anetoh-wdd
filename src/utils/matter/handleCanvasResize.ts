@@ -137,6 +137,57 @@ export const handleCanvasResize = ({
           );
           Matter.Composite.add(engine.world, newNavBoundary);
         }
+      } else if ((body as any).plugin?.customConfig) {
+        // Handle custom bodies with stored config
+        const config = (body as any).plugin.customConfig;
+        const width = config.width;
+        const height = config.height;
+
+        // Remove old body and create new one with same config
+        Matter.Composite.remove(engine.world, body);
+
+        const newBody = Matter.Bodies.rectangle(
+          body.position.x,
+          body.position.y,
+          width,
+          height,
+          {
+            isStatic: config.isStatic ?? false,
+            restitution: config.physics?.restitution ?? 0.8,
+            friction: config.physics?.friction ?? 0.1,
+            frictionAir: config.physics?.frictionAir ?? 0.02,
+            render: {
+              fillStyle: "transparent",
+              strokeStyle: "transparent",
+              lineWidth: 0,
+            },
+            label: config.label,
+            chamfer: config.chamfer ? { radius: config.chamfer } : undefined,
+            collisionFilter: config.disableMouseDrag
+              ? {
+                  category: 0x0002,
+                  mask: 0xFFFFFFFF & ~0x0004,
+                }
+              : {
+                  category: 0x0001,
+                  mask: 0xFFFFFFFF,
+                },
+            plugin: {
+              customConfig: config,
+              data: {
+                viewBox: { x: 0, y: 0, w: width, h: height },
+                scale: 1,
+                collisionOffset: { x: 0, y: 0 },
+              },
+            },
+          }
+        );
+
+        // Preserve velocity from old body
+        Matter.Body.setVelocity(newBody, body.velocity);
+        Matter.Body.setAngularVelocity(newBody, body.angularVelocity);
+
+        Matter.Composite.add(engine.world, newBody);
       }
     });
   }
