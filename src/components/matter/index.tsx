@@ -19,7 +19,7 @@ import { useDataContext } from "@/context/DataContext";
 import { loadSpriteDefs } from "@/utils/svg/loadSpriteDefs";
 import { spawnBodyFromGeom } from "@/utils/matter/spawnFromGeom";
 import { BOUNDARY_THICKNESS } from "@/utils/matter/constants";
-import type { MatterCanvasHandle } from "../../../types/matter";
+import type { MatterCanvasHandle, CustomBody } from "../../../types/matter";
 
 type TrinketData = {
   id: string;
@@ -30,10 +30,11 @@ type TrinketData = {
 
 type MatterCanvasProps = {
   trinketData: TrinketData[];
+  customBodies?: CustomBody[];
 };
 
 const MatterCanvas = forwardRef<MatterCanvasHandle, MatterCanvasProps>(
-  ({ trinketData }, ref) => {
+  ({ trinketData, customBodies = [] }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const engineRef = useRef<{
       engine: Engine;
@@ -161,6 +162,49 @@ const MatterCanvas = forwardRef<MatterCanvasHandle, MatterCanvasProps>(
           Matter.Composite.add(engine.world, navBoundary);
         }
 
+        // Add custom bodies
+        customBodies.forEach((customBody) => {
+          const width = customBody.width;
+          const height = customBody.height;
+          const x = customBody.position?.x ?? render.canvas.width / 2;
+          const y = customBody.position?.y ?? render.canvas.height / 2;
+
+          const body = Matter.Bodies.rectangle(x, y, width, height, {
+            isStatic: customBody.isStatic ?? false,
+            restitution: customBody.physics?.restitution ?? 0.8,
+            friction: customBody.physics?.friction ?? 0.1,
+            frictionAir: customBody.physics?.frictionAir ?? 0.02,
+            render: {
+              fillStyle: "transparent",
+              strokeStyle: "transparent",
+              lineWidth: 0,
+            },
+            label: customBody.label,
+            chamfer: customBody.chamfer
+              ? { radius: customBody.chamfer }
+              : undefined,
+            collisionFilter: customBody.disableMouseDrag
+              ? {
+                  category: 0x0002, // Different category
+                  mask: 0xFFFFFFFF & ~0x0004, // Collide with everything except mouse
+                }
+              : {
+                  category: 0x0001,
+                  mask: 0xFFFFFFFF,
+                },
+            plugin: {
+              customConfig: customBody,
+              data: {
+                viewBox: { x: 0, y: 0, w: width, h: height },
+                scale: 1,
+                collisionOffset: { x: 0, y: 0 },
+              },
+            },
+          });
+
+          Matter.Composite.add(engine.world, body);
+        });
+
         // Spawn all trinkets immediately
         trinketData.forEach((trinket, i) => {
           const sym = defs.get(`${trinket.name}--collision`) || defs.get(trinket.name);
@@ -241,7 +285,7 @@ const MatterCanvas = forwardRef<MatterCanvasHandle, MatterCanvasProps>(
         engineRef.current = null;
         didInitRef.current = false;
       };
-    }, [trinketData, spriteData.spriteSheet]);
+    }, [trinketData, customBodies, spriteData.spriteSheet]);
 
     return <div className="matter-canvas" ref={containerRef} />;
   }
