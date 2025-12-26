@@ -8,12 +8,15 @@ import Trinket from "../../trinket";
 import type { MatterCanvasHandle } from "../../../../types/matter";
 import Matter from "matter-js";
 import { useDataContext } from "@/context/DataContext";
+import LoadingBar from "@/components/trinket/loading-bar";
+import CheckeredCanvas from "@/components/checkered-canvas";
 
 type HomeSlice = Extract<Content.HeroSlice, { variation: "default" }>;
 
 const Home: FC<{ data: HomeSlice }> = ({ data }) => {
   const canvasRef = React.useRef<MatterCanvasHandle | null>(null);
   const [bodies, setBodies] = useState<Matter.Body[]>([]);
+  const [overlayOpacity, setOverlayOpacity] = useState(100);
   const { setIsFirstVisit } = useDataContext();
 
   const triggerTimeScaleEffect = (
@@ -72,6 +75,30 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
     );
   }, [data]);
 
+  const customBodies = useMemo(() => {
+    const loadingBarWidth = Math.min(
+      typeof window !== "undefined" ? window.innerWidth - 96 : 720,
+      720
+    );
+    const loadingBarHeight = 48;
+
+    return [
+      {
+        label: "loading-bar",
+        width: loadingBarWidth,
+        height: loadingBarHeight,
+        isStatic: false,
+        disableMouseDrag: true,
+        physics: {
+          restitution: 0.8,
+          friction: 0.1,
+          frictionAir: 0.02,
+        },
+        chamfer: 8,
+      },
+    ];
+  }, []);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsFirstVisit(false);
@@ -122,7 +149,21 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
       className="hero"
     >
       <div className="matter-container" style={{ position: "relative" }}>
+        <CheckeredCanvas overlayOpacity={overlayOpacity} />
         {bodies.map((body) => {
+          if (body.label === "loading-bar") {
+            return (
+              <Body key="loading-bar" body={body}>
+                {() => (
+                  <LoadingBar
+                    value={overlayOpacity}
+                    onChange={setOverlayOpacity}
+                  />
+                )}
+              </Body>
+            );
+          }
+
           const trinket = trinketData.find(
             (t: { id: string }) => t.id === body.label
           );
@@ -143,6 +184,8 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
                     height: "100%",
                     outline: wasClicked ? "3px solid red" : "none",
                     transition: "outline 0.1s",
+                    position: "relative",
+                    zIndex: 10,
                   }}
                 >
                   <Trinket
@@ -156,7 +199,19 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
           );
         })}
 
-        <MatterCanvas ref={canvasRef} trinketData={trinketData} />
+        {/* Manually created trinkets - LoadingBar now renders via physics body */}
+        {/* <MousePosition parameter={"x"} />
+        <MousePosition parameter={"y"} />
+        <ScrollIndicator />
+        <ColorBlock />
+        <MemeBlock />
+        <Location /> */}
+
+        <MatterCanvas
+          ref={canvasRef}
+          trinketData={trinketData}
+          customBodies={customBodies}
+        />
       </div>
     </section>
   );
