@@ -30,7 +30,8 @@ export const handleMouseInteraction = ({
       render: { visible: false },
     },
     collisionFilter: {
-      mask: 0xFFFFFFFF,
+      category: 0x0004, // Mouse category
+      mask: 0x0001, // Only interact with default category bodies
     },
   });
 
