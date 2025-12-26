@@ -7,6 +7,7 @@ interface CheckeredCanvasProps {
   darkColor?: string;
   parallaxSpeed?: number;
   smoothness?: number;
+  overlayOpacity?: number;
 }
 
 const CheckeredCanvas: React.FC<CheckeredCanvasProps> = ({
@@ -15,6 +16,7 @@ const CheckeredCanvas: React.FC<CheckeredCanvasProps> = ({
   darkColor = "#e5e5e5",
   parallaxSpeed = 0.15,
   smoothness = 0.8,
+  overlayOpacity = 0,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scrollY, setScrollY] = useState(0);
@@ -102,18 +104,33 @@ const CheckeredCanvas: React.FC<CheckeredCanvasProps> = ({
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="checkered-canvas"
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-      }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="checkered-canvas"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        className="checkered-overlay"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "#E0E1E1",
+          opacity: overlayOpacity / 100,
+          pointerEvents: "none",
+        }}
+      />
+    </>
   );
 };
 
