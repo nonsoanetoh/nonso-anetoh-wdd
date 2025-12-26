@@ -18,10 +18,10 @@
 @use "./base/base";
 
 @use "./components/preloader";
+@use "./components/page-transition";
 @use "./components/logo";
 @use "./components/spotify-player";
 @use "./components/services-legend";
-@use "./components/reps";
 @use "./components/text-block";
 @use "./components/inactive-cover";
 @use "./components/rapier-canvas";
@@ -35,7 +35,7 @@
 @use "./components/text";
 @use "./components/trinket";
 @use "./components/matter-canvas";
-@use "./components/event-container";
+@use "./components/avatar-confetti";
 
 @use "./layout/layout";
 @use "./layout/header";
@@ -116,7 +116,7 @@ main .transition-cover {
 }
 
 canvas {
-  pointer-events: none;
+  pointer-events: auto;  // Canvas needs to receive mouse events for drag
 }
 
 .preloader-av {
