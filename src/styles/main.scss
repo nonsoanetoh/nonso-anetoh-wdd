@@ -35,6 +35,7 @@
 @use "./components/text";
 @use "./components/trinket";
 @use "./components/matter-canvas";
+@use "./components/loading-bar";
 @use "./components/avatar-confetti";
 
 @use "./layout/layout";
@@ -116,7 +117,7 @@ main .transition-cover {
 }
 
 canvas {
-  pointer-events: auto;  // Canvas needs to receive mouse events for drag
+  pointer-events: auto; // Canvas needs to receive mouse events for drag
 }
 
 .preloader-av {
