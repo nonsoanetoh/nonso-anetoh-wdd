@@ -1,0 +1,31 @@
+// Only transition main page content, not nav or other elements
+.page-content-transition-wrapper {
+  view-transition-name: page-content;
+}
+
+// View Transitions API styles
+::view-transition-old(page-content) {
+  z-index: 1;
+  animation: none !important;
+  opacity: 1 !important;
+}
+
+::view-transition-new(page-content) {
+  z-index: 2;
+  animation: slide-in-from-bottom 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes tilt-away {
+  to {
+    transform: perspective(1200px) rotateX(-5deg);
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
