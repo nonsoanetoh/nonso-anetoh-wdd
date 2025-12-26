@@ -96,6 +96,10 @@ const Body: React.FC<BodyComponentProps> = ({
     };
   }, [body]);
 
+  // Check if this body should allow HTML interaction
+  const customConfig = (body as any).plugin?.customConfig;
+  const allowHtmlInteraction = customConfig?.disableMouseDrag ?? false;
+
   return (
     <div
       ref={elemRef}
@@ -105,7 +109,8 @@ const Body: React.FC<BodyComponentProps> = ({
         top: 0,
         transformOrigin: "center center",
         willChange: "transform",
-        pointerEvents: "none",
+        pointerEvents: allowHtmlInteraction ? "auto" : "none",
+        zIndex: allowHtmlInteraction ? 100 : 10,
       }}
     >
       {typeof children === "function"
