@@ -71,8 +71,7 @@ const SVGComponent: React.FC<SVGComponentProps> = ({ id, name, type }) => {
   }), []);
 
   const gStyle = useMemo(() => ({
-    pointerEvents: "all" as const,
-    cursor: "pointer" as const,
+    pointerEvents: "none" as const,  // Let events pass through to Matter.js canvas
   }), []);
 
   if (!doc || svgSymbols.length === 0) return null;
