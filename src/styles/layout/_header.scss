@@ -18,13 +18,13 @@
   }
 
   .navigation {
-    --bottom-spacing: #{r(60)};
+    --bottom-spacing: #{r(40)};
     isolation: isolate;
     position: fixed;
     top: calc(100dvh - var(--bottom-spacing));
     left: 50%;
     transform: translateY(-100%) translateX(-50%);
-    z-index: 5000;
+    z-index: 10000;
     background-color: #232323;
     border-radius: r(38);
 
@@ -112,9 +112,16 @@
       display: block;
       width: r(var(--indicator-size));
       height: r(var(--indicator-size));
-      background-color: #6fea2a;
-
+      color: #6fea2a;
+      transform-origin: bottom center;
       visibility: hidden;
+      z-index: 10;
+
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     }
 
     &__links {

@@ -1,6 +1,9 @@
 import { PrismicNextLink } from "@prismicio/next";
 import React, { FC, useEffect, useState } from "react";
 import { NavigationDocument } from "../../../../../prismicio-types";
+import { usePathname, useRouter } from "next/navigation";
+import { asLink } from "@prismicio/client";
+import Link from "next/link";
 
 interface NavigationLinksProps {
   links?: NavigationDocument["data"]["navigation_link"];
@@ -39,23 +42,42 @@ const CSS_EASE: Record<string, string> = {
 };
 
 const NAV_ANIM = {
-  indicatorMs: 550,
-  backdropMs: 220 as number,
+  indicatorMs: 600,
+  backdropMs: 400 as number,
   spinMs: 500,
   curveHeight: 80,
   spacer: 20,
-  positionEase: "inOutSine",
+  positionEase: "outExpo",
   spinEase: "outExpo",
-  backdropEase: "inOutQuad",
+  backdropEase: "outExpo",
+  // Squash & stretch parameters
+  anticipationMs: 100, // squish before takeoff
+  squashIntensity: 0.75, // how much to squish (0.75 = 75% height)
+  stretchIntensity: 1.15, // how much to stretch at peak
 };
 
 const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const indicatorRef = React.useRef<HTMLSpanElement>(null);
-  const activeLinkIndex = useState(0);
   const [indicatorPoints, setIndicatorPoints] = useState<{
     start: { x: number; y: number };
     end: { x: number; y: number };
   } | null>(null);
+
+  // Helper to check if link is active
+  const isLinkActive = (link: any) => {
+    // Get the href from the link using Prismic's asLink helper
+    const linkPath = asLink(link) || "/";
+
+    // Home page check
+    if (linkPath === "/" || linkPath === "") {
+      return pathname === "/";
+    }
+
+    // Other pages check
+    return pathname.startsWith(linkPath);
+  };
 
   useEffect(() => {
     if (indicatorRef.current) {
@@ -69,18 +91,32 @@ const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
         if (parentRect) {
           const relativeLeft = guideRect.left - parentRect.left;
           const relativeTop = guideRect.top - parentRect.top;
-          indicator.style.transform = `translateX(${relativeLeft}px) translateY(${relativeTop}px)`;
+          indicator.style.transform = `translateX(${relativeLeft}px) translateY(${relativeTop}px) scale(1, 1)`;
           setTimeout(() => {
             indicator.style.visibility = "visible";
           }, 0);
         }
       }
     }
-  }, []);
+  }, [pathname]);
 
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault(); // Prevent default Prismic navigation
+
     const clickedLink = event.currentTarget;
     const parent = clickedLink.closest(".navigation__links");
+    const href = clickedLink.getAttribute("href");
+
+    // Don't animate if clicking the already active link
+    const isAlreadyActive =
+      clickedLink.parentElement?.classList.contains("active");
+    if (isAlreadyActive) return;
+
+    // Navigate with transition
+    if (href) {
+      router.push(href);
+    }
+
     if (parent && indicatorRef.current) {
       const ind = clickedLink.parentElement?.querySelector(
         ".ind"
@@ -122,40 +158,21 @@ const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
       y: Math.min(start.y, end.y) - NAV_ANIM.curveHeight,
     };
 
-    const quadPeakT = (y0: number, yc: number, y1: number) => {
-      const d = y0 - 2 * yc + y1;
-      if (Math.abs(d) < 1e-6) return 0.5;
-      const t = (y0 - yc) / d;
-      return Math.max(0, Math.min(1, t));
-    };
-    const tPeak = quadPeakT(start.y, control.y, end.y);
-
     const posEase = EASES[NAV_ANIM.positionEase];
-    const spinEase = EASES[NAV_ANIM.spinEase];
-
-    const peakTau = invertEase(posEase, tPeak);
-    const peakTimeMs = peakTau * NAV_ANIM.indicatorMs;
 
     const navEl = indicator.closest(".navigation") as HTMLElement | null;
     let baseHeight = 0;
 
     if (navEl) {
       baseHeight = navEl.getBoundingClientRect().height;
-
       const newHeight = baseHeight + NAV_ANIM.curveHeight / 2 + NAV_ANIM.spacer;
 
-      let dur = NAV_ANIM.backdropMs;
-      let delay = peakTimeMs - dur;
-      if (delay < 0) {
-        dur = peakTimeMs;
-        delay = 0;
-      }
-
+      // Expand: start immediately with smooth easing
       navEl.style.transitionProperty = "height";
       navEl.style.transitionTimingFunction =
         CSS_EASE[NAV_ANIM.backdropEase] || "linear";
-      navEl.style.transitionDuration = `${Math.max(0, dur)}ms`;
-      navEl.style.transitionDelay = `${Math.max(0, delay)}ms`;
+      navEl.style.transitionDuration = `${NAV_ANIM.backdropMs}ms`;
+      navEl.style.transitionDelay = "0ms";
 
       void navEl.offsetHeight;
 
@@ -164,6 +181,47 @@ const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
 
     const startTime = performance.now();
     const IND_MS = NAV_ANIM.indicatorMs;
+
+    // Calculate squash & stretch based on animation progress
+    const getSquashStretch = (tLin: number) => {
+      const scaleX = 1;
+      let scaleY = 1;
+
+      if (tLin < 0.12) {
+        // Squat: squish down from top before takeoff (0-12%)
+        const squatT = tLin / 0.12;
+        scaleY = 1 - (1 - NAV_ANIM.squashIntensity) * squatT;
+      } else if (tLin < 0.2) {
+        // Takeoff: release squish and start stretching (12-20%)
+        const takeoffT = (tLin - 0.12) / 0.08;
+        scaleY =
+          NAV_ANIM.squashIntensity +
+          (NAV_ANIM.stretchIntensity - NAV_ANIM.squashIntensity) * takeoffT;
+      } else if (tLin < 0.7) {
+        // In the air: maintain stretch longer (20-70%)
+        scaleY = NAV_ANIM.stretchIntensity;
+      } else if (tLin < 0.82) {
+        // Descent: return to normal (70-82%)
+        const descentT = (tLin - 0.7) / 0.12;
+        scaleY =
+          NAV_ANIM.stretchIntensity -
+          (NAV_ANIM.stretchIntensity - 1) * descentT;
+      } else if (tLin < 0.92) {
+        // Landing squish from top (82-92%)
+        const landT = (tLin - 0.82) / 0.1;
+        scaleY = 1 - (1 - NAV_ANIM.squashIntensity) * Math.sin(landT * Math.PI);
+      } else {
+        // Settle back to rest (92-100%)
+        const settleT = (tLin - 0.92) / 0.08;
+        const eased = 1 - Math.pow(1 - settleT, 3);
+        scaleY =
+          NAV_ANIM.squashIntensity + (1 - NAV_ANIM.squashIntensity) * eased;
+      }
+
+      return { scaleX, scaleY };
+    };
+
+    let hasContracted = false;
 
     const tick = (now: number) => {
       const tLin = Math.min(1, (now - startTime) / IND_MS);
@@ -179,17 +237,23 @@ const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
         2 * (1 - t) * t * control.y +
         t * t * end.y;
 
-      indicator.style.transform = `translateX(${x}px) translateY(${y}px)`;
+      const { scaleX, scaleY } = getSquashStretch(tLin);
+
+      indicator.style.transform = `translateX(${x}px) translateY(${y}px) scale(${scaleX}, ${scaleY})`;
+
+      // Start contracting at 50% progress for smoother transition
+      if (tLin >= 0.5 && navEl && !hasContracted) {
+        hasContracted = true;
+        const contractDelay = Math.max(0, IND_MS * 0.5 - (now - startTime));
+        navEl.style.transitionDuration = `${NAV_ANIM.backdropMs}ms`;
+        navEl.style.transitionDelay = `${contractDelay}ms`;
+        navEl.style.height = `${baseHeight}px`;
+      }
 
       if (tLin < 1) {
         requestAnimationFrame(tick);
       } else {
-        indicator.style.transform = `translateX(${end.x}px) translateY(${end.y}px)`;
-
-        if (navEl) {
-          navEl.style.transitionDelay = "0ms";
-          navEl.style.height = `${baseHeight}px`;
-        }
+        indicator.style.transform = `translateX(${end.x}px) translateY(${end.y}px) scale(1, 1)`;
       }
     };
 
@@ -198,15 +262,32 @@ const NavigationLinks: FC<NavigationLinksProps> = ({ links }) => {
 
   return (
     <ul className="navigation__links">
-      <span className="indicator" ref={indicatorRef} />
-      {links?.map((link, index) => (
-        <li className={`link ${index === 2 && "active"}`} key={index}>
-          <span className="ind"></span>
-          <PrismicNextLink field={link} onClick={handleLinkClick}>
-            <span className="link__text">{link.text}</span>
-          </PrismicNextLink>
-        </li>
-      ))}
+      <span className="indicator" ref={indicatorRef}>
+        <svg
+          width="100%"
+          height="100%"
+          viewBox="0 0 10 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect x="1" y="1" width="12" height="12" fill="#D9D9D9" />
+        </svg>
+      </span>
+      {links?.map((link, index) => {
+        const href = asLink(link) || "/";
+
+        return (
+          <li
+            className={`link ${isLinkActive(link) ? "active" : ""}`}
+            key={index}
+          >
+            <span className="ind"></span>
+            <Link href={href} onClick={handleLinkClick}>
+              <span className="link__text">{link.text}</span>
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 };
