@@ -1,4 +1,3 @@
-// components/hero/variants/home.tsx
 "use client";
 import { Content } from "@prismicio/client";
 import React, { FC, useEffect, useMemo, useState } from "react";
@@ -8,16 +7,14 @@ import Body from "../../body";
 import Trinket from "../../trinket";
 import type { MatterCanvasHandle } from "../../../../types/matter";
 import Matter from "matter-js";
+import { useDataContext } from "@/context/DataContext";
 
 type HomeSlice = Extract<Content.HeroSlice, { variation: "default" }>;
 
 const Home: FC<{ data: HomeSlice }> = ({ data }) => {
   const canvasRef = React.useRef<MatterCanvasHandle | null>(null);
   const [bodies, setBodies] = useState<Matter.Body[]>([]);
-  const [preloaderTrinketIndex, setPreloaderTrinketIndex] = useState(0);
-
-  // Define preloader trinket cycle
-  const preloaderCycle = ["dev__circle", "dev__polygon", "dev__triangle"];
+  const { setIsFirstVisit } = useDataContext();
 
   const triggerTimeScaleEffect = (
     intensity: "low" | "medium" | "high" = "high"
@@ -56,7 +53,6 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
     triggerTimeScaleEffect("high");
   };
 
-  // Parse trinkets from Prismic data
   const trinketData = useMemo(() => {
     const parsed = parseTrinkets([
       ...data.primary.trinkets,
@@ -76,25 +72,14 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
     );
   }, [data]);
 
-  // Cycle through preloader trinkets every 500ms for 3.5 seconds
   useEffect(() => {
-    const cycleInterval = setInterval(() => {
-      setPreloaderTrinketIndex((prev) => (prev + 1) % preloaderCycle.length);
-    }, 500);
+    const timeout = setTimeout(() => {
+      setIsFirstVisit(false);
+    }, 1000);
 
-    // Stop cycling after 3.5 seconds and reset to first trinket
-    const stopTimeout = setTimeout(() => {
-      clearInterval(cycleInterval);
-      setPreloaderTrinketIndex(0);
-    }, 3500);
+    return () => clearTimeout(timeout);
+  }, [setIsFirstVisit]);
 
-    return () => {
-      clearInterval(cycleInterval);
-      clearTimeout(stopTimeout);
-    };
-  }, [preloaderCycle.length]);
-
-  // Wait for canvas to be ready, then continuously poll for bodies
   useEffect(() => {
     let mounted = true;
     let intervalId: NodeJS.Timeout;
@@ -110,7 +95,7 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
         if (!mounted) return;
 
         const allBodies = Matter.Composite.allBodies(engine.world).filter(
-          (body) => body.label === "preloader" || !body.isStatic
+          (body) => !body.isStatic
         );
 
         setBodies((prevBodies) => {
@@ -137,23 +122,10 @@ const Home: FC<{ data: HomeSlice }> = ({ data }) => {
       className="hero"
     >
       <div className="matter-container" style={{ position: "relative" }}>
-        {/* Render Body components once bodies are spawned */}
         {bodies.map((body) => {
-          // Handle preloader body separately with cycling trinkets
-          if (body.label === "preloader") {
-            return (
-              <Body key="preloader" body={body}>
-                <Trinket
-                  id="preloader"
-                  name={preloaderCycle[preloaderTrinketIndex]}
-                  type="static"
-                />
-              </Body>
-            );
-          }
-
-          // Find matching trinket by label
-          const trinket = trinketData.find((t: { id: string }) => t.id === body.label);
+          const trinket = trinketData.find(
+            (t: { id: string }) => t.id === body.label
+          );
           if (!trinket) return null;
 
           const isTriangle = trinket.name.includes("triangle");
