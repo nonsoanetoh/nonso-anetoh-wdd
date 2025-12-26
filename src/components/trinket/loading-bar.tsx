@@ -1,15 +1,42 @@
-import React, { FC } from "react";
+import React, { FC, useRef } from "react";
 
-const LoadingBar: FC = () => {
+interface LoadingBarProps {
+  value: number;
+  onChange: (value: number) => void;
+}
+
+const LoadingBar: FC<LoadingBarProps> = ({ value, onChange }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleOpacity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(parseInt(e.target.value));
+  };
+
+  const thumbPosition = ((value - 0) / (100 - 0)) * 100;
+
   return (
     <div
       className="loading-bar"
-      style={{
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-      }}
-    />
+      style={
+        {
+          "--thumb-position": thumbPosition,
+        } as React.CSSProperties
+      }
+    >
+      <input
+        ref={inputRef}
+        onChange={handleOpacity}
+        type="range"
+        min="0"
+        max="100"
+        value={value}
+        id="opacity"
+      />
+
+      <label className="indicator" htmlFor="opacity">
+        {value}
+      </label>
+    </div>
   );
 };
 
