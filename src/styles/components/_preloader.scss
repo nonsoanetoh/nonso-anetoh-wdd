@@ -1,46 +1,71 @@
+@use "../abstract/functions" as *;
+
 .preloader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100dvh;
-  background-color: #fff;
   z-index: 99999999999;
-  opacity: 0.3;
+  pointer-events: none;
 
-  --column: calc(100vw / 10);
-  --flex-row: calc((100dvh - (var(--column) * 2)) / 3);
-
-  display: grid;
-  grid-template-columns: repeat(10, var(--column));
-  grid-template-rows:
-    var(--column) repeat(3, calc(var(--flex-row)))
-    var(--column);
-
-  &__block {
-    background-color: grey;
-    border: 1px solid blue;
-    width: 100%;
-    height: 100%;
+  // Standalone version for non-home pages
+  &--standalone {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease-out;
+    pointer-events: all;
   }
 
-  &__block:nth-child(n + 11):nth-child(-n + 40) {
-    visibility: hidden;
-  }
+  &__avatar {
+    width: r(300);
+    height: r(300);
 
-  @media (min-aspect-ratio: 1/1) {
-    &__block:nth-child(n + 11):nth-child(-n + 40):nth-child(10n + 1),
-    &__block:nth-child(n + 11):nth-child(-n + 40):nth-child(10n + 2),
-    &__block:nth-child(n + 11):nth-child(-n + 40):nth-child(10n + 9),
-    &__block:nth-child(n + 11):nth-child(-n + 40):nth-child(10n + 10) {
-      visibility: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .trinket {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
 
-  @media (max-aspect-ratio: 1/1) {
-    &__block:nth-child(n + 11):nth-child(-n + 40):nth-child(10n + 1),
-    &__block:nth-child(n + 11):nth-child(-n + 40):nth-child(10n + 10) {
-      visibility: visible;
+  // Grid version (for potential future use)
+  &--grid {
+    background-color: #fff;
+    opacity: 0.3;
+
+    --column: calc(100vw / 10);
+    --flex-row: calc((100dvh - (var(--column) * 2)) / 3);
+
+    display: grid;
+    grid-template-columns: repeat(10, var(--column));
+    grid-template-rows:
+      var(--column) repeat(3, calc(var(--flex-row)))
+      var(--column);
+
+    .preloader__block {
+      background-color: grey;
+      border: 1px solid blue;
+      width: 100%;
+      height: 100%;
+    }
+
+    .preloader__block:nth-child(n + 11):nth-child(-n + 40) {
+      visibility: hidden;
     }
   }
 }

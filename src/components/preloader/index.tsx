@@ -1,57 +1,102 @@
-// [Preloader Component]
-// For the homepage, I want this to render a preloader below the hero canvas but above all other content
-// For other pages, I want this to render a preloader above all content
-
-// Prevent scrolling when preloader is active using Lenis
-// One global preloader state to manage preloading across pages using context
-
-// Cell animation for preloader
-
+"use client";
 import React, { FC, useEffect, useState } from "react";
-import { NavigationDocument } from "../../../prismicio-types";
 import { usePathname } from "next/navigation";
 import { LenisRef } from "lenis/react";
+import Trinket from "../trinket";
+import { useDataContext } from "@/context/DataContext";
 
 interface PreloaderProps {
   lenis: React.RefObject<LenisRef | null>;
-  data?: NavigationDocument;
 }
 
-const Preloader: FC<PreloaderProps> = ({ lenis, data }) => {
+const Preloader: FC<PreloaderProps> = ({ lenis }) => {
   const pathname = usePathname();
-
-  const [blockCount, setBlockCount] = useState(50);
-
-  console.log("Preloader data:", data);
-  console.log("lenis:", lenis.current);
+  const { isFirstVisit, setIsFirstVisit } = useDataContext();
+  const [trinketIndex, setTrinketIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
 
   const isHomePage = pathname === "/";
 
-  const stopScroll = () => {
+  // Define preloader trinket cycle (same as home hero)
+  const preloaderCycle = [
+    "avatar__base",
+    "avatar__gym",
+    "avatar__shower",
+    "avatar__work",
+    "avatar__music",
+    "avatar__sleep",
+    "avatar__base",
+  ];
+
+  useEffect(() => {
+    // Only show preloader on first visit to non-home pages
+    if (isHomePage || !isFirstVisit) {
+      setIsVisible(false);
+      return;
+    }
+
+    // Stop scrolling during preloader
     if (lenis.current) {
       lenis.current.lenis?.stop();
     }
-  };
 
-  const startScroll = () => {
-    if (lenis.current) {
-      lenis.current.lenis?.start();
-    }
-  };
+    // Cycle through trinkets every 200ms for 1.2 seconds
+    const cycleInterval = setInterval(() => {
+      setTrinketIndex((prev) => (prev + 1) % preloaderCycle.length);
+    }, 200);
+
+    // Stop cycling after 1.2 seconds
+    const stopTimeout = setTimeout(() => {
+      clearInterval(cycleInterval);
+      setTrinketIndex(0);
+
+      // Start fade out after a brief pause
+      setTimeout(() => {
+        setIsVisible(false);
+
+        // Re-enable scrolling
+        if (lenis.current) {
+          lenis.current.lenis?.start();
+        }
+
+        // Mark first visit as complete after fade
+        setTimeout(() => {
+          setIsFirstVisit(false);
+        }, 600); // Match fade duration
+      }, 200);
+    }, 1200);
+
+    return () => {
+      clearInterval(cycleInterval);
+      clearTimeout(stopTimeout);
+    };
+  }, [isFirstVisit, isHomePage, lenis, preloaderCycle.length, setIsFirstVisit]);
+
+  // Don't render on home page or if not first visit
+  if (isHomePage || !isFirstVisit) {
+    return null;
+  }
+
+  // Don't render if faded out
+  if (!isVisible && trinketIndex === 0) {
+    return null;
+  }
 
   return (
-    <>
-      <section className="preloader preloader--home">
-        {Array.from({ length: blockCount }).map((_, index) => (
-          <div className="preloader__block" key={index}></div>
-        ))}
-      </section>
-      {/* {!isPreloaded && (
-        <section className="preloader" ref={preloaderRef}>
-          preloader
-        </section>
-      )} */}
-    </>
+    <div
+      className="preloader preloader--standalone"
+      style={{
+        opacity: isVisible ? 1 : 0,
+      }}
+    >
+      <div className="preloader__avatar">
+        <Trinket
+          id="preloader-standalone"
+          name={preloaderCycle[trinketIndex]}
+          type="static"
+        />
+      </div>
+    </div>
   );
 };
 
