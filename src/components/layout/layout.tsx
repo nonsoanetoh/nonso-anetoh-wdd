@@ -35,8 +35,8 @@ const LayoutInner: FC<CLProps> = ({ children, data }) => {
   // Set initial overflow hidden immediately on mount
   useEffect(() => {
     if (isFirstVisit) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     }
   }, [isFirstVisit]);
 
@@ -63,8 +63,8 @@ const LayoutInner: FC<CLProps> = ({ children, data }) => {
       if (lenisRef.current?.lenis) {
         lenisRef.current.lenis.start();
       }
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
   }, [isFirstVisit]);
 
@@ -90,7 +90,7 @@ const LayoutInner: FC<CLProps> = ({ children, data }) => {
       root
     >
       <Preloader lenis={lenisRef} />
-      <Header data={data.navigation} isVisible={!isFirstVisit} />
+      {/* <Header data={data.navigation} isVisible={!isFirstVisit} /> */}
       <PageContent data={data}>{children}</PageContent>
       <AvatarConfetti ref={confettiRef} />
       {/* <Footer /> */}

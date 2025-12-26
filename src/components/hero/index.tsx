@@ -1,4 +1,3 @@
-// HeroComponent.tsx
 "use client";
 
 import React from "react";
@@ -16,9 +15,6 @@ const HeroComponent: React.FC<HeroComponentProps> = ({ data }) => {
   switch (data.variation) {
     case "default": {
       return <Home data={data} />;
-    }
-    case "about": {
-      return <About data={data} />;
     }
     default: {
       return null;
