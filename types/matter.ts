@@ -47,6 +47,22 @@ export type MouseInteractionProps = {
 
 export type ScreenPoint = { x: number; y: number };
 
+// Custom body configuration for manually added physics bodies
+export type CustomBody = {
+  label: string;
+  width: number;
+  height: number;
+  isStatic?: boolean;
+  disableMouseDrag?: boolean;
+  position?: { x: number; y: number };
+  physics?: {
+    restitution?: number;
+    friction?: number;
+    frictionAir?: number;
+  };
+  chamfer?: number;
+};
+
 // Simplified API for the new architecture
 export type MatterCanvasHandle = {
   getEngine(): Matter.Engine | null;
